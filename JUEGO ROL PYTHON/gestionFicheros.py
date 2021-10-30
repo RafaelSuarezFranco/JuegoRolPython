@@ -1,5 +1,6 @@
 import csv
 
+
 def generarMapa(): #con csv es más conciso, por lo que importaré los archivos de esta manera.
     archivoSalas = open('./default/mapa.txt', "r",encoding="utf-8")
     salas = csv.reader(archivoSalas, delimiter = ';')
@@ -21,7 +22,7 @@ def generarObjetos():
 def generarMonstruos():
     archivoMonstruo = open('./default/monstruos.txt', "r",encoding="utf-8")
     monstruos = csv.reader(archivoMonstruo, delimiter = ';')
-    arrayomonstruos = list(monstruos)
+    arraymonstruos = list(monstruos)
     return arraymonstruos
 
 

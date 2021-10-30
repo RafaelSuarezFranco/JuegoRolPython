@@ -1,5 +1,4 @@
 import csv
- 
 lista = [["nombre", "apellidos", "grado"],
           ['Alex', 'Brian', 'A'],
           ['Tom', 'Smith', 'B']]
