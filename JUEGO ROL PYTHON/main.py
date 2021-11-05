@@ -1,29 +1,30 @@
 import random
 import gestionFicheros as gf #alias para llamar a las funciones de cada modulo
 import gestionMonstruos as gm
+import gestionObjetos as go
 
 arraysalas = []
 arrayambientes = []
-arrayobjetos = []
-arraymonstruos = []
+#arrayobjetos = []
+#arraymonstruos = []
 personaje = []
-
+inventario = []
+    
 def randomizarAmbiente(arrayambientes): #Devuelve una cadena de ambiente aleatoria.
     numAleatorio = random.randint(1, len(arrayambientes))
     for indice in range( len(arrayambientes) ):
         if arrayambientes[indice][0] == str(numAleatorio):
-            return arrayambientes[indice][1]
+            return arrayambientes[indice][1]   
 
-    
-
-def avanzarMapa(salaactual, arraysalas, arrayambientes, arraymonstruos, monstruopasado):
+def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario):
     resultadosala = [] #devolveré este array de resultados para saber la siguiente sala, si hubo o no hubo monstruo, etc.
     # dado que hay ciertos problemas a la hora de devolverlos por separado.
+    nuevosObjetos = []
     
     try:
         salaactual = int(salaactual)
     except ValueError:
-        Print("Este mensaje de error no debería aparecer, pero si aparece, significa que la sala actual toma un valor que no es int.")
+        print("Este mensaje de error no debería aparecer, pero si aparece, significa que la sala actual toma un valor que no es int.")
     salidas = []#estas serán las salidas posibles, puede contener N S O E
     
     #digamos que guardaremos la letra de la salida si en su posición no hay un cero.
@@ -37,27 +38,57 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, arraymonstruos, monstruo
     input("Pulsa intro para dar un paso adelante.")
     print("")
     
+    #calculo de objetos
+    nuevosObjetos = go.invocarObjeto()
+    
     # aqui calculamos si hay o no un monstruo
     monstruopasado, monstruoactual= gm.invocarMonstruo(monstruopasado)
     resultadosala.append(monstruopasado)
    
-    if monstruopasado == True: #si hay un monstruo en la sala
+    if monstruopasado == True or nuevosObjetos != None: #si hay un monstruo u objetos en la sala
         accion = ""
-        while accion != "1" and accion != "2":
+        while accion != "4" and accion != "5":
+            #este es el menu que se mostrará si hay monstruo y/o objeto, si no hay nada, vamos directamente a la elección
+            #del siguiente camino. Algunas acciones no nos sacarán de este menú, como mostrar el estado actual o recoger un
+            #objeto. otras acciones son definitivas, si elegimos luchar por ejemplo, ya no hay posibilidad de huir o recoger objeto
             print("Elige una acción")
-            print("1 - Luchar con el monstruo")
-            print("2 - Huir del monstruo")
+            print("1 - Estado del personaje")
+            print("2 - Monstrar tu inventario")
+            print("3 - Recoger Objeto")
+            if monstruopasado == True: #si hay objetos pero no hay monstruo, no queremos enseñar esto
+                print("4 - Luchar con el monstruo")
+                print("5 - Huir del monstruo")
+            else:
+                print("4, 5 - Salir de la sala")
+                
             accion = input("")
-        if accion == "1": #si decidimos luchar
-            personaje[1] = gm.lucha(personaje, monstruoactual)
-        elif accion == "2": # si dedicimos escapar
-            print("Has salido ileso del combate, sin embargo, tu orgullo ha sido gravemente herido. Pierdes 50 HP.")
-            personaje[1] = personaje[1] - 50
-            
+
+            if accion == "1":
+                mostrarPersonaje(salaactual)
+            elif accion == "2":
+                go.consultarInventario(inventario)
+            elif accion == "3":
+                if nuevosObjetos != None:
+                    inventario = go.recogerObjeto(nuevosObjetos, inventario)
+                    nuevosObjetos = None
+                else:
+                    print("No puedes recoger más objetos de esta sala.")
+            elif accion == "4": #si decidimos luchar
+                if monstruopasado == True:
+                    personaje[1] = gm.lucha(personaje, monstruoactual)
+            elif accion == "5": # si dedicimos escapar
+                if monstruopasado == True:
+                    print("Has salido ileso del combate, sin embargo, tu orgullo ha sido gravemente herido. Pierdes 50 HP.")
+                    personaje[1] = personaje[1] - 50
+    
+    if personaje[1] < 1: #bajar a 0 o menos de vida es condición de derrota.
+        print("Tus heridas tras el último encuentro son letales, tu cuerpo no puede aguantar más. Has perdido la partida.")
+        resultadosala.append('-1') # hacemos un return para que la función termine aquí.
+        return resultadosala
     
     # una vez que hayamos hecho lo que sea en la sala, vamos a salir. Si no hay salidas disponibles, se acabó el juego.
     if len(salidas) == 0:
-        print("Parece que has llegado a un callejón sin salida. Te quedas atrapado en la sala hasta que se derruba sobre tu cabeza")
+        print("Parece que has llegado a un callejón sin salida. Te quedas atrapado en la sala hasta que se derruba sobre tu cabeza.")
         print("Fin del juego. Has perdido.")
         resultadosala.append('-1') # hacemos un return para que la función termine aquí.
         return resultadosala
@@ -94,18 +125,7 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, arraymonstruos, monstruo
  
     return resultadosala
     #en resultadosala tenemos: [monstruopasado, salaactual]
- 
-#cargamos en memoria los elementos del juego. Los comentados se cargan desde su propio modulo.
-arraysalas = gf.generarMapa()
-arrayambientes = gf.generarAmbientes()
-arrayobjetos = gf.generarObjetos()
-#arraymonstruos = gf.generarMonstruos()
 
-"""
-Acerca del array de salas: como el tema sobre no volver a una sala anterior queda un poco a criterio del diseñador, lo
-que he dedidido es que cada sala por la que pasemos se vaya borrando de dicho array, como si el mapa se fuera destruyendo
-a medida que avanzamos. Esto implica que si nos encontramos en un callejón sin salida, el juego se da por perdido.
-"""
 def crearPersonaje():
     print("Vamos a crear tu personaje")
     nombre = input("Nombre de tu personaje: ")
@@ -129,25 +149,47 @@ def crearPersonaje():
     personaje.extend((nombre, vida, habilidad))
     return personaje
 
+def mostrarPersonaje(salaactual):
+    print("Estado actual de tu personaje:")
+    print("Nombre: " + personaje[0])
+    print("Vida: " + str(personaje[1]))
+    print("Habilidad: " + personaje[2])
+    print("Sala actual: " + str(salaactual))
 
+def nuevaPartida():   
+    #cargamos en memoria los elementos del juego. Los comentados se cargan desde su propio modulo.
+    arraysalas = gf.generarMapa()
+    arrayambientes = gf.generarAmbientes()
+    #arrayobjetos = gf.generarObjetos()
+    #arraymonstruos = gf.generarMonstruos()
 
-#inicializamos variables que controlarán el estado actual del juego
-personaje = crearPersonaje()
-salaactual = "1"
-resultadosala = []
-monstruopasado = False #guardamos si hubo un monstruo en la sala anterior
-print("Da comienzo la aventura, te encuentras en la sala "+arraysalas[1][0]+".")
-print("La mazmorra en la que te encuentras es inestable y colapsa a medida que la recorres.")
-print("Cada sala por la que pases se derrumbará y no podrás volver sobre tus pasos. Elige bien a dónde vas.")
-input("Pulsa intro para empezar...")
-#avanzamos por las salas mientras que no llegemos a la sala FIN o la sala actual valga -1, que significa que estamos
-#en un callejón sin salida.
-while salaactual != "FIN" and salaactual != "-1":
-    resultadosala = avanzarMapa(salaactual, arraysalas, arrayambientes, arraymonstruos, monstruopasado)
-    salaactual = resultadosala[1]
-    monstruopasado = resultadosala[0]
-    if salaactual != "-1":
-        print("Te encuentras en la sala "+salaactual)
+    """
+    Acerca del array de salas: como el tema sobre no volver a una sala anterior queda un poco a criterio del diseñador, lo
+    que he dedidido es que cada sala por la que pasemos se vaya borrando de dicho array, como si el mapa se fuera destruyendo
+    a medida que avanzamos. Esto implica que si nos encontramos en un callejón sin salida, el juego se da por perdido.
+    """
     
-if salaactual == "FIN":
-    print("Has llegado a la sala final")
+    #inicializamos variables que controlarán el estado actual del juego
+    personaje = crearPersonaje()
+    inventario = []
+    salaactual = "1"
+    resultadosala = []
+    monstruopasado = False #guardamos si hubo un monstruo en la sala anterior
+    print("Da comienzo la aventura, te encuentras en la sala "+arraysalas[1][0]+".")
+    print("La mazmorra en la que te encuentras es inestable y colapsa a medida que la recorres.")
+    print("Cada sala por la que pases se derrumbará y no podrás volver sobre tus pasos. Elige bien a dónde vas.")
+    input("Pulsa intro para empezar...")
+    #avanzamos por las salas mientras que no llegemos a la sala FIN o la sala actual valga -1, que significa que estamos
+    #en un callejón sin salida.
+    while salaactual != "FIN" and salaactual != "-1" and personaje[1] > 0:
+        resultadosala = avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario)
+        salaactual = resultadosala[1]
+        monstruopasado = resultadosala[0]
+        if salaactual != "-1":
+            print("Te encuentras en la sala "+salaactual)
+    
+    if salaactual == "FIN":
+        print("Has llegado a la sala final")
+        
+        
+nuevaPartida()
