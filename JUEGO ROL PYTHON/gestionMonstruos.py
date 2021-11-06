@@ -1,5 +1,6 @@
 import random
 import gestionFicheros as gf
+import gestionObjetos as go
 
 #hay que definir este array aqui, si no, las funciones no pueden encontrarlo.
 arraymonstruos = gf.generarMonstruos()
@@ -40,8 +41,25 @@ def invocarMonstruo(monstruopasado): # una vez estemos en la sala, usamos esta f
     return monstruopasado, monstruoactual
 
 
-def lucha(personaje, monstruoactual):
+def lucha(personaje, monstruoactual, inventario, arrayobjetos):
     print("Has decidido enfrentarte al "+monstruoactual[1])
+    
+    #aquí damos la opción de usar un objeto, si tenemos algo en el inventario
+    objetoUsado = None
+    nombreObjeto = ""
+    cualidadObjeto = ""
+    puntosObjeto = ""
+    if len(inventario) > 0:
+        objetoUsado = go.usarObjeto(inventario)
+    if objetoUsado != None:#si hemos escogido un objeto, lo eliminamos del inventario y guardamos las variables que nos interesan
+        objeto1 = inventario[objetoUsado]#recordamos que en inventario solo guardamos el "código" del objeto. sus cualidades las
+        #consultamos en el array de objetos
+        nombreObjeto = arrayobjetos[objeto1][1]
+        cualidadObjeto = arrayobjetos[objeto1][2]
+        puntosObjeto = arrayobjetos[objeto1][3]
+        inventario.pop(objetoUsado)
+    
+        
     resultado = "empate"
     while resultado == "empate":
     
@@ -72,15 +90,31 @@ def lucha(personaje, monstruoactual):
             resultado = "ganar"
         else:
             resultado = "perder"
-        
+        #recalculamos la vida del pj dependiendo del resultado y del objeto
         vidaresultado = personaje[1]
         if resultado == "ganar":
             vidaresultado = vidaresultado + int(monstruoactual[2])
             print("Has derrotado al " + monstruoactual[1] + ", tu vida se ha incrementado a "+ str(vidaresultado))
+            if objetoUsado != None: #si hemos usado objeto
+                if cualidadObjeto == monstruoactual[3]: #comparamos sus cualidades, si es la misma
+                    print("Has usado un "+nombreObjeto+". Ha sido efectivo, ganas "+puntosObjeto+" puntos de vida.")
+                    vidaresultado = vidaresultado + int(puntosObjeto)
+                    if personaje[2] == monstruoactual[3]: #si nuestra cualidad también coincide, sumamos 20%
+                        bonus = 0.2*(int(puntosObjeto)+int(monstruoactual[2]))
+                        print("Tu cualidad de "+personaje[2]+" ha sido efectiva, recibes un bonus de "+str(bonus)+" de vida.")
+                        vidaresultado = vidaresultado + bonus
+                else:# si no es la misma
+                    print("Has usado un "+nombreObjeto+". Ha sido contraproducente, pierdes "+puntosObjeto+" puntos de vida.")
+                    vidaresultado = vidaresultado - int(puntosObjeto)
             return vidaresultado
         elif resultado == "perder":
             vidaresultado = vidaresultado - int(monstruoactual[2])
             print("Has perdido contra el " + monstruoactual[1] + ", tu vida se ha reducido a "+ str(vidaresultado))
+            # de momento voy a restar el objeto, sea de la cualidad que sea.
+            if objetoUsado != None: #si hemos usado objeto
+                print("Has usado un "+nombreObjeto+". Ha sido contraproducente, pierdes "+puntosObjeto+" puntos de vida.")
+                vidaresultado = vidaresultado - int(puntosObjeto)
+
             return vidaresultado
         else:
             print("Ha habido empate en este turno.")
