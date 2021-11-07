@@ -28,7 +28,7 @@ def invocarObjeto():# por cada sala, esta función generará 0, 1 o 2 objetos al
         print("En la sala hay " + arrayobjetos[objeto1][1]+".")
         hayOtroObjeto = gm.probalilidad(30)
         if hayOtroObjeto == True:
-            objeto2 = ""
+            objeto2 = objeto1
             while objeto2 == objeto1: #no permitimos que un segundo objeto sea igual al primero
                 objeto2 = int(randomizarObjeto(arrayobjetos))
             objetosNuevos.append(objeto2)

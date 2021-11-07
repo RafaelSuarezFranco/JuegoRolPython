@@ -20,7 +20,7 @@ def randomizarMonstruo(arraymonstruos): #Devuelve un monstruo aleatorio con sus 
             return arraymonstruos[indice]
 
 
-def invocarMonstruo(monstruopasado): # una vez estemos en la sala, usamos esta funcion para dedicir si hay o no hay monstruo y generar mensajes etc
+def invocarMonstruo(monstruopasado, salaactual): # una vez estemos en la sala, usamos esta funcion para dedicir si hay o no hay monstruo y generar mensajes etc
     hayMonstruo = False
     if monstruopasado == False: #si no hubo monstruo en la sala anterior
         hayMonstruo = probalilidad(75)
@@ -28,7 +28,10 @@ def invocarMonstruo(monstruopasado): # una vez estemos en la sala, usamos esta f
     else:
         hayMonstruo = probalilidad(66)
         #print("Hubo monstruo en la sala anterior")
-        
+    
+    if salaactual == "FIN": #si es la sala final, debe haber monstruo
+        hayMonstruo = True
+    
     monstruoactual = ""
     if hayMonstruo == True:
         monstruopasado = True
@@ -41,7 +44,7 @@ def invocarMonstruo(monstruopasado): # una vez estemos en la sala, usamos esta f
     return monstruopasado, monstruoactual
 
 
-def lucha(personaje, monstruoactual, inventario, arrayobjetos):
+def lucha(personaje, monstruoactual, inventario, arrayobjetos, salaactual):
     print("Has decidido enfrentarte al "+monstruoactual[1])
     
     #aquí damos la opción de usar un objeto, si tenemos algo en el inventario
@@ -92,6 +95,7 @@ def lucha(personaje, monstruoactual, inventario, arrayobjetos):
             resultado = "perder"
         #recalculamos la vida del pj dependiendo del resultado y del objeto
         vidaresultado = personaje[1]
+        ########################################################################################## SI GANAMOS
         if resultado == "ganar":
             vidaresultado = vidaresultado + int(monstruoactual[2])
             print("Has derrotado al " + monstruoactual[1] + ", tu vida se ha incrementado a "+ str(vidaresultado))
@@ -107,6 +111,7 @@ def lucha(personaje, monstruoactual, inventario, arrayobjetos):
                     print("Has usado un "+nombreObjeto+". Ha sido contraproducente, pierdes "+puntosObjeto+" puntos de vida.")
                     vidaresultado = vidaresultado - int(puntosObjeto)
             return vidaresultado
+        ################################################################################### SI PERDEMOS
         elif resultado == "perder":
             vidaresultado = vidaresultado - int(monstruoactual[2])
             print("Has perdido contra el " + monstruoactual[1] + ", tu vida se ha reducido a "+ str(vidaresultado))
@@ -114,7 +119,12 @@ def lucha(personaje, monstruoactual, inventario, arrayobjetos):
             if objetoUsado != None: #si hemos usado objeto
                 print("Has usado un "+nombreObjeto+". Ha sido contraproducente, pierdes "+puntosObjeto+" puntos de vida.")
                 vidaresultado = vidaresultado - int(puntosObjeto)
-
-            return vidaresultado
+            
+            #si estamos en la sala final, supongo que debemos luchar hasta matar al mostruo final, por lo que perder debe
+            #iterar el bucle también
+            if salaactual == "FIN":
+                resultado = "empate"
+            else:
+                return vidaresultado
         else:
             print("Ha habido empate en este turno.")

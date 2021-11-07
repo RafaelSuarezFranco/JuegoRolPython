@@ -20,17 +20,19 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     resultadosala = [] #devolveré este array de resultados para saber la siguiente sala, si hubo o no hubo monstruo, etc.
     # dado que hay ciertos problemas a la hora de devolverlos por separado.
     nuevosObjetos = []
+    salidas = []#estas serán las salidas posibles, puede contener N S O E
     
     try:
         salaactual = int(salaactual)
-    except ValueError:
-        print("Este mensaje de error no debería aparecer, pero si aparece, significa que la sala actual toma un valor que no es int.")
-    salidas = []#estas serán las salidas posibles, puede contener N S O E
+        #digamos que guardaremos la letra de la salida si en su posición no hay un cero.
+        for puerta in range( len(arraysalas[salaactual]) -1 ):
+            if arraysalas[salaactual][puerta] != "0" and arraysalas[salaactual][puerta] != arraysalas[salaactual][0]:
+                salidas.append(arraysalas[0][puerta])
+    except ValueError: # si entramos en esta excepción significa que salaactual toma valor que no es entero, cosa que solo
+        #debería ocurrir en la sala FIN
+        print("")
     
-    #digamos que guardaremos la letra de la salida si en su posición no hay un cero.
-    for puerta in range( len(arraysalas[salaactual]) -1 ):
-        if arraysalas[salaactual][puerta] != "0" and arraysalas[salaactual][puerta] != arraysalas[salaactual][0]:
-            salidas.append(arraysalas[0][puerta])
+
     
     #mostrar mensaje de ambiente
     ambiente = randomizarAmbiente(arrayambientes)
@@ -42,9 +44,9 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     nuevosObjetos = go.invocarObjeto()
     
     # aqui calculamos si hay o no un monstruo
-    monstruopasado, monstruoactual= gm.invocarMonstruo(monstruopasado)
+    monstruopasado, monstruoactual= gm.invocarMonstruo(monstruopasado, salaactual)
     resultadosala.append(monstruopasado)
-   
+       
     if monstruopasado == True or nuevosObjetos != None: #si hay un monstruo u objetos en la sala
         accion = ""
         while accion != "4" and accion != "5":
@@ -75,11 +77,14 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
                     print("No puedes recoger más objetos de esta sala.")
             elif accion == "4": #si decidimos luchar
                 if monstruopasado == True:
-                    personaje[1] = gm.lucha(personaje, monstruoactual, inventario, go.arrayobjetos)
+                    personaje[1] = gm.lucha(personaje, monstruoactual, inventario, go.arrayobjetos, salaactual)
             elif accion == "5": # si dedicimos escapar
-                if monstruopasado == True:
+                if monstruopasado == True and salaactual != "FIN":
                     print("Has salido ileso del combate, sin embargo, tu orgullo ha sido gravemente herido. Pierdes 50 HP.")
                     personaje[1] = personaje[1] - 50
+                elif salaactual == "FIN": #si estamos en la sala FIN, no podemos huir del monstruo
+                    print("Es el monstruo final, no puedes huir de él.")
+                    accion = ""
     
     if personaje[1] < 1: #bajar a 0 o menos de vida es condición de derrota.
         print("Tus heridas tras el último encuentro son letales, tu cuerpo no puede aguantar más. Has perdido la partida.")
@@ -87,13 +92,16 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
         return resultadosala
     
     # una vez que hayamos hecho lo que sea en la sala, vamos a salir. Si no hay salidas disponibles, se acabó el juego.
-    if len(salidas) == 0:
+    if len(salidas) == 0 and salaactual != "FIN": #siempre que no sea la sala FIN
         print("Parece que has llegado a un callejón sin salida. Te quedas atrapado en la sala hasta que se derruba sobre tu cabeza.")
         print("Fin del juego. Has perdido.")
         resultadosala.append('-1') # hacemos un return para que la función termine aquí.
         return resultadosala
+    elif salaactual == "FIN":
+        print("Has acabado con el monstruo final, ¡enhorabuena!")
+        return resultadosala
     else:
-        print("Tus salidas son "+" ".join(salidas))
+        print("Tus salidas son: "+" ".join(salidas))
         opcion = input("Elige por donde quieres salir ").upper()
         while opcion not in salidas:
             opcion = input("Te chocas con una pared. Elige otra ruta. ").upper()
@@ -189,6 +197,6 @@ def nuevaPartida():
     
     if salaactual == "FIN":
         print("Has llegado a la sala final")
-        
+        resultadosala = avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario)
 
 nuevaPartida()
