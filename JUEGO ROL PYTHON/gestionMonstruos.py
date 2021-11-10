@@ -3,7 +3,7 @@ import gestionFicheros as gf
 import gestionObjetos as go
 
 #hay que definir este array aqui, si no, las funciones no pueden encontrarlo.
-arraymonstruos = gf.generarMonstruos()
+arraymonstruos = gf.generarMonstruos(gf.opcion)
 
 def probalilidad(porcentaje):
     #le pasaremos un porcentaje entero entre 0 y 100, devolverá true o false si el resultado cae dentro de esa probabilidad
@@ -152,7 +152,7 @@ def resultadoLucha(personaje, resultado, vidaresultado, monstruoactual, objetoUs
                 if personaje[2] == monstruoactual[3]: #si nuestra cualidad también coincide, sumamos 20%
                     bonus = 0.2*(int(puntosObjeto)+int(monstruoactual[2]))
                     print("Tu cualidad de "+personaje[2]+" ha sido efectiva, recibes un bonus de "+str(bonus)+" de vida.")
-                    vidaresultado = vidaresultado + bonus
+                    vidaresultado = vidaresultado + int(bonus)
             else:# si no es la misma
                 print("Has usado un "+nombreObjeto+". Ha sido contraproducente, pierdes "+puntosObjeto+" puntos de vida.")
                 vidaresultado = vidaresultado - int(puntosObjeto)

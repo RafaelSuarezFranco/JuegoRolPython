@@ -1,0 +1,7 @@
+NOMBRE;VIDA;HABILIDAD;TIPO PARTIDA; SALA ACTUAL;MONSTRUO PASADO;CANTIDAD OBJETOS;OBJETOS
+aaaa;130;MAGIA;custom;1;True;0
+aaaaaa;51;LUCHA;default;4;False;2;8;1
+hola;160;ASTUCIA;custom;3;True;0
+aaaa;130;MAGIA;default;4;True;1;4
+aaaa;130;MAGIA;custom;1;True;0
+aaaa;130;MAGIA;custom;1;True;0

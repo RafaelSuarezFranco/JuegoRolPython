@@ -2,7 +2,8 @@ import random
 import gestionFicheros as gf
 import gestionMonstruos as gm #necesitamos usar la funcion de probabilidad
 
-arrayobjetos = gf.generarObjetos()
+
+arrayobjetos = gf.generarObjetos(gf.opcion)
 
 def esEntero(num):
     try:
