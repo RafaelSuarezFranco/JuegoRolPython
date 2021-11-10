@@ -3,4 +3,4 @@
 3;Dragón anciano;80;MAGIA;Prepárate para esquivar su aliento de fuego, o saldrás muy mal parado;
 4;Cocodrilo Desdentado;30;LUCHA;No es una gran amenaza dado que carece de dientes, pero aún puede arrear coletazos;
 5;Voluntario de Greenpeace;10;ASTUCIA;No es muy violento, pero desde luego muy molesto;
-6;Tomás;25;ASTUCIA;Es el profesor de informática O_o Pondrá a prueba tus capacidades como programador. ¡Al lío!;
+6;Brujo Oscuro;25;ASTUCIA;Sus maldiciones son perjudiciales, aunque rara vez letales;

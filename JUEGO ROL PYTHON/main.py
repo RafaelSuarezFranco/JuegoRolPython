@@ -33,7 +33,6 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
         print("")
     
 
-    
     #mostrar mensaje de ambiente
     ambiente = randomizarAmbiente(arrayambientes)
     print(ambiente)
@@ -46,45 +45,10 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     # aqui calculamos si hay o no un monstruo
     monstruopasado, monstruoactual= gm.invocarMonstruo(monstruopasado, salaactual)
     resultadosala.append(monstruopasado)
-       
+    
     if monstruopasado == True or nuevosObjetos != None: #si hay un monstruo u objetos en la sala
-        accion = ""
-        while accion != "4" and accion != "5":
-            #este es el menu que se mostrará si hay monstruo y/o objeto, si no hay nada, vamos directamente a la elección
-            #del siguiente camino. Algunas acciones no nos sacarán de este menú, como mostrar el estado actual o recoger un
-            #objeto. otras acciones son definitivas, si elegimos luchar por ejemplo, ya no hay posibilidad de huir o recoger objeto
-            print("\nElige una acción")
-            print("1 - Estado del personaje")
-            print("2 - Monstrar tu inventario")
-            print("3 - Recoger Objeto")
-            if monstruopasado == True: #si hay objetos pero no hay monstruo, no queremos enseñar esto
-                print("4 - Luchar con el monstruo")
-                print("5 - Huir del monstruo")
-            else:
-                print("4, 5 - Salir de la sala")
-                
-            accion = input("")
-
-            if accion == "1":
-                mostrarPersonaje()
-            elif accion == "2":
-                go.consultarInventario(inventario)
-            elif accion == "3":
-                if nuevosObjetos != None:
-                    inventario = go.recogerObjeto(nuevosObjetos, inventario)
-                    nuevosObjetos = None
-                else:
-                    print("No puedes recoger más objetos de esta sala.")
-            elif accion == "4": #si decidimos luchar
-                if monstruopasado == True:
-                    personaje[1] = gm.lucha(personaje, monstruoactual, inventario, go.arrayobjetos, salaactual)
-            elif accion == "5": # si dedicimos escapar
-                if monstruopasado == True and salaactual != "FIN":
-                    print("Has salido ileso del combate, sin embargo, tu orgullo ha sido gravemente herido. Pierdes 50 HP.")
-                    personaje[1] = personaje[1] - 50
-                elif salaactual == "FIN": #si estamos en la sala FIN, no podemos huir del monstruo
-                    print("Es el monstruo final, no puedes huir de él.")
-                    accion = ""
+        #entonces mostramos el menú, si no, pasaremos directamente a elegir la salida
+        menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, go.arrayobjetos, salaactual, monstruopasado)
     
     if personaje[1] < 1: #bajar a 0 o menos de vida es condición de derrota.
         print("Tus heridas tras el último encuentro son letales, tu cuerpo no puede aguantar más. Has perdido la partida.")
@@ -133,6 +97,49 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
  
     return resultadosala
     #en resultadosala tenemos: [monstruopasado, salaactual]
+
+
+def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos, salaactual, monstruopasado):
+    # si hay monstruo o objeto, damos a elegir las acciones.
+    accion = ""
+    while accion != "4" and accion != "5":
+        #este es el menu que se mostrará si hay monstruo y/o objeto, si no hay nada, vamos directamente a la elección
+        #del siguiente camino. Algunas acciones no nos sacarán de este menú, como mostrar el estado actual o recoger un
+        #objeto. otras acciones son definitivas, si elegimos luchar por ejemplo, ya no hay posibilidad de huir o recoger objeto
+        print("\nElige una acción")
+        print("1 - Estado del personaje")
+        print("2 - Mostrar tu inventario")
+        print("3 - Recoger Objeto")
+        if monstruopasado == True: #si hay objetos pero no hay monstruo, no queremos enseñar esto
+            print("4 - Luchar con el monstruo")
+            print("5 - Huir del monstruo")
+        else:
+            print("4, 5 - Salir de la sala")
+                
+        accion = input("")
+
+        if accion == "1":
+            mostrarPersonaje()
+        elif accion == "2":
+            go.consultarInventario(inventario)
+        elif accion == "3":
+            if nuevosObjetos != None:
+                inventario = go.recogerObjeto(nuevosObjetos, inventario)
+                nuevosObjetos = None
+            else:
+                print("No puedes recoger más objetos de esta sala.")
+        elif accion == "4": #si decidimos luchar
+            if monstruopasado == True:
+                personaje[1] = gm.lucha(personaje, monstruoactual, inventario, go.arrayobjetos, salaactual)
+        elif accion == "5": # si dedicimos escapar
+            if monstruopasado == True and salaactual != "FIN":
+                print("Has salido ileso del combate, sin embargo, tu orgullo ha sido gravemente herido. Pierdes 50 HP.")
+                personaje[1] = personaje[1] - 50
+            elif salaactual == "FIN": #si estamos en la sala FIN, no podemos huir del monstruo
+                print("Es el monstruo final, no puedes huir de él.")
+                accion = ""
+
+                    
 
 def crearPersonaje():
     print("Vamos a crear tu personaje")
