@@ -9,12 +9,12 @@ import csv
 #personaje = []
 inventario = []
 
-
 def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, le pasamos None)
     if partida == None:# SI LA PARTIDA ES COMPLETAMENTE NUEVA
         gf.opcion = gf.elegirArchivos() #controla si usamos archivos default o custom
         #inicializamos variables que controlarán el estado actual del juego
         gpj.personaje = gpj.crearPersonaje()
+        dificultad = elegirDificultad()
         inventario = []
         salaactual = "1"
         resultadosala = []
@@ -27,16 +27,23 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
     else: #SI LA PARTIDA ES CARGADA, INICILIZAMOS LAS VARIABLES CON LA PARTIDA QUE HEMOS PASADO
         gf.opcion = partida[3] # default o custom guardado en partida[3]
         gpj.personaje = [partida[0], int(partida[1]), partida[2]]
+        
+        dificultad = 0
+        if partida[4] == "facil":
+            dificultad = -1
+        elif partida[4] == "dificil":
+            dificultad = 1
+            
         inventario = []
-        for i in range(1, int(partida[6])):
-            inventario.append(int(partida[6+i]))#añadiendo los objetos guardados al inventario
+        for i in range(1, int(partida[7])):
+            inventario.append(int(partida[7+i]))#añadiendo los objetos guardados al inventario
 
-        salaactual = partida[4]
+        salaactual = partida[5]
         resultadosala = []
         monstruopasado = True
-        if partida[5] == "False":#el monstruo pasado está guardado como string.
+        if partida[6] == "False":#el monstruo pasado está guardado como string.
             monstruopasado = False
-        input("Pulsa intro para continuar con la partida...")
+        input("Partida cargada con éxito. Pulsa intro para continuar...")
     
     #cargamos en memoria los elementos del juego.
     arraysalas = gf.generarMapa(gf.opcion)
@@ -54,7 +61,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
     #avanzamos por las salas mientras que no llegemos a la sala FIN o la sala actual valga -1, que significa que estamos
     #en un callejón sin salida.
     while salaactual != "FIN" and salaactual != "-1" and salaactual !="guardar y salir" and gpj.personaje[1] > 0:
-        resultadosala = gs.avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario)
+        resultadosala = gs.avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario, dificultad)
         salaactual = resultadosala[1]
         monstruopasado = resultadosala[0]
         if salaactual != "-1" and salaactual != "guardar y salir":
@@ -64,6 +71,30 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
            
     if salaactual == "FIN":
         print("Has llegado a la sala final")
-        resultadosala = gs.avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario)
+        resultadosala = gs.avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario, dificultad)
 
 #nuevaPartida()
+        
+
+#dificultad afecta a la probabilidad de encontrar objetos, de generar un monstruo, a los dados del monstruo y a la
+#penalización por huir de un monstruo.
+def elegirDificultad():
+    dificultad = ""
+    while dificultad != "1" and dificultad != "2" and dificultad != "3":
+        print("Elige la dificultad:")
+        print("1 - Fácil")
+        print("2 - Normal")
+        print("3 - Difícil")
+        dificultad = input("")
+    if dificultad == "1":
+        dificultad = -1
+    elif dificultad == "2":
+        dificultad = 0
+    else:
+        dificultad = 1
+    #aunque pedimos del 1 al 3, me interesa guardar un entero que sea -1, 0, o 1, ya la dificultad será un multiplicador
+    #de ciertos parámetros del juego. El 0 será normal, es decir, no influirá, es la dificultad base del juego, mientras
+    # que el -1 y el 1 sumarán o restarán a ciertos parámetros para hacer más fácil o difícil el juego.
+    return dificultad
+            
+        

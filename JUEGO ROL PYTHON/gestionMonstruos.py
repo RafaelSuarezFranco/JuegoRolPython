@@ -20,14 +20,13 @@ def randomizarMonstruo(arraymonstruos): #Devuelve un monstruo aleatorio con sus 
             return arraymonstruos[indice]
 
 
-def invocarMonstruo(monstruopasado, salaactual): # una vez estemos en la sala, usamos esta funcion para dedicir si hay o no hay monstruo y generar mensajes etc
+def invocarMonstruo(monstruopasado, salaactual, dificultad):
+    # una vez estemos en la sala, usamos esta funcion para dedicir si hay o no hay monstruo y generar mensajes etc
     hayMonstruo = False
     if monstruopasado == False: #si no hubo monstruo en la sala anterior
-        hayMonstruo = probalilidad(75)
-        #print("No hubo monstruo en la sala anterior")
-    else:
-        hayMonstruo = probalilidad(66)
-        #print("Hubo monstruo en la sala anterior")
+        hayMonstruo = probalilidad(75 + (dificultad * 5))
+    else: # la dificultad hace un 5% más o menos probable que hayan monstruos.
+        hayMonstruo = probalilidad(66 + (dificultad * 5))
     
     if salaactual == "FIN": #si es la sala final, debe haber monstruo
         hayMonstruo = True
@@ -44,7 +43,7 @@ def invocarMonstruo(monstruopasado, salaactual): # una vez estemos en la sala, u
     return monstruopasado, monstruoactual
 
 
-def lucha(personaje, monstruoactual, inventario, arrayobjetos, salaactual):
+def lucha(personaje, monstruoactual, inventario, arrayobjetos, salaactual, dificultad):
     print("Has decidido enfrentarte al "+monstruoactual[1])
     
     #aquí damos la opción de usar un objeto, si tenemos algo en el inventario
@@ -78,7 +77,8 @@ def lucha(personaje, monstruoactual, inventario, arrayobjetos, salaactual):
     
         resultadosenemigo = [] #dos tiradas para el enemigo, las guardamos ordenadas.
         for i in range(0,2):    
-            resultadosenemigo.append(random.randint(1, 25))
+            resultadosenemigo.append(random.randint(1, 25 + (dificultad * 5)))
+            #la dificultad aumenta o disminuye las probabilidades de ganar del monstruo.
         enemax1 = max(resultadosenemigo)
         resultadosenemigo.remove(enemax1)
         enemax2 = max(resultadosenemigo)   

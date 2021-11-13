@@ -40,10 +40,17 @@ def generarMonstruos(opcion):
     return arraymonstruos
 
 #me conviene tener esta función aquí
-def guardarPartida(personaje, opcion, salaactual, monstruopasado, inventario):
+def guardarPartida(personaje, opcion, salaactual, monstruopasado, inventario, dificultad):
     partidas = open("partidasGuardadas.txt",'a', newline='', encoding='utf-8')
+    if dificultad == 0:
+        dificultad = "normal"
+    elif dificultad == 1:
+        dificultad = "dificil"
+    elif dificultad == -1:
+        dificultad = "facil"  
     #en la partida guardaré la cantidad de objetos también, para saber cuántos hay.
-    datosGuardados = [personaje[0], str(personaje[1]), personaje[2], opcion, str(salaactual), str(monstruopasado), str(len(inventario))]
+    datosGuardados = [personaje[0], str(personaje[1]), personaje[2], opcion, str(dificultad), str(salaactual),
+                      str(monstruopasado), str(len(inventario))]
     for objeto in inventario:
         datosGuardados.append(str(objeto))
     with partidas:
@@ -64,12 +71,13 @@ def elegirPartidaGuardada():#muestra las partidas guardadas en una tabla
     ficheropartidas = open("partidasGuardadas.txt",'r', encoding='utf-8')   
     partidasguardadas = csv.reader(ficheropartidas, delimiter = ';')
     arraypartidas = list(partidasguardadas)
-    tablaPartidas=PrettyTable(["Nº PARTIDA","NOMBRE","VIDA","HABILIDAD","TIPO PARTIDA","SALA ACTUAL"])
+    tablaPartidas=PrettyTable(["Nº PARTIDA","NOMBRE","VIDA","HABILIDAD","TIPO PARTIDA","DIFICULTAD","SALA ACTUAL"])
     contador = 0
-    
+
+        
     for partida in arraypartidas:
         if contador != 0:
-            tablaPartidas.add_row([contador, partida[0], partida[1], partida[2], partida[3], partida[4]])
+            tablaPartidas.add_row([contador, partida[0], partida[1], partida[2], partida[3], partida[4], partida[5]])
         contador = contador + 1
     print(tablaPartidas)
     

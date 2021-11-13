@@ -20,14 +20,15 @@ def randomizarObjeto(arrayobjetos): #Devuelve un objeto (solo su número, si que
             return arrayobjetos[indice][0]
             
         
-def invocarObjeto():# por cada sala, esta función generará 0, 1 o 2 objetos aleatorios.
+def invocarObjeto(dificultad):# por cada sala, esta función generará 0, 1 o 2 objetos aleatorios.
+    #la dificultad hace más o menos probable que hayan objetos. si es fácil, será 85 y 40, si es difícil, será 65 y 20.
     objetosNuevos = []
-    hayObjeto = gm.probalilidad(75)
+    hayObjeto = gm.probalilidad(75 - (dificultad * 10))
     if hayObjeto == True:
         objeto1 = int(randomizarObjeto(arrayobjetos))-1
         objetosNuevos.append(objeto1)
         print("En la sala hay " + arrayobjetos[objeto1][1]+".")
-        hayOtroObjeto = gm.probalilidad(30)
+        hayOtroObjeto = gm.probalilidad(30 - (dificultad * 10))
         if hayOtroObjeto == True:
             objeto2 = objeto1
             while objeto2 == objeto1: #no permitimos que un segundo objeto sea igual al primero

@@ -15,12 +15,10 @@ def randomizarAmbiente(arrayambientes): #Devuelve una cadena de ambiente aleator
         if arrayambientes[indice][0] == str(numAleatorio):
             return arrayambientes[indice][1]
 
-def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario):
+def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario, dificultad):
     resultadosala = [] #devolveré este array de resultados para saber la siguiente sala, si hubo o no hubo monstruo, etc.
-    # dado que hay ciertos problemas a la hora de devolverlos por separado.
     nuevosObjetos = []
     salidas = []#estas serán las salidas posibles, puede contener N S O E
-    guardarYsalir = False
     
     try:
         salaactual = int(salaactual)
@@ -32,28 +30,41 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
         #debería ocurrir en la sala FIN
         print("")
     
-
+    #aquí damos la opción de salir (guardando o sin guardar).Si elegimos una de esas opciones, hacemos un return de
+    #resultado sala para salir de la función, pero debemos introducir algo en ese return para que no se vuelva a iterar esta
+    #función. Para ello, simplemente introduzco la cadena 'guardar y salir' en ese return, la cual indicará al bucle de
+    #de nuevaPartida que no se debe seguir iterando, por lo tanto salimos directamente al menú principal.
+    salirPartida = input("Pulsa intro para entrar en la sala.\nIntroduce G para Guardar y salir o S para Salir sin guardar.").lower()
+    
+    if salirPartida == "g":
+        gf.guardarPartida(gpj.personaje, gf.opcion, salaactual, monstruopasado, inventario, dificultad)
+        print("Saliendo de la partida.")
+        resultadosala.append(monstruopasado)
+        resultadosala.append('guardar y salir')
+        return resultadosala
+    elif salirPartida == "s":
+        print("Saliendo de la partida.")
+        resultadosala.append(monstruopasado)
+        resultadosala.append('guardar y salir')
+        return resultadosala
+    
+    print("")
     #mostrar mensaje de ambiente
     ambiente = randomizarAmbiente(arrayambientes)
     print(ambiente)
-    input("Pulsa intro para dar un paso adelante.")
-    print("")
     
     #calculo de objetos
-    nuevosObjetos = go.invocarObjeto()
+    nuevosObjetos = go.invocarObjeto(dificultad)
     
     # aqui calculamos si hay o no un monstruo
-    monstruopasado, monstruoactual= gm.invocarMonstruo(monstruopasado, salaactual)
+    monstruopasado, monstruoactual= gm.invocarMonstruo(monstruopasado, salaactual, dificultad)
     resultadosala.append(monstruopasado)
     
     if monstruopasado == True or nuevosObjetos != None: #si hay un monstruo u objetos en la sala
         #entonces mostramos el menú, si no, pasaremos directamente a elegir la salida
-        guardarYsalir = menuMapa(inventario, nuevosObjetos, gpj.personaje, monstruoactual, go.arrayobjetos, salaactual, monstruopasado)
+        menuMapa(inventario, nuevosObjetos, gpj.personaje, monstruoactual, go.arrayobjetos, salaactual, monstruopasado, dificultad)
     
-    if guardarYsalir == True:
-        print("Saliendo de la partida.")
-        resultadosala.append('guardar y salir')
-        return resultadosala
+    
     
     if gpj.personaje[1] < 1: #bajar a 0 o menos de vida es condición de derrota.
         print("Tus heridas tras el último encuentro son letales, tu cuerpo no puede aguantar más. Has perdido la partida.")
@@ -104,10 +115,9 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     #en resultadosala tenemos: [monstruopasado, salaactual]
 
 
-def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos, salaactual, monstruopasado):
+def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos, salaactual, monstruopasado, dificultad):
     # si hay monstruo o objeto, damos a elegir las acciones.
     accion = ""
-    guardarYsalir = False #si guardamos, también saldremos al menú principal
     
     while accion != "4" and accion != "5":
         #este es el menu que se mostrará si hay monstruo y/o objeto, si no hay nada, vamos directamente a la elección
@@ -122,7 +132,6 @@ def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos,
             print("5 - Huir del monstruo")
         else:
             print("4, 5 - Salir de la sala")
-        print("6 - Guardar partida y salir")
                 
         accion = input("")
 
@@ -138,17 +147,16 @@ def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos,
                 print("No puedes recoger más objetos de esta sala.")
         elif accion == "4": #si decidimos luchar
             if monstruopasado == True:
-                gpj.personaje[1] = gm.lucha(gpj.personaje, monstruoactual, inventario, go.arrayobjetos, salaactual)
+                gpj.personaje[1] = gm.lucha(gpj.personaje, monstruoactual, inventario, go.arrayobjetos, salaactual, dificultad)
         elif accion == "5": # si dedicimos escapar
             if monstruopasado == True and salaactual != "FIN":
-                print("Has salido ileso del combate, sin embargo, tu orgullo ha sido gravemente herido. Pierdes 50 HP.")
-                gpj.personaje[1] = gpj.personaje[1] - 50
+                penalizacion = 50 + dificultad * 10
+                gpj.personaje[1] = gpj.personaje[1] - penalizacion
+                print("Has salido ileso del combate, sin embargo, tu orgullo ha sido gravemente herido. Pierdes "+str(penalizacion)+" HP.")
+                
             elif salaactual == "FIN": #si estamos en la sala FIN, no podemos huir del monstruo
                 print("Es el monstruo final, no puedes huir de él.")
                 accion = ""
-        elif accion == "6":
-            gf.guardarPartida(gpj.personaje, gf.opcion, salaactual, monstruopasado, inventario)
-            guardarYSalir = True
-            return guardarYSalir
+ 
 
 
