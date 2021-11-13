@@ -71,11 +71,6 @@ def elegirPartidaGuardada():#muestra las partidas guardadas en una tabla
     ficheropartidas = open("partidasGuardadas.txt",'r', encoding='utf-8')   
     partidasguardadas = csv.reader(ficheropartidas, delimiter = ';')
     arraypartidas = list(partidasguardadas)
-    
-    if len(arraypartidas) == 1:#si no hay partidas guardadas
-        print("No tienes partidas guardadas. Se creará una nueva.")
-        return None
-    
     tablaPartidas=PrettyTable(["Nº PARTIDA","NOMBRE","VIDA","HABILIDAD","TIPO PARTIDA","DIFICULTAD","SALA ACTUAL"])
     contador = 0
 

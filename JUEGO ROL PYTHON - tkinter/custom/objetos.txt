@@ -1,0 +1,9 @@
+1;unAAAAAAAAA cuchillo sin afilar;LUCHA;10;
+2;unaAAAAAAAAA cerbatana somnífera;ASTUCIA;5;
+3;un AAAAAAAAAyogurt caducado;MAGIA;25;
+4;unaAAAAAAAAA hoja afilada;LUCHA;20;
+5;un AAAAAAAAAarco con flechas envenenadas;ASTUCIA;15;
+6;un AAAAAAAAAspray corrosivo;MAGIA;30;
+7;unaAAAAAAAAA poción misteriosa;ASTUCIA;30;
+8;un AAAAAAAAAbarril de pólvora;LUCHA;40;
+9;unaAAAAAAAAA pistola de portales;MAGIA;50;

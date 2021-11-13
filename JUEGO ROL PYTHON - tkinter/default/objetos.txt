@@ -1,0 +1,9 @@
+1;un cuchillo sin afilar;LUCHA;10;
+2;una cerbatana somnífera;ASTUCIA;5;
+3;un yogurt caducado;MAGIA;25;
+4;una hoja afilada;LUCHA;20;
+5;un arco con flechas envenenadas;ASTUCIA;15;
+6;un spray corrosivo;MAGIA;30;
+7;una poción misteriosa;ASTUCIA;30;
+8;un barril de pólvora;LUCHA;40;
+9;una pistola de portales;MAGIA;50;
