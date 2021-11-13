@@ -1,10 +1,10 @@
-import random
 import gestionFicheros as gf
 import gestionMonstruos as gm
 import gestionObjetos as go
 import gestionSalas as gs
 import gestionPersonaje as gpj
-import csv
+from tkinter import *
+import centrarPantalla as cp
 
 #personaje = []
 inventario = []
@@ -80,22 +80,50 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
 #dificultad afecta a la probabilidad de encontrar objetos, de generar un monstruo, a los dados del monstruo y a la
 #penalización por huir de un monstruo.
 def elegirDificultad():
-    dificultad = ""
-    while dificultad != "1" and dificultad != "2" and dificultad != "3":
-        print("Elige la dificultad:")
-        print("1 - Fácil")
-        print("2 - Normal")
-        print("3 - Difícil")
-        dificultad = input("")
-    if dificultad == "1":
-        dificultad = -1
-    elif dificultad == "2":
-        dificultad = 0
-    else:
-        dificultad = 1
-    #aunque pedimos del 1 al 3, me interesa guardar un entero que sea -1, 0, o 1, ya la dificultad será un multiplicador
-    #de ciertos parámetros del juego. El 0 será normal, es decir, no influirá, es la dificultad base del juego, mientras
-    # que el -1 y el 1 sumarán o restarán a ciertos parámetros para hacer más fácil o difícil el juego.
-    return dificultad
+    ventanadif = Tk()
+    ventanadif.title('DIFICULTAD')
+    cp.centrarPantalla(200, 300, ventanadif)
+    ventanadif.resizable(False, False)
+
+    imgnormal = PhotoImage(file="./pictures/normal.png")
+    imgfacil = PhotoImage(file="./pictures/facil.png")
+    imgdificil = PhotoImage(file="./pictures/dificil.png")
+    labelimg = Label(ventanadif,image=imgnormal)
+    labelimg.place(x=0, y=0)
+    
+    lbl = Label(ventanadif, text="Elige una dificultad")
+    lbl.place(x=100, y=0)
+    
+    lbldescripcion = Label(ventanadif, text="Dificultad base del juego.")
+    lbldescripcion.place(x=10, y=100)
+    
+    def describirdif():
+        dif = dificultad.get()
+        if dif == -1:
+            lbldescripcion.configure(text="""Menos monstruos. Más objetos.\nMonstruos más débiles. Penalización de huida menor.""")
+            labelimg.configure(image=imgfacil)
+        elif dif == 1:
+            lbldescripcion.configure(text="""Más monstruos. Menos objetos.\nMonstruos más fuertes. Penalización de huida mayor.""")
+            labelimg.configure(image=imgdificil)
+        elif dif == 0:
+            lbldescripcion.configure(text="Dificultad base del juego.")
+            labelimg.configure(image=imgnormal)
+    
+    dificultad = IntVar()
+    rad1 = Radiobutton(ventanadif,text='Fácil', value=-1, variable=dificultad, command=describirdif)
+    rad2 = Radiobutton(ventanadif,text='Normal', value=0, variable=dificultad, command=describirdif)
+    rad3 = Radiobutton(ventanadif,text='Difícil', value=1, variable=dificultad, command=describirdif)
+
+    def elegirdif():
+        dif = dificultad.get()
+        if dif == 1 or dif == 0 or dif == -1:
+            ventanadif.destroy()
             
-        
+    btnelegir = Button(ventanadif, text="Aceptar", command=elegirdif)
+    rad1.place(x=10, y=50)
+    rad2.place(x=120, y=50)
+    rad3.place(x=240, y=50)
+    btnelegir.place(x=120, y=160)
+    
+    ventanadif.mainloop()
+    return dificultad.get()  

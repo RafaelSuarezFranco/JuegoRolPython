@@ -22,7 +22,7 @@ def crearPersonaje():
     lblnombre = Label(ventanapj, text="Nombre")
     lblnombre.place(x=200, y=60)
 
-    txtnombre = Entry(ventanapj,width=10)
+    txtnombre = Entry(ventanapj,width=20)
     txtnombre.place(x=200, y=100)
     txtnombre.focus()
     
