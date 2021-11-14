@@ -2,3 +2,4 @@ NOMBRE;VIDA;HABILIDAD;TIPO PARTIDA;DIFICULTAD; SALA ACTUAL;MONSTRUO PASADO;CANTI
 aaaa;130;MAGIA;custom;normal;1;True;0
 tal;92;LUCHA;default;dificil;3;True;0
 asdf;105;LUCHA;default;facil;1;False;0
+111111111;184;MAGIA;default;dificil;1;False;0

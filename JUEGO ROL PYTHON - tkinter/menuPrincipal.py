@@ -1,39 +1,41 @@
 import gestionPartidas as gp
 import gestionFicheros as gf
 from tkinter import *
-import centrarPantalla as cp
+import gestionPantalla as cp
 
-ventana = Tk()
-ventana.title('JUEGO ROL PYTHON - VERSIÓN TKINTER')
-cp.centrarPantalla(350, 500, ventana)
-ventana.resizable(False, False)
+def menuPrincipal():
+    ventana = Tk()
+    ventana.title('JUEGO ROL PYTHON - VERSIÓN TKINTER')
+    cp.centrarPantalla(350, 500, ventana)
+    ventana.resizable(False, False)
+    imagenfondo = PhotoImage(file="./pictures/menuppal.png")    
+    # crear un canvas para poner la foto de fondo y otras fotos encima.
+    frame = Frame(ventana)
+    frame.pack()
+    canvas = Canvas(frame, bg="black", width=700, height=400)
+    canvas.create_image(200,180,image=imagenfondo)
+    canvas.pack()
+    canvas.create_text(238,18,text='MENÚ PRINCIPAL', fill='black', font=('freemono', 20, 'bold'))
+    canvas.create_text(240,20,text='MENÚ PRINCIPAL', fill='white', font=('freemono', 20, 'bold'))
 
-
-imagenfondo = PhotoImage(file="./pictures/menuppal.png")
-labelfondo = Label(ventana,image=imagenfondo)
-labelfondo.place(x=0, y=0)
-
-lbl = Label(ventana, text="MENÚ PRINCIPAL")
-lbl.place(x=200, y=0)
-
-def botonnuevaClick():
-    ventana.destroy()
-    gp.nuevaPartida(None)
+    def botonnuevaClick():
+        ventana.destroy()
+        gp.nuevaPartida(None)
     
-def botoncargarClick():
-    ventana.destroy()
-    gp.nuevaPartida(gf.elegirPartidaGuardada())
+    def botoncargarClick():
+        ventana.destroy()
+        gp.nuevaPartida(gf.elegirPartidaGuardada())
 
-def salirClick():
-    ventana.destroy()
+    def salirClick():
+        ventana.destroy()
 
-botonnueva = Button(ventana, text="Nueva Partida", command=botonnuevaClick)
-botonnueva.place(x=200, y=100)
+    botonnueva = Button(ventana, text="Nueva Partida", command=botonnuevaClick)
+    botonnueva.place(x=150, y=300)
 
-botoncargar = Button(ventana, text="Cargar Partida", command=botoncargarClick)
-botoncargar.place(x=200, y=200)
+    botoncargar = Button(ventana, text="Cargar Partida", command=botoncargarClick)
+    botoncargar.place(x=250, y=300)
 
-botonsalir = Button(ventana, text="Salir", command=salirClick)
-botonsalir.place(x=200, y=300)
+    botonsalir = Button(ventana, text="Salir", command=salirClick)
+    botonsalir.place(x=350, y=300)
 
-ventana.mainloop()
+    ventana.mainloop()

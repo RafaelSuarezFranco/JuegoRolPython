@@ -1,6 +1,6 @@
 import random
 from tkinter import *
-import centrarPantalla as cp
+import gestionPantalla as cp
 
 personaje = []
 #el personaje se guardará como una lista global a la que hay que llamar desde este módulo.
@@ -11,32 +11,61 @@ def crearPersonaje():
     ventanapj.title('CREACIÓN PERSONAJE')
     cp.centrarPantalla(350, 500, ventanapj)
     ventanapj.resizable(False, False)
-    
+    cp.deshabilitarX(ventanapj)
     imagenfondo = PhotoImage(file="./pictures/personajes.png")
-    labelfondo = Label(ventanapj,image=imagenfondo)
-    labelfondo.place(x=0, y=0)
+    # crear un canvas para poner la foto de fondo y otras fotos encima.
+    frame = Frame(ventanapj)
+    frame.pack()
+    canvas = Canvas(frame, bg="black", width=700, height=400)
+    canvas.create_image(350,200,image=imagenfondo)
+    canvas.pack()
+    
+    pjlucha = PhotoImage(file="./pictures/LUCHA.png")
+    pjmagia = PhotoImage(file="./pictures/MAGIA.png")
+    pjastucia = PhotoImage(file="./pictures/ASTUCIA.png")
 
-    lbl = Label(ventanapj, text="CREACIÓN DE PERSONAJE")
-    lbl.place(x=200, y=0)
-
-    lblnombre = Label(ventanapj, text="Nombre")
-    lblnombre.place(x=200, y=60)
-
+    fotopj1 = canvas.create_image(120,200,image=pjlucha)
+    fotopj2 = canvas.create_image(210,200,image=pjmagia)
+    fotopj3 = canvas.create_image(320,200,image=pjastucia)
+    #las fotos de pj están escondidas, se enseña la que se seleccione.
+    canvas.itemconfigure(fotopj1, state='hidden')
+    canvas.itemconfigure(fotopj2, state='hidden')
+    canvas.itemconfigure(fotopj3, state='hidden')
+    #título, introducción de nombre
+    canvas.create_text(240,20,text='CREACIÓN DE PERSONAJE', fill='white', font=('freemono', 16, 'bold'))
+    canvas.create_text(140,68,text='Nombre', fill='black', font=('freemono', 11, 'bold'))
+    canvas.create_text(140,70,text='Nombre', fill='white', font=('freemono', 11, 'bold'))
     txtnombre = Entry(ventanapj,width=20)
-    txtnombre.place(x=200, y=100)
+    txtnombre.place(x=200, y=60)
     txtnombre.focus()
     
+    def verpersonaje():
+        pj = habilidad.get()
+        if pj == 1:
+            canvas.itemconfigure(fotopj1, state='normal')
+            canvas.itemconfigure(fotopj2, state='hidden')
+            canvas.itemconfigure(fotopj3, state='hidden')
+        elif pj == 2:
+            canvas.itemconfigure(fotopj1, state='hidden')
+            canvas.itemconfigure(fotopj2, state='normal')
+            canvas.itemconfigure(fotopj3, state='hidden')
+        elif pj == 3:
+            canvas.itemconfigure(fotopj1, state='hidden')
+            canvas.itemconfigure(fotopj2, state='hidden')
+            canvas.itemconfigure(fotopj3, state='normal')
+    
     habilidad = IntVar()
-    rad1 = Radiobutton(ventanapj,text='LUCHA', value=1, variable=habilidad)
-    rad2 = Radiobutton(ventanapj,text='MAGIA', value=2, variable=habilidad)
-    rad3 = Radiobutton(ventanapj,text='ASTUCIA', value=3, variable=habilidad)
+    rad1 = Radiobutton(ventanapj,text='LUCHA', value=1, variable=habilidad, command=verpersonaje)
+    rad2 = Radiobutton(ventanapj,text='MAGIA', value=2, variable=habilidad, command=verpersonaje)
+    rad3 = Radiobutton(ventanapj,text='ASTUCIA', value=3, variable=habilidad, command=verpersonaje)
 
+    
     def crearpj():
         habil = ""
         if habilidad.get() == 1:
             habil = "LUCHA"
         elif habilidad.get() == 2:
-            habil = "MAGIA"
+            habil = "MAGIA" 
         elif habilidad.get() == 3:
             habil = "ASTUCIA"
         else:
@@ -45,22 +74,20 @@ def crearPersonaje():
         nombre = txtnombre.get()
         if nombre == "":
             messagebox.showinfo('Error', 'Por favor, escribe un nombre')
-        
         vida = 100
         if nombre != "" and habil != "":
             vidarand = random.randint(0, 100)
             vida = vida + vidarand
             messagebox.showinfo("Atención","Los dioses te han condedido "+str(vida)+" puntos de vida.")
             personaje.extend((nombre, vida, habil))
-            
             ventanapj.destroy()
             
 
     btncrear = Button(ventanapj, text="Crear personaje", command=crearpj)
-    rad1.place(x=120, y=140)
-    rad2.place(x=200, y=140)
-    rad3.place(x=280, y=140)
-    btncrear.place(x=400, y=140)
+    rad1.place(x=50, y=300)
+    rad2.place(x=170, y=300)
+    rad3.place(x=290, y=300)
+    btncrear.place(x=400, y=300)
     
     ventanapj.mainloop()
     return personaje
@@ -69,21 +96,26 @@ def crearPersonaje():
 def mostrarPersonaje():
     ventanapj = Tk()
     ventanapj.title('ESTADO DEL PERSONAJE')
-    cp.centrarPantalla(200, 200, ventanapj)
+    cp.centrarPantalla(220, 400, ventanapj)
     ventanapj.resizable(False, False)
     
+    imgpj = PhotoImage(file="./pictures/"+personaje[2]+".png")
+    labelimg = Label(ventanapj,image=imgpj)
+    labelimg.place(x=10, y=10)
+    
     lblnombre = Label(ventanapj, text="Nombre: "+personaje[0])
-    lblnombre.place(x=40, y=30)
+    lblnombre.place(x=240, y=30)
     lblvida = Label(ventanapj, text="Vida: " + str(personaje[1]))
-    lblvida.place(x=40, y=50)
+    lblvida.place(x=240, y=50)
     lblhabilidad = Label(ventanapj, text="Habilidad: " + personaje[2])
-    lblhabilidad.place(x=40, y=70)
+    lblhabilidad.place(x=240, y=70)
     
     def salir():
-        ventanapj.destroy()
+        crearPersonaje()
+        #ventanapj.destroy()
         
     botonsalir = Button(ventanapj, text="Salir", command=salir)
-    botonsalir.place(x=40, y=100)
+    botonsalir.place(x=240, y=150)
     
     ventanapj.mainloop()
     

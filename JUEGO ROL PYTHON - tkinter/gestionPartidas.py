@@ -4,7 +4,7 @@ import gestionObjetos as go
 import gestionSalas as gs
 import gestionPersonaje as gpj
 from tkinter import *
-import centrarPantalla as cp
+import gestionPantalla as cp
 
 #personaje = []
 inventario = []
@@ -14,17 +14,47 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         gf.opcion = "default"
         #gf.opcion = gf.elegirArchivos() #controla si usamos archivos default o custom
         #inicializamos variables que controlarán el estado actual del juego
-        gpj.personaje = gpj.crearPersonaje()
+        gpj.personaje = gpj.crearPersonaje()#EN ESTE CASO se crean ventanas para crear el pj y elegir la dificultad.
         dificultad = elegirDificultad()
         inventario = []
         salaactual = "1"
         resultadosala = []
         monstruopasado = False #guardamos si hubo un monstruo en la sala anterior
-        print("Da comienzo la aventura, te encuentras en la sala 1.")
-        print("La mazmorra en la que te encuentras es inestable y colapsa a medida que la recorres.")
-        print("Cada sala por la que pases se derrumbará y no podrás volver sobre tus pasos. Elige bien a dónde vas.")
-        input("Pulsa intro para empezar...")
         
+        ######################### esto es una ventana introductoria con una breve narración.
+        sala1 = Tk()
+        sala1.title('Empieza el juego')
+        cp.centrarPantalla(360, 450, sala1)
+        sala1.resizable(False, False)
+        cp.deshabilitarX(sala1)
+        
+        frame = Frame(sala1)
+        frame.pack()
+        canvas = Canvas(frame, bg="black", width=700, height=400)
+        canvas.pack()
+        imgfondo = PhotoImage(file="./pictures/castillo.png")
+        canvas.create_image(230,180,image=imgfondo)
+        
+        narracion = canvas.create_text(200,320,text='Da comienzo la aventura, te encuentras \na las puertas de la mazmorra.',
+                                        fill='white', font=('freemono', 10, 'bold'))
+        
+        def botonsiguiente():
+            if btnsiguiente.counter == 0:
+                btnsiguiente.counter = btnsiguiente.counter + 1
+                canvas.itemconfigure(narracion, text="La mazmorra a la que vas a entrar es inestable \ny colapsa a medida que la recorres.")
+            elif btnsiguiente.counter == 1:
+                btnsiguiente.counter = btnsiguiente.counter + 1
+                canvas.itemconfigure(narracion, text="Cada sala por la que pases se derrumbará y no \npodrás volver sobre tus pasos. Elige bien a dónde vas.")
+                btnsiguiente.configure(text="Empezar")
+            else: 
+                sala1.destroy()
+        
+        btnsiguiente = Button(sala1, text="Siguiente", command=botonsiguiente)
+        btnsiguiente.counter = 0
+        btnsiguiente.place(x=380, y=300)
+        
+        sala1.mainloop()
+
     else: #SI LA PARTIDA ES CARGADA, INICILIZAMOS LAS VARIABLES CON LA PARTIDA QUE HEMOS PASADO
         gf.opcion = partida[3] # default o custom guardado en partida[3]
         gpj.personaje = [partida[0], int(partida[1]), partida[2]]
@@ -52,13 +82,6 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
     go.arrayobjetos = gf.generarObjetos(gf.opcion)
     gm.arraymonstruos = gf.generarMonstruos(gf.opcion)
 
-    """
-    Acerca del array de salas: como el tema sobre no volver a una sala anterior queda un poco a criterio del diseñador, lo
-    que he dedidido es que cada sala por la que pasemos se vaya borrando de dicho array, como si el mapa se fuera destruyendo
-    a medida que avanzamos. Esto implica que si nos encontramos en un callejón sin salida, el juego se da por perdido.
-    """
-    
-    
     #avanzamos por las salas mientras que no llegemos a la sala FIN o la sala actual valga -1, que significa que estamos
     #en un callejón sin salida.
     while salaactual != "FIN" and salaactual != "-1" and salaactual !="guardar y salir" and gpj.personaje[1] > 0:
@@ -84,30 +107,52 @@ def elegirDificultad():
     ventanadif.title('DIFICULTAD')
     cp.centrarPantalla(200, 300, ventanadif)
     ventanadif.resizable(False, False)
-
+    cp.deshabilitarX(ventanadif)
+    
+    frame = Frame(ventanadif)
+    frame.pack()
+    canvas = Canvas(frame, bg="black", width=700, height=400)
+    canvas.pack()
+    
     imgnormal = PhotoImage(file="./pictures/normal.png")
     imgfacil = PhotoImage(file="./pictures/facil.png")
     imgdificil = PhotoImage(file="./pictures/dificil.png")
-    labelimg = Label(ventanadif,image=imgnormal)
-    labelimg.place(x=0, y=0)
     
-    lbl = Label(ventanadif, text="Elige una dificultad")
-    lbl.place(x=100, y=0)
+    fotofacil = canvas.create_image(130,120,image=imgfacil)
+    fotonormal = canvas.create_image(130,120,image=imgnormal)
+    fotodificil = canvas.create_image(130,120,image=imgdificil)
     
-    lbldescripcion = Label(ventanadif, text="Dificultad base del juego.")
-    lbldescripcion.place(x=10, y=100)
+    canvas.itemconfigure(fotofacil, state='hidden')
+    canvas.itemconfigure(fotonormal, state='normal')
+    canvas.itemconfigure(fotodificil, state='hidden')
     
+    canvas.create_text(148,18,text='Elige una dificultad', fill='black', font=('freemono', 14, 'bold'))#sombra
+    canvas.create_text(150,20,text='Elige una dificultad', fill='white', font=('freemono', 14, 'bold'))
+    
+    descripcion2 = canvas.create_text(121,111,text='Dificultad base del juego.', fill='black', font=('freemono', 10, 'bold'))#sombra
+    descripcion = canvas.create_text(120,110,text='Dificultad base del juego.', fill='white', font=('freemono', 10, 'bold'))
+
     def describirdif():
         dif = dificultad.get()
         if dif == -1:
-            lbldescripcion.configure(text="""Menos monstruos. Más objetos.\nMonstruos más débiles. Penalización de huida menor.""")
-            labelimg.configure(image=imgfacil)
+            canvas.itemconfigure(fotofacil, state='normal')
+            canvas.itemconfigure(fotonormal, state='hidden')
+            canvas.itemconfigure(fotodificil, state='hidden')
+            canvas.itemconfigure(descripcion, text="Menos monstruos. Más objetos.\nMonstruos más débiles. \nPenalización de huida menor.")
+            canvas.itemconfigure(descripcion2, text="Menos monstruos. Más objetos.\nMonstruos más débiles. \nPenalización de huida menor.")
         elif dif == 1:
-            lbldescripcion.configure(text="""Más monstruos. Menos objetos.\nMonstruos más fuertes. Penalización de huida mayor.""")
-            labelimg.configure(image=imgdificil)
+            canvas.itemconfigure(fotofacil, state='hidden')
+            canvas.itemconfigure(fotonormal, state='hidden')
+            canvas.itemconfigure(fotodificil, state='normal')
+            canvas.itemconfigure(descripcion, text="Más monstruos. Menos objetos.\nMonstruos más fuertes. \nPenalización de huida mayor.")
+            canvas.itemconfigure(descripcion2, text="Más monstruos. Menos objetos.\nMonstruos más fuertes. \nPenalización de huida mayor.")
         elif dif == 0:
-            lbldescripcion.configure(text="Dificultad base del juego.")
-            labelimg.configure(image=imgnormal)
+            canvas.itemconfigure(fotofacil, state='hidden')
+            canvas.itemconfigure(fotonormal, state='normal')
+            canvas.itemconfigure(fotodificil, state='hidden')
+            canvas.itemconfigure(descripcion, text='Dificultad base del juego.')
+            canvas.itemconfigure(descripcion2, text='Dificultad base del juego.')
+
     
     dificultad = IntVar()
     rad1 = Radiobutton(ventanadif,text='Fácil', value=-1, variable=dificultad, command=describirdif)
@@ -126,4 +171,4 @@ def elegirDificultad():
     btnelegir.place(x=120, y=160)
     
     ventanadif.mainloop()
-    return dificultad.get()  
+    return dificultad.get()

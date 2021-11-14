@@ -5,7 +5,8 @@ import gestionObjetos as go
 import gestionPersonaje as gpj
 import csv
 from tkinter import *
-
+import gestionPantalla as cp
+import menuPrincipal as mp
 arraysalas = []
 arrayambientes = []
 
@@ -14,13 +15,15 @@ def randomizarAmbiente(arrayambientes): #Devuelve una cadena de ambiente aleator
     numAleatorio = random.randint(1, len(arrayambientes))
     for indice in range( len(arrayambientes) ):
         if arrayambientes[indice][0] == str(numAleatorio):
-            return arrayambientes[indice][1]
+            return arrayambientes[indice]#devolvemos la cadena y el código de ambiente también para saber qué imagen mostrar
 
 def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario, dificultad):
     resultadosala = [] #devolveré este array de resultados para saber la siguiente sala, si hubo o no hubo monstruo, etc.
     nuevosObjetos = []
     salidas = []#estas serán las salidas posibles, puede contener N S O E
-
+    
+    puertaSala(salaactual, monstruopasado, inventario, dificultad)
+    #en este caso todo el tema de guardar y/o salir al menu se maneja desde la ventana.
     
     try:
         salaactual = int(salaactual)
@@ -32,29 +35,38 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
         #debería ocurrir en la sala FIN
         print("")
     
-    #aquí damos la opción de salir (guardando o sin guardar).Si elegimos una de esas opciones, hacemos un return de
-    #resultado sala para salir de la función, pero debemos introducir algo en ese return para que no se vuelva a iterar esta
-    #función. Para ello, simplemente introduzco la cadena 'guardar y salir' en ese return, la cual indicará al bucle de
-    #de nuevaPartida que no se debe seguir iterando, por lo tanto salimos directamente al menú principal.
-    salirPartida = input("Pulsa intro para entrar en la sala.\nIntroduce G para Guardar y salir o S para Salir sin guardar.").lower()
-    
-    if salirPartida == "g":
-        gf.guardarPartida(gpj.personaje, gf.opcion, salaactual, monstruopasado, inventario, dificultad)
-        print("Saliendo de la partida.")
-        resultadosala.append(monstruopasado)
-        resultadosala.append('guardar y salir')
-        return resultadosala
-    elif salirPartida == "s":
-        print("Saliendo de la partida.")
-        resultadosala.append(monstruopasado)
-        resultadosala.append('guardar y salir')
-        return resultadosala
-    
-    print("")
     #mostrar mensaje de ambiente
     ambiente = randomizarAmbiente(arrayambientes)
-    print(ambiente)
+    #print(ambiente)
     
+    ventanasala = Tk()
+    ventanasala.title('SALA '+str(salaactual))
+    #alto, ancho
+    cp.centrarPantalla(500, 500, ventanasala)
+    ventanasala.resizable(False, False)
+    cp.deshabilitarX(ventanasala)
+    frame = Frame(ventanasala)
+    frame.pack()
+    canvas = Canvas(frame, bg="black", width=700, height=400)
+    canvas.pack()
+    imgambiente = PhotoImage(file="./pictures/"+ambiente[0]+".png")
+    fotoambiente = canvas.create_image(240,200,image=imgambiente)
+    imgpj = PhotoImage(file="./pictures/"+gpj.personaje[2]+".png")
+    fotopj = canvas.create_image(80,300,image=imgpj)
+    
+    panelinferior = Frame(ventanasala, height=100, width=450)
+    panelinferior.place(x=5, y= 420)
+    textosala = Message(panelinferior, text=ambiente[1], width=400)
+    textosala.place(x=5, y=5)
+    
+    def seguiradelante():
+        ventanasala.destroy()
+    
+    btnsiguiente = Button(ventanasala, text="Siguiente", command=seguiradelante)
+    btnsiguiente.place(x=425, y=420)
+    
+    ventanasala.mainloop()
+        
     #calculo de objetos
     nuevosObjetos = go.invocarObjeto(dificultad)
     
@@ -161,4 +173,69 @@ def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos,
                 print("Es el monstruo final, no puedes huir de él.")
                 accion = ""
  
+ 
+def puertaSala(salaactual, monstruopasado, inventario, dificultad):
+    ventanasala = Tk()
+    ventanasala.title('PUERTA DE LA SALA '+salaactual)
+    cp.centrarPantalla(400, 480, ventanasala)
+    ventanasala.resizable(False, False)
+    cp.deshabilitarX(ventanasala)
+    frame = Frame(ventanasala)
+    frame.pack()
+    canvas = Canvas(frame, bg="black", width=700, height=400)
+    canvas.pack()
+    
+    imgpuerta1 = PhotoImage(file="./pictures/puerta.png")
+    imgpuerta2 = PhotoImage(file="./pictures/puertaabierta.png")
+    imgpj = PhotoImage(file="./pictures/"+gpj.personaje[2]+".png")
+    
+    puertacerrada = canvas.create_image(240,220,image=imgpuerta1)
+    puertaabierta = canvas.create_image(240,220,image=imgpuerta2)
+    canvas.itemconfigure(puertaabierta, state='hidden')
+    fotopj = canvas.create_image(80,300,image=imgpj)
 
+    textosala = canvas.create_text(240,20,text='Te encuentras a las puertas de la sala '+salaactual,
+                       fill='white', font=('freemono', 10, 'bold'))
+
+    def moverpj():#animacion
+        canvas.move(fotopj, 2, 0)
+        ventanasala.update()
+    
+    def cerrarventana():
+        ventanasala.destroy()
+        
+    def entrar():
+        btnentrar.place_forget()
+        btnguardar.place_forget()
+        btnsalir.place_forget()
+        canvas.itemconfigure(textosala, state='hidden')
+        canvas.itemconfigure(puertacerrada, state='hidden')
+        canvas.itemconfigure(puertaabierta, state='normal')
+        canvas.after(1500, cerrarventana)
+        canvas.create_text(240,180,text='Entrando en la sala '+salaactual+'...',
+                       fill='white', font=('freemono', 10, 'bold'))
+        for i in range(1, 75):#animacion
+            canvas.after(10, None)
+            moverpj()
+    def guardar():
+        gf.guardarPartida(gpj.personaje, gf.opcion, salaactual, monstruopasado, inventario, dificultad)
+        ventanasala.destroy()
+        mp.menuPrincipal()
+        
+    def salir():
+        ventanasala.destroy()
+        mp.menuPrincipal()
+        
+    btnentrar = Button(ventanasala, text="Entrar", command=entrar)
+    btnentrar.place(x=70,y=360)
+    
+    btnguardar = Button(ventanasala, text="Guardar y Salir", command=guardar)
+    btnguardar.place(x=190,y=360)
+    
+    btnsalir = Button(ventanasala, text="Salir", command=salir)
+    btnsalir.place(x=350,y=360)
+    
+    canvas.create_text(240,20,text='Te encuentras a las puertas de la sala '+salaactual,
+                       fill='white', font=('freemono', 10, 'bold'))
+    
+    ventanasala.mainloop()
