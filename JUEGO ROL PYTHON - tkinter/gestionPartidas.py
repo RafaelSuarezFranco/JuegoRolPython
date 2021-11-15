@@ -45,6 +45,12 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
             elif btnsiguiente.counter == 1:
                 btnsiguiente.counter = btnsiguiente.counter + 1
                 canvas.itemconfigure(narracion, text="Cada sala por la que pases se derrumbará y no \npodrás volver sobre tus pasos. Elige bien a dónde vas.")
+            elif btnsiguiente.counter == 2:
+                btnsiguiente.counter = btnsiguiente.counter + 1
+                canvas.itemconfigure(narracion, text="En cada sala puede haber un monstruo aleatorio\nDebes elegir luchar o huir antes de poder avanzar.")
+            elif btnsiguiente.counter == 3:
+                btnsiguiente.counter = btnsiguiente.counter + 1
+                canvas.itemconfigure(narracion, text="También puede haber hasta 2 objetos en cada sala.\nPuedes optar por recoger uno de ellos.")
                 btnsiguiente.configure(text="Empezar")
             else: 
                 sala1.destroy()
