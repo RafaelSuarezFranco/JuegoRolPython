@@ -1,6 +1,7 @@
 from tkinter import *
 import gestionPantalla as cp
-
+from tkinter.ttk import *
+import gestionObjetos as go
 def puertaSala():
     resultadosala = [] #devolveré este array de resultados para saber la siguiente sala, si hubo o no hubo monstruo, etc.
     nuevosObjetos = []
@@ -13,6 +14,7 @@ def puertaSala():
     cp.deshabilitarX(ventanasala)
     frame = Frame(ventanasala)
     frame.pack()
+    #panelinferior = Frame(ventanasala, height=100, width=450)
     canvas = Canvas(frame, bg="black", width=700, height=400)
     canvas.pack()
     
@@ -69,6 +71,36 @@ def puertaSala():
     
     canvas.create_text(240,20,text='Te encuentras a las puertas de la sala '+salaactual,
                        fill='white', font=('freemono', 10, 'bold'))
+    panelinferior = crearMenu(ventanasala)
+    panelinferior.place(x=5, y= 5)
     ventanasala.mainloop()
+    
+def crearMenu(window):
+    panelinferior = Frame(window, height=100, width=450)
+    #panelinferior.place(x=5, y= 420)
+    
+    btnentrar = Button(panelinferior, text="Mostrar Personaje", command=None)
+    btnentrar.place(x=10,y=10)
+    
+    btnguardar = Button(panelinferior, text="Mostrar Inventario", command=None)
+    btnguardar.place(x=10,y=50)
+    
+    combo = crearInventario(panelinferior, ["1", "3", "4", "4", "4", "4"])
+    combo.place(x=150,y=50)
+    
+    btnsalir = Button(panelinferior, text="Recoger Objeto", command=None)
+    btnsalir.place(x=150,y=10)
+    return panelinferior
+
+def crearInventario(panelinferior, inventario):
+    
+    combo = Combobox(panelinferior)
+    nombres = ['Ninguno']
+    for objeto in inventario:
+        nombres.append(go.arrayobjetos[int(objeto)][1])
+    combo['values']= nombres
+    combo.current(0)
+    return combo
+    #combo.place(x=150,y=50)
     
 puertaSala()

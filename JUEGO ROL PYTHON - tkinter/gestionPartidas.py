@@ -66,9 +66,8 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
             dificultad = 1
             
         inventario = []
-        for i in range(1, int(partida[7])):
+        for i in range(1, int(partida[7])+1):
             inventario.append(int(partida[7+i]))#añadiendo los objetos guardados al inventario
-
         salaactual = partida[5]
         resultadosala = []
         monstruopasado = True

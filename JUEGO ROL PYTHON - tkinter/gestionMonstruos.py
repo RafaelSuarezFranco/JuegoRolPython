@@ -35,7 +35,7 @@ def invocarMonstruo(monstruopasado, salaactual, dificultad):
     if hayMonstruo == True:
         monstruopasado = True
         monstruoactual = randomizarMonstruo(arraymonstruos) #en monstruo actual se almacena una línea del fichero de monstruos
-        print("¡Un "+monstruoactual[1]+" salvaje apareció!")
+        print("¡Un "+monstruoactual[1]+" salvaje apareció!\n")
         print("¡Ten cuidado! "+monstruoactual[4]+".")# monstramos el nombre del monstruo y una descripción.
     else:
         print("No parece haber ninguna amenaza en la sala. Suspiras de alivio.")

@@ -99,9 +99,9 @@ def mostrarPersonaje():
     cp.centrarPantalla(220, 400, ventanapj)
     ventanapj.resizable(False, False)
     
-    imgpj = PhotoImage(file="./pictures/"+personaje[2]+".png")
-    labelimg = Label(ventanapj,image=imgpj)
-    labelimg.place(x=10, y=10)
+    #imgpj = PhotoImage(file="./pictures/"+personaje[2]+".png")
+    #labelimg = Label(ventanapj,image=imgpj)
+    #labelimg.place(x=10, y=10)
     
     lblnombre = Label(ventanapj, text="Nombre: "+personaje[0])
     lblnombre.place(x=240, y=30)
@@ -111,8 +111,7 @@ def mostrarPersonaje():
     lblhabilidad.place(x=240, y=70)
     
     def salir():
-        crearPersonaje()
-        #ventanapj.destroy()
+        ventanapj.destroy()
         
     botonsalir = Button(ventanapj, text="Salir", command=salir)
     botonsalir.place(x=240, y=150)

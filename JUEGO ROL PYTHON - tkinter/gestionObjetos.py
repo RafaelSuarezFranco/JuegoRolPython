@@ -1,7 +1,9 @@
 import random
 import gestionFicheros as gf
 import gestionMonstruos as gm #necesitamos usar la funcion de probabilidad
-
+from tkinter.ttk import *
+from tkinter import *
+import gestionPantalla as cp
 
 arrayobjetos = gf.generarObjetos(gf.opcion)
 
@@ -52,21 +54,49 @@ def consultarInventario(inventario):
         print("No hay ningún objeto en tu inventario")
         
 def recogerObjeto(nuevosObjetos, inventario):
-    if nuevosObjetos != None: #si hay objetos en la sala
-        if len(nuevosObjetos) == 1:
-            inventario.append(nuevosObjetos[0])
-            print("Has recogido "+arrayobjetos[nuevosObjetos[0]][1]+".")
-        else:
-            opcion = ""
-            while opcion != "1" and opcion != "2":
-                opcion = input("Elige, ¿recoger "+arrayobjetos[nuevosObjetos[0]][1]+"(1) o recoger "+arrayobjetos[nuevosObjetos[1]][1]+"(2)?")
-            if opcion == 1:
-                inventario.append(nuevosObjetos[0])
-                print("Has recogido "+arrayobjetos[nuevosObjetos[0]][1]+".")
-            else:
-                inventario.append(nuevosObjetos[1])
-                print("Has recogido "+arrayobjetos[nuevosObjetos[1]][1]+".")
-    return inventario
+    recogido = False
+    ventanaobjeto = Tk()
+    ventanaobjeto.title('Recoger Objeto')
+    cp.centrarPantalla(200, 400, ventanaobjeto)
+    ventanaobjeto.resizable(False, False)
+    
+    lbl = Label(ventanaobjeto, text="")
+    lbl.place(x=70,y=150)
+    
+    def recoger1():
+        inventario.append(o1)
+        objeto1.place_forget()
+        if len(nuevosObjetos) > 1: 
+            objeto2.place_forget()
+        lbl.configure(text="Has recogido "+arrayobjetos[o1][1])
+        recogido = True
+        
+    o1 = int(nuevosObjetos[0])
+    objeto1 = Button(ventanaobjeto, text="Recoger "+arrayobjetos[o1][1], command=recoger1)
+    objeto1.place(x=70,y=30)
+    
+    o2 = ""
+    def recoger2():
+        inventario.append(o2)
+        objeto1.place_forget()
+        objeto2.place_forget()
+        lbl.configure(text="Has recogido "+arrayobjetos[o2][1])
+        recogido = True
+        
+    if len(nuevosObjetos) > 1:
+        o2 = int(nuevosObjetos[1])
+        objeto2 = Button(ventanaobjeto, text="Recoger "+arrayobjetos[o2][1], command=recoger2)
+        objeto2.place(x=70,y=60)
+        
+    
+    def salir():
+        ventanaobjeto.destroy()
+        
+    salir = Button(ventanaobjeto, text="Salir", command=salir)
+    salir.place(x=70,y=100)
+    
+    ventanaobjeto.mainloop()   
+    return inventario, recogido
 
 
 def usarObjeto(inventario): #en la funcion de lucha, llamamos a esta función para dar la opción de escoger un objeto.
@@ -89,3 +119,12 @@ def usarObjeto(inventario): #en la funcion de lucha, llamamos a esta función pa
                 objetoUsado = "" # iterar el bucle
     else:#si elige no usar objeto
         return None
+    
+def crearInventario(panelinferior, inventario):
+    combo = Combobox(panelinferior)
+    nombres = ['Ninguno']
+    for objeto in inventario:
+        nombres.append(arrayobjetos[int(objeto)-1][1])
+    combo['values']= nombres
+    combo.current(0)
+    return combo

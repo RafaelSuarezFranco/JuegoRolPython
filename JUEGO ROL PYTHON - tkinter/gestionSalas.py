@@ -7,6 +7,9 @@ import csv
 from tkinter import *
 import gestionPantalla as cp
 import menuPrincipal as mp
+from tkinter.ttk import *
+import gestionPartidas as gp
+
 arraysalas = []
 arrayambientes = []
 
@@ -59,26 +62,66 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     textosala = Message(panelinferior, text=ambiente[1], width=400)
     textosala.place(x=5, y=5)
     
-    def seguiradelante():
-        ventanasala.destroy()
-    
-    btnsiguiente = Button(ventanasala, text="Siguiente", command=seguiradelante)
-    btnsiguiente.place(x=425, y=420)
-    
-    ventanasala.mainloop()
-        
-    #calculo de objetos
-    nuevosObjetos = go.invocarObjeto(dificultad)
-    
     # aqui calculamos si hay o no un monstruo
     monstruopasado, monstruoactual= gm.invocarMonstruo(monstruopasado, salaactual, dificultad)
     resultadosala.append(monstruopasado)
     
-    if monstruopasado == True or nuevosObjetos != None: #si hay un monstruo u objetos en la sala
-        #entonces mostramos el menú, si no, pasaremos directamente a elegir la salida
-        menuMapa(inventario, nuevosObjetos, gpj.personaje, monstruoactual, go.arrayobjetos, salaactual, monstruopasado, dificultad)
+    fotomonstruo = ""
+    if monstruopasado == True:#si hay monstruo, creamos su imagen y la escondemos
+        imgmonstruo = PhotoImage(file="./pictures/monstruo"+str(monstruoactual[0])+".png")
+        fotomonstruo = canvas.create_image(550,320,image=imgmonstruo)
+        canvas.itemconfigure(fotomonstruo, state='hidden')
+    
+    #calculo de objetos
+    nuevosObjetos = go.invocarObjeto(dificultad)
+    
+    def movermonstruo():#animacion
+        canvas.move(fotomonstruo, -5, 0)
+        ventanasala.update()
+        
+    def animacionmonstruo():
+        for i in range(1, 35):#animacion
+            canvas.after(10, None)
+            movermonstruo()
+    
+    def siguentemonstruo():
+        btnsiguiente.place_forget()
+        btnsiguiente2.place(x=425, y=420)
+        if monstruopasado == True:
+            canvas.itemconfigure(fotomonstruo, state='normal')
+            textosala.configure(text="Un "+monstruoactual[1]+" salvaje apareció!"+
+                                "¡Ten cuidado! "+monstruoactual[4]+".")
+            animacionmonstruo()
+        else:
+            textosala.configure(text="No parece haber ninguna amenaza en la sala. Suspiras de alivio.")
+    
+    btnsiguiente = Button(ventanasala, text="Siguiente", command=siguentemonstruo)#al pulsar este boton sale el monstruo
+    btnsiguiente.place(x=425, y=420)
     
     
+    def siguienteobjetos():
+        btnsiguiente2.place_forget()
+        btnsiguiente3.place(x=425, y=420)
+        if nuevosObjetos != None:#si hay 1 objeto
+            cadenaobjeto = "En la sala hay " + go.arrayobjetos[nuevosObjetos[0]][1]+"."
+            textosala.configure(text=cadenaobjeto)
+            if len(nuevosObjetos) > 1:#si hay 2 objetos
+                textosala.configure(text=cadenaobjeto + " Además, hay " + go.arrayobjetos[nuevosObjetos[1]][1]+".")
+        else:
+            textosala.configure(text="No parece haber ningún objeto en la sala.")
+            
+    btnsiguiente2 = Button(ventanasala, text="Siguiente", command=siguienteobjetos)#al pulsar este boton salen los objetos.
+    
+    def mostrarmenu():
+        btnsiguiente3.place_forget()
+        panelinferior = crearMenu(ventanasala, textosala, inventario, nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad)
+        panelinferior.place(x=5, y= 420)
+        
+    btnsiguiente3 = Button(ventanasala, text="Ver Menú", command=mostrarmenu)#al pulsar este boton sale el menú.
+    
+    ventanasala.mainloop()
+        
+
     
     if gpj.personaje[1] < 1: #bajar a 0 o menos de vida es condición de derrota.
         print("Tus heridas tras el último encuentro son letales, tu cuerpo no puede aguantar más. Has perdido la partida.")
@@ -129,6 +172,76 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
 
     #en resultadosala tenemos: [monstruopasado, salaactual]
 
+#se crea un panel con unos botones, sustituye al menu de la otra version. Por tanto debemos pasarle los mismos paramentros.
+def crearMenu(window,textosala, inventario, nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad):
+    panelinferior = Frame(window, height=100, width=450)
+    #panelinferior.place(x=5, y= 420)
+    def mostrarpj():
+        gpj.mostrarPersonaje()
+    
+    btnpj = Button(panelinferior, text="Mostrar Personaje", command=mostrarpj)
+    btnpj.place(x=10,y=0)
+    
+    lblinventario = Label(panelinferior, text="Tu inventario:")
+    lblinventario.place(x=30,y=50)
+        
+    comboobjeto = go.crearInventario(panelinferior, inventario)
+    comboobjeto.place(x=150,y=50)
+    
+    # para recoger objetos, monstrare tantos botones como objetos hayan en la sala, al pulsar uno, se recoge
+    # y se desactivan los botones, a la vez que se actualiza el combo del inventario
+    btnobjeto1 = ""
+    btnobjeto2 = ""
+    o1 = ""
+    o2 = ""
+    
+    def recogerObjeto(objeto):
+        inventario.append(objeto+1)
+        if len(nuevosObjetos) >1:
+            btnobjeto2.place_forget() 
+        btnobjeto1.place_forget()
+        nombres = ['Ninguno']
+        for objeto in inventario:
+            nombres.append(go.arrayobjetos[int(objeto)-1][1])
+        comboobjeto['values'] = nombres
+        comboobjeto.update()
+        
+    def recoger1():
+        recogerObjeto(o1)
+        
+    def recoger2():
+        recogerObjeto(o2)
+        
+    if nuevosObjetos != None:
+        o1 = int(nuevosObjetos[0])
+        btnobjeto1 = Button(panelinferior, text="Recoger "+go.arrayobjetos[o1][1], command=recoger1)
+        btnobjeto1.place(x=150,y=0)
+        if len(nuevosObjetos) > 1:
+            o2 = int(nuevosObjetos[1])
+            btnobjeto2 = Button(panelinferior, text="Recoger "+go.arrayobjetos[o2][1], command=recoger2)
+            btnobjeto2.place(x=150,y=25)
+    ################ FIN BOTONES RECOGER OBJETO.
+    btnluchar = ""
+    btnhuir = ""
+    btnsalir = ""
+    
+    def huir():
+        penalizacion = 50 + dificultad * 10
+        gpj.personaje[1] = gpj.personaje[1] - penalizacion
+        textosala.configure(text="Has salido ileso del combate, sin embargo, tu orgullo ha sido gravemente herido. Pierdes "+str(penalizacion)+" HP.")
+        panelinferior.destroy()
+        
+    if monstruopasado == True:#si hay monstruo, monstramos boton para luchar y huir
+        btnluchar = Button(panelinferior, text="Luchar", command=None)
+        btnluchar.place(x=340,y=0)
+    
+        btnhuir = Button(panelinferior, text="Huir", command=huir)
+        btnhuir.place(x=340,y=50)
+    else:
+        btnsalir = Button(panelinferior, text="Salir", command=None)
+        btnsalir.place(x=340,y=0)
+    
+    return panelinferior
 
 def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos, salaactual, monstruopasado, dificultad):
     # si hay monstruo o objeto, damos a elegir las acciones.
@@ -234,8 +347,5 @@ def puertaSala(salaactual, monstruopasado, inventario, dificultad):
     
     btnsalir = Button(ventanasala, text="Salir", command=salir)
     btnsalir.place(x=350,y=360)
-    
-    canvas.create_text(240,20,text='Te encuentras a las puertas de la sala '+salaactual,
-                       fill='white', font=('freemono', 10, 'bold'))
     
     ventanasala.mainloop()
