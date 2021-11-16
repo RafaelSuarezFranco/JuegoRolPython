@@ -79,6 +79,8 @@ def crearPersonaje():
             vidarand = random.randint(0, 100)
             vida = vida + vidarand
             messagebox.showinfo("Atención","Los dioses te han condedido "+str(vida)+" puntos de vida.")
+            for i in range(len(personaje)):
+                personaje.pop(i)
             personaje.extend((nombre, vida, habil))
             ventanapj.destroy()
             

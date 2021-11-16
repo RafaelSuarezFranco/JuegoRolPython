@@ -51,6 +51,9 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
             elif btnsiguiente.counter == 3:
                 btnsiguiente.counter = btnsiguiente.counter + 1
                 canvas.itemconfigure(narracion, text="También puede haber hasta 2 objetos en cada sala.\nPuedes optar por recoger uno de ellos.")
+            elif btnsiguiente.counter == 4:
+                btnsiguiente.counter = btnsiguiente.counter + 1
+                canvas.itemconfigure(narracion, text="Puedes usar un objeto en cada lucha, si ganas,\nte recompensará o perjudicará. Si pierdes, nada.")
                 btnsiguiente.configure(text="Empezar")
             else: 
                 sala1.destroy()

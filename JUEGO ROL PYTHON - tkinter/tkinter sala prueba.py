@@ -57,8 +57,7 @@ def puertaSala():
         mp.menuPrincipal()
         
     def salir():
-        ventanasala.destroy()
-        mp.menuPrincipal()
+        animacionSalir(ventanasala, canvas, fotopj, "este")
         
     btnentrar = Button(ventanasala, text="Entrar", command=entrar)
     btnentrar.place(x=70,y=360)
@@ -102,5 +101,29 @@ def crearInventario(panelinferior, inventario):
     combo.current(0)
     return combo
     #combo.place(x=150,y=50)
+def animacionSalir(window, canvas, fotopj, salida):
+
+    def moverfoto(fotopj,x,y):
+        canvas.move(fotopj, x,y)
+        window.update()
     
+    x = 0
+    y = 0
+    if salida == "norte":
+        y = -2
+    elif salida == "sur":
+        y = 10
+    elif salida == "oeste":
+        x = -2
+    else:
+        x = 10
+    
+    def animacion():
+        for i in range(1, 150):
+            canvas.after(10, None)
+            moverfoto(fotopj,x,y)
+    animacion()
+
+   
+
 puertaSala()

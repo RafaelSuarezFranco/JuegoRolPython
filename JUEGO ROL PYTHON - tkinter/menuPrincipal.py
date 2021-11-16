@@ -2,6 +2,7 @@ import gestionPartidas as gp
 import gestionFicheros as gf
 from tkinter import *
 import gestionPantalla as cp
+import sys
 
 def menuPrincipal():
     ventana = Tk()
@@ -28,6 +29,7 @@ def menuPrincipal():
 
     def salirClick():
         ventana.destroy()
+        sys.exit()
 
     botonnueva = Button(ventana, text="Nueva Partida", command=botonnuevaClick)
     botonnueva.place(x=150, y=300)
