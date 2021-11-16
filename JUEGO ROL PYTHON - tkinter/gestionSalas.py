@@ -343,7 +343,7 @@ def puertaSala(salaactual, monstruopasado, inventario, dificultad):
     btnentrar.place(x=70,y=360)
     
     btnguardar = Button(ventanasala, text="Guardar y Salir", command=guardar)
-    btnguardar.place(x=190,y=360)
+    btnguardar.place(x=200,y=360)
     
     btnsalir = Button(ventanasala, text="Salir", command=salir)
     btnsalir.place(x=350,y=360)

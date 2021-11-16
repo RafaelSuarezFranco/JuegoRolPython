@@ -121,7 +121,7 @@ def usarObjeto(inventario): #en la funcion de lucha, llamamos a esta función pa
         return None
     
 def crearInventario(panelinferior, inventario):
-    combo = Combobox(panelinferior)
+    combo = Combobox(panelinferior, state="readonly") # crear combobox no editable, al que se añaden los objetos.
     nombres = ['Ninguno']
     for objeto in inventario:
         nombres.append(arrayobjetos[int(objeto)-1][1])

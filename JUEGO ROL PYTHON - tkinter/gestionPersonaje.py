@@ -60,7 +60,7 @@ def crearPersonaje():
     rad3 = Radiobutton(ventanapj,text='ASTUCIA', value=3, variable=habilidad, command=verpersonaje)
 
     
-    def crearpj():
+    def crearpjfinal():
         habil = ""
         if habilidad.get() == 1:
             habil = "LUCHA"
@@ -83,7 +83,7 @@ def crearPersonaje():
             ventanapj.destroy()
             
 
-    btncrear = Button(ventanapj, text="Crear personaje", command=crearpj)
+    btncrear = Button(ventanapj, text="Crear personaje", command=crearpjfinal)
     rad1.place(x=50, y=300)
     rad2.place(x=170, y=300)
     rad3.place(x=290, y=300)
@@ -98,10 +98,17 @@ def mostrarPersonaje():
     ventanapj.title('ESTADO DEL PERSONAJE')
     cp.centrarPantalla(220, 400, ventanapj)
     ventanapj.resizable(False, False)
+
+    frame = Frame(ventanapj)
+    frame.pack()
+    canvas = Canvas(frame, width=700, height=400)
+    canvas.pack()
+    imgpj = PhotoImage(master = canvas, file="./pictures/"+personaje[2]+".png")
+    fotopj1 = canvas.create_image(120,100,image=imgpj)
+    #PARA PODER ABRIR UNA NUEVA VENTANA CON IMAGEN SIN DESTRUIR LA ANTERIOR
+    #DEBE UTILIZARSE UNA LINEA COMO LA SIGUIENTE PARA GUARDAR UNA REFERENCIA. SI NO, NO FUNCIONA
+    canvas.theimage = imgpj
     
-    #imgpj = PhotoImage(file="./pictures/"+personaje[2]+".png")
-    #labelimg = Label(ventanapj,image=imgpj)
-    #labelimg.place(x=10, y=10)
     
     lblnombre = Label(ventanapj, text="Nombre: "+personaje[0])
     lblnombre.place(x=240, y=30)

@@ -4,7 +4,7 @@ from tkinter import *
 
 def nuevaVentana2():
     ws1 = Tk()
-    ws1.title('PythonGuides')
+    ws1.title('VENTANA 2')
     ws1.geometry('500x300')
     ws1.config(bg='red')
 
@@ -14,23 +14,33 @@ def nuevaVentana2():
 
     
     def clicked():
-        #ws.destroy()
+        #ws1.destroy()
         nuevaVentana()
         
     btn3 = Button(ws1, text="Click Me 1", command=clicked)
     btn3.grid(column=2, row=1)
     
-    ws.mainloop()
+    ws1.mainloop()
 
 def nuevaVentana():
     ws = Tk()
-    ws.title('PythonGuides')
+    ws.title('VENTANA 1')
     ws.geometry('500x300')
+    ws.config(bg='blue')
+    frame = Frame(ws)
+    frame.pack()
+    canvas = Canvas(frame, bg="black", width=700, height=400)
+    canvas.pack()
+    pjlucha = PhotoImage(master = canvas, file="./pictures/LUCHA.png")
+    fotopj1 = canvas.create_image(120,200,image=pjlucha)
+    #PARA PODER ABRIR UNA NUEVA VENTANA CON IMAGEN SIN DESTRUIR LA ANTERIOR
+    #DEBE UTILIZARSE OBLIGATORIAMENTE UN CANVAS
+    canvas.theimage = pjlucha
     
-    img = PhotoImage(file="./pictures/1.png")
-    label = Label(ws,image=img)
-    label.image = img
-    label.place(x=0, y=0)
+    #img = PhotoImage(file="./pictures/1.png")
+    #label = Label(ws,image=img)
+    #label.image = img
+    #label.place(x=0, y=0)
 
     
     def clicked():
@@ -38,7 +48,7 @@ def nuevaVentana():
         nuevaVentana2()
         
     btn3 = Button(ws, text="Click Me 2", command=clicked)
-    btn3.grid(column=2, row=1)
+    btn3.place(x=10, y=10)
     
     ws.mainloop()
     
