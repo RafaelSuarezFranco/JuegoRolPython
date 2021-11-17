@@ -8,6 +8,7 @@ def menuPrincipal():
     ventana = Tk()
     ventana.title('JUEGO ROL PYTHON - VERSIÓN TKINTER')
     cp.centrarPantalla(350, 500, ventana)
+    cp.deshabilitarX(ventana)
     ventana.resizable(False, False)
     imagenfondo = PhotoImage(file="./pictures/menuppal.png")    
     # crear un canvas para poner la foto de fondo y otras fotos encima.

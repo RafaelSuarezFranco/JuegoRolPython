@@ -6,22 +6,23 @@ import gestionPersonaje as gpj
 from tkinter import *
 import gestionPantalla as cp
 
-#personaje = []
-inventario = []
-
 def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, le pasamos None)
+    if len(gpj.inventario) > 0:#vaciamos el inventario, si jugamos varias partidas en al misma sesión, es necesario.
+        for item in gpj.inventario:
+            gpj.inventario.remove(item)
     if partida == None:# SI LA PARTIDA ES COMPLETAMENTE NUEVA
         gf.opcion = "default"
         #gf.opcion = gf.elegirArchivos() #controla si usamos archivos default o custom
         #inicializamos variables que controlarán el estado actual del juego
-        gpj.personaje = gpj.crearPersonaje()#EN ESTE CASO se crean ventanas para crear el pj y elegir la dificultad.
+        gpj.personaje = gpj.crearPersonaje()#En este caso, se crean ventanas para crear el pj y elegir la dificultad.
         dificultad = elegirDificultad()
+
         inventario = []
         salaactual = "1"
         resultadosala = []
         monstruopasado = False #guardamos si hubo un monstruo en la sala anterior
         
-        ######################### esto es una ventana introductoria con una breve narración.
+        ######################### esto es una ventana introductoria con una narración.
         sala1 = Tk()
         sala1.title('Empieza el juego')
         cp.centrarPantalla(360, 450, sala1)
@@ -77,6 +78,8 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         inventario = []
         for i in range(1, int(partida[7])+1):
             inventario.append(int(partida[7+i]))#añadiendo los objetos guardados al inventario
+            gpj.inventario.append(int(partida[7+i]))
+            
         salaactual = partida[5]
         resultadosala = []
         monstruopasado = True
@@ -98,6 +101,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         monstruopasado = resultadosala[0]
         if salaactual != "-1" and salaactual != "guardar y salir":
             print("Te encuentras en la sala "+salaactual)
+            print(gpj.inventario)
         #si hemos seleccionado guardar partida y salir, salaactual recoge el valor 'guardar y salir'
         #nos indica que debemos salir del juego (romper este bucle)
            
@@ -105,7 +109,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         print("Has llegado a la sala final")
         resultadosala = gs.avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario, dificultad)
 
-#nuevaPartida()
+
         
 
 #dificultad afecta a la probabilidad de encontrar objetos, de generar un monstruo, a los dados del monstruo y a la

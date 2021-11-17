@@ -120,7 +120,7 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     """
     una vez hemos determinado el monstruo y los objetos, enseñamos un menu que será el 'panelinferior', el cual tendrá
     las mismas fuciones o equivalentes al menu de la versión de texto (por ejemplo no hay una opcion de monstrar inventario
-    porque monstraremos los objetos en un combobox) por tanto al pulsar el boton, se crea dicho panel con los controles
+    porque mostraremos los objetos en un combobox) por tanto al pulsar el boton, se crea dicho panel con los controles
     que llaman a las funciones necesarias, algunas son de otros módulos, otras son creadas dentro de la misma función del
     panel. de nuevo solo saldremos de ese panel de controles una vez elijamos luchar o huir (o salir si no hay monstruo)
     por lo que el resultado de la sala se determinará en la función del panel inferior, la cual se llama 'crearMenu'.
@@ -262,23 +262,12 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, inventario, nuevos
     btnobjeto2 = ""
     o1 = ""
     o2 = ""
-    
-    def recogerObjeto(objeto):
-        inventario.append(objeto+1)
-        if len(nuevosObjetos) >1:
-            btnobjeto2.place_forget() 
-        btnobjeto1.place_forget()
-        nombres = ['Ninguno']
-        for obj in inventario:
-            nombres.append(go.arrayobjetos[int(obj)-1][1])
-        comboobjeto['values'] = nombres
-        comboobjeto.update()
-        
+   
     def recoger1():
-        recogerObjeto(o1)
+        go.recogerObjeto(o1,comboobjeto, inventario, nuevosObjetos, btnobjeto1, btnobjeto2)
         
     def recoger2():
-        recogerObjeto(o2)
+        go.recogerObjeto(o2,comboobjeto, inventario, nuevosObjetos, btnobjeto1, btnobjeto2)
         
     if nuevosObjetos != None:
         o1 = int(nuevosObjetos[0])
@@ -315,10 +304,10 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, inventario, nuevos
         resultadolucha = "empate"
         while resultadolucha == "empate" or (salaactual == "FIN" and resultadolucha != "ganar"):
             #repetimos la lucha y la animación hasta que no sea empate
-            gpj.personaje[1], resultadolucha, objetobueno = gm.lucha(gpj.personaje, monstruoactual, inventario,indiceinventario, salaactual, dificultad)
+            gpj.personaje[1], resultadolucha, objetobueno = gm.lucha(monstruoactual, inventario,indiceinventario, salaactual, dificultad)
             gm.animacionLucha(window, canvas, resultadolucha, fotopj, fotomonstruo, textosala, monstruoactual, objetobueno, indiceinventario)
 
-        if resultadolucha != "empate":
+        if resultadolucha != "empate" or (salaactual == "FIN" and resultadolucha != "ganar"):
             panelinferior.place_forget()
         return panelinferior,  indiceinventario,resultadolucha
     

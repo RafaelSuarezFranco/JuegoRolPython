@@ -3,8 +3,8 @@ from tkinter import *
 import gestionPantalla as cp
 
 personaje = []
-#el personaje se guardará como una lista global a la que hay que llamar desde este módulo.
-
+#el personaje e inventario se guardarán como una listas globales a las que hay que llamar desde este módulo.
+inventario = []
 
 def crearPersonaje():
     ventanapj = Tk()
@@ -79,8 +79,9 @@ def crearPersonaje():
             vidarand = random.randint(0, 100)
             vida = vida + vidarand
             messagebox.showinfo("Atención","Los dioses te han condedido "+str(vida)+" puntos de vida.")
-            for i in range(len(personaje)):
-                personaje.pop(i)
+            if len(personaje) > 0:# hay que vaciar el personaje si jugamos varias veces en la misma sesión.
+                for i in range(len(personaje)):
+                    personaje.pop(i)
             personaje.extend((nombre, vida, habil))
             ventanapj.destroy()
             

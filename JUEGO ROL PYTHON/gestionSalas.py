@@ -147,7 +147,7 @@ def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos,
                 print("No puedes recoger más objetos de esta sala.")
         elif accion == "4": #si decidimos luchar
             if monstruopasado == True:
-                gpj.personaje[1] = gm.lucha(gpj.personaje, monstruoactual, inventario, go.arrayobjetos, salaactual, dificultad)
+                gpj.personaje[1] = gm.lucha(monstruoactual, inventario, go.arrayobjetos, salaactual, dificultad)
         elif accion == "5": # si dedicimos escapar
             if monstruopasado == True and salaactual != "FIN":
                 penalizacion = 50 + dificultad * 10

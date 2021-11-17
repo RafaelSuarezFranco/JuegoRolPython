@@ -128,3 +128,15 @@ def crearInventario(panelinferior, inventario):
     combo['values']= nombres
     combo.current(0)
     return combo
+
+def recogerObjeto(objeto, comboobjeto, inventario, nuevosObjetos, btnobjeto1, btnobjeto2):
+    #le pasamos el objeto recogido y el combobox para añadirlo
+    inventario.append(objeto+1)
+    if len(nuevosObjetos) >1:
+        btnobjeto2.place_forget() 
+    btnobjeto1.place_forget()
+    nombres = ['Ninguno']
+    for obj in inventario:
+        nombres.append(arrayobjetos[int(obj)-1][1])
+    comboobjeto['values'] = nombres
+    comboobjeto.update()

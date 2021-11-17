@@ -44,7 +44,7 @@ def invocarMonstruo(monstruopasado, salaactual, dificultad):
     return monstruopasado, monstruoactual
 
 
-def lucha(personaje, monstruoactual, inventario, indiceinventario, salaactual, dificultad):
+def lucha(monstruoactual, inventario, indiceinventario, salaactual, dificultad):
     print("Has decidido enfrentarte al "+monstruoactual[1])
     
     #aquí damos la opción de usar un objeto, si tenemos algo en el inventario
@@ -61,7 +61,7 @@ def lucha(personaje, monstruoactual, inventario, indiceinventario, salaactual, d
         inventario.pop(index)
     
     #tendremos una variable para saber la vida que le queda al pj despues del encuentro.
-    vidaresultado = personaje[1]
+    vidaresultado = gpj.personaje[1]
     resultado = "empate"
     while resultado == "empate" or (resultado == "perder" and salaactual == "FIN" and vidaresultado > 0):
         # repetimos hasta que una de las partes gane (si no es la sala final)
@@ -92,13 +92,13 @@ def lucha(personaje, monstruoactual, inventario, indiceinventario, salaactual, d
             resultado = "perder"
             
         objetobueno = False
-        vidaresultado, objetobueno = resultadoLucha(personaje, resultado, vidaresultado, monstruoactual, objetoUsado, cualidadObjeto, puntosObjeto, nombreObjeto, salaactual)
+        vidaresultado, objetobueno = resultadoLucha(resultado, vidaresultado, monstruoactual, objetoUsado, cualidadObjeto, puntosObjeto, nombreObjeto, salaactual)
     
     return vidaresultado, resultado, objetobueno
 
 
 
-def resultadoLucha(personaje, resultado, vidaresultado, monstruoactual, objetoUsado, cualidadObjeto, puntosObjeto, nombreObjeto, salaactual):
+def resultadoLucha(resultado, vidaresultado, monstruoactual, objetoUsado, cualidadObjeto, puntosObjeto, nombreObjeto, salaactual):
     #recalculamos la vida del pj dependiendo del resultado y del objeto
     ########################################################################################## SI GANAMOS
     objetobueno = False
@@ -111,9 +111,9 @@ def resultadoLucha(personaje, resultado, vidaresultado, monstruoactual, objetoUs
             if objetobueno == True:
                 print("Has usado un "+nombreObjeto+". Ha sido efectivo, ganas "+puntosObjeto+" puntos de vida.")
                 vidaresultado = vidaresultado + int(puntosObjeto)
-                if personaje[2] == monstruoactual[3]: #si nuestra cualidad también coincide, sumamos 20%
+                if gpj.personaje[2] == monstruoactual[3]: #si nuestra cualidad también coincide, sumamos 20%
                     bonus = 0.2*(int(puntosObjeto)+int(monstruoactual[2]))
-                    print("Tu cualidad de "+personaje[2]+" ha sido efectiva, recibes un bonus de "+str(bonus)+" de vida.")
+                    print("Tu cualidad de "+gpj.personaje[2]+" ha sido efectiva, recibes un bonus de "+str(bonus)+" de vida.")
                     vidaresultado = vidaresultado + int(bonus)
             else:# si no es la misma
                 print("Has usado un "+nombreObjeto+". Ha sido contraproducente, pierdes "+puntosObjeto+" puntos de vida.")
