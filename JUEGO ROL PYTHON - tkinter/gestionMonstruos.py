@@ -66,33 +66,31 @@ def lucha(personaje, monstruoactual, inventario, indiceinventario, salaactual, d
     while resultado == "empate" or (resultado == "perder" and salaactual == "FIN" and vidaresultado > 0):
         # repetimos hasta que una de las partes gane (si no es la sala final)
     
-        #hacemos 3 tiradas y guardamos las 2 más grandes.
-        resultados = []
+        #hacemos 3 tiradas y las guardamos ordenadas
+        r1 = []
         for i in range(0,3):
-            resultados.append(random.randint(1, 20))
-        pjmax1 = max(resultados)
-        resultados.remove(pjmax1)
-        pjmax2 = max(resultados)
+            r1.append(random.randint(1, 20))
+        r1 = sorted(r1, key=int, reverse=True)
     
-        resultadosenemigo = [] #dos tiradas para el enemigo, las guardamos ordenadas.
+        r2 = [] #dos tiradas para el enemigo, las guardamos ordenadas.
         for i in range(0,2):    
-            resultadosenemigo.append(random.randint(1, 25 + (dificultad * 5)))
-            #la dificultad aumenta o disminuye las probabilidades de ganar del monstruo.
-        enemax1 = max(resultadosenemigo)
-        resultadosenemigo.remove(enemax1)
-        enemax2 = max(resultadosenemigo)   
+            r2.append(random.randint(1, 25 + (dificultad * 5)))
+            #la dificultad aumenta o disminuye las probabilidades de ganar del monstruo.   
+        r2 = sorted(r2, key=int, reverse=True)
+        
     
         #posibles resultados:
         #si ambos nº del pj pasan los del enemigo, ganamos, si uno lo sobrepasa y el otro es igual, ganamos
         #si uno lo sobrepasa y el otro queda por debajo, empate. si ambos nº son iguales a los del enemigo, empate
         #si uno de los nº esta por debajo y el otro también o empata, perdemos
     
-        if (pjmax1 == enemax1 and pjmax2 == enemax2) or (pjmax1 > enemax1 and pjmax2 < enemax2) or (pjmax1 < enemax1 and pjmax2 > enemax2):
+        if (r1[0] == r2[0] and r1[1] == r2[1]) or (r1[0] > r2[0] and r1[1] < r2[1]) or (r1[0] < r2[0] and r1[1] > r2[1]):
             resultado = "empate"
-        elif (pjmax1 > enemax1 and pjmax2 > enemax2) or (pjmax1 > enemax1 and pjmax2 == enemax2) or (pjmax1 == enemax1 and pjmax2 > enemax2):
+        elif (r1[0] > r2[0] and r1[1] > r2[1]) or (r1[0] > r2[0] and r1[1] == r2[1]) or (r1[0] == r2[0] and r1[1] > r2[1]):
             resultado = "ganar"
         else:
             resultado = "perder"
+            
         objetobueno = False
         vidaresultado, objetobueno = resultadoLucha(personaje, resultado, vidaresultado, monstruoactual, objetoUsado, cualidadObjeto, puntosObjeto, nombreObjeto, salaactual)
     
