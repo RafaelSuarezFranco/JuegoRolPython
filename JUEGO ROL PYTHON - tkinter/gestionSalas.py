@@ -80,15 +80,12 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     usados normalmente se quedarán escondidos una vez los pulsemos (normalmente surgirá otro botón o un panel de botones
     que lo reemplace)
     """
-    
-    def movermonstruo():#animacion entrada de monstruo
-        canvas.move(fotomonstruo, -5, 0)
-        ventanasala.update()
         
-    def animacionmonstruo():
+    def animacionmonstruo():#animacion entrada de monstruo
         for i in range(1, 35):
             canvas.after(10, None)
-            movermonstruo()
+            canvas.move(fotomonstruo, -5, 0)
+            ventanasala.update()
     
     def siguentemonstruo(): #al pulsar el boton btnsiguiente, se enseña el monstruo y el mensaje
         btnsiguiente.place_forget()
@@ -313,6 +310,7 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, nuevosObjetos, mon
                                               monstruoactual, objetobueno, indiceinventario)
 
         if resultadolucha != "empate" or (salaactual == "FIN" and resultadolucha != "ganar"):
+            #DEBERÍA QUITAR ESTA CONDICION
             panelinferior.place_forget()
         return panelinferior, indiceinventario,resultadolucha
     
@@ -357,14 +355,8 @@ def puertaSala(salaactual, monstruopasado, dificultad):
     fotopj = canvas.create_image(80,300,image=imgpj)
 
     textosala = canvas.create_text(240,20,text='Te encuentras a las puertas de la sala '+salaactual,
-                       fill='white', font=('freemono', 10, 'bold'))
-
-    def moverpj():#animacion
-        canvas.move(fotopj, 2, 0)
-        ventanasala.update()
+                       fill='white', font=('freemono', 10, 'bold'))      
     
-    def cerrarventana():
-        ventanasala.destroy()
         
     def entrar():
         btnentrar.place_forget()
@@ -373,12 +365,13 @@ def puertaSala(salaactual, monstruopasado, dificultad):
         canvas.itemconfigure(textosala, state='hidden')
         canvas.itemconfigure(puertacerrada, state='hidden')
         canvas.itemconfigure(puertaabierta, state='normal')
-        canvas.after(1500, cerrarventana)
+        canvas.after(1500, ventanasala.destroy)
         canvas.create_text(240,180,text='Entrando en la sala '+salaactual+'...',
                        fill='white', font=('freemono', 10, 'bold'))
-        for i in range(1, 75):
+        for i in range(1, 75):#animación
             canvas.after(10, None)
-            moverpj()
+            canvas.move(fotopj, 2, 0)
+            ventanasala.update()
 
         
     def salir():
@@ -401,12 +394,7 @@ def puertaSala(salaactual, monstruopasado, dificultad):
     ventanasala.mainloop()
 
 #una vez acaba la sala, animamos la salida del personaje.
-def animacionSalir(window, canvas, fotopj, salida):
-
-    def moverfoto(fotopj,x,y):
-        canvas.move(fotopj, x,y)
-        window.update()
-    
+def animacionSalir(window, canvas, fotopj, salida): 
     x = 0
     y = 0
     if salida == "norte":
@@ -421,5 +409,7 @@ def animacionSalir(window, canvas, fotopj, salida):
     def animacion():
         for i in range(1, 130):
             canvas.after(10, None)
-            moverfoto(fotopj,x,y)
+            canvas.move(fotopj, x,y)
+            window.update()
+            
     animacion()

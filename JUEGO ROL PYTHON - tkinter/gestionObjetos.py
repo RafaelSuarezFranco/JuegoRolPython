@@ -35,7 +35,7 @@ def invocarObjeto(dificultad):# por cada sala, esta función generará 0, 1 o 2 
         if hayOtroObjeto == True:
             objeto2 = objeto1
             while objeto2 == objeto1: #no permitimos que un segundo objeto sea igual al primero
-                objeto2 = int(randomizarObjeto(arrayobjetos))-1
+                objeto2 = int(randomizarObjeto())-1
             objetosNuevos.append(objeto2)
             print("Además, hay " + arrayobjetos[objeto2][1]+".")
     

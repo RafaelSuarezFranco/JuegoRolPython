@@ -58,7 +58,9 @@ def lucha(monstruoactual, indiceinventario, salaactual, dificultad):
     #tendremos una variable para saber la vida que le queda al pj despues del encuentro.
     vidaresultado = gpj.personaje[1]
     resultado = "empate"
-    while resultado == "empate" or (resultado == "perder" and salaactual == "FIN" and vidaresultado > 0):
+    objetobueno = False
+    
+    while resultado == "" or (resultado == "perder" and salaactual == "FIN" and vidaresultado > 0):
         # repetimos hasta que una de las partes gane (si no es la sala final)
     
         #hacemos 3 tiradas y las guardamos ordenadas
@@ -86,7 +88,6 @@ def lucha(monstruoactual, indiceinventario, salaactual, dificultad):
         else:
             resultado = "perder"
             
-        objetobueno = False
         gpj.personaje[1], objetobueno = resultadoLucha(resultado, vidaresultado, monstruoactual, objetoUsado, objetoLucha, salaactual)
     return resultado, objetobueno
 
@@ -152,33 +153,27 @@ def animacionLucha(window, canvas, resultadolucha, fotopj, fotomonstruo, textosa
         objetousado = True
         
     def moverfoto(foto,mov):
+        canvas.after(10, None)
         canvas.move(foto, mov, 0)
         window.update()
-
         
     def animacionperder():#mueve el mostruo a la izq y a la derecha.
         for i in range(1, 35):
-            canvas.after(10, None)
             moverfoto(fotomonstruo,-10)
         for i in range(1, 35):
-            canvas.after(10, None)
             moverfoto(fotomonstruo,10)
             
     def animacionganar():#mueve el personaje a la der e izq
         for i in range(1, 35):
-            canvas.after(10, None)
             moverfoto(fotopj,10)
         for i in range(1, 35):
-            canvas.after(10, None)
             moverfoto(fotopj,-10)
             
     def animacionempate():
         for i in range(1, 35):
-            canvas.after(10, None)
             moverfoto(fotopj,5)
             moverfoto(fotomonstruo,-5)
         for i in range(1, 35):
-            canvas.after(10, None)
             moverfoto(fotopj,-5)
             moverfoto(fotomonstruo,5)
     
