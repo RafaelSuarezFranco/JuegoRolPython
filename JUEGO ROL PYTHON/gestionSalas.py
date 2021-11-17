@@ -15,17 +15,20 @@ def randomizarAmbiente(arrayambientes): #Devuelve una cadena de ambiente aleator
         if arrayambientes[indice][0] == str(numAleatorio):
             return arrayambientes[indice][1]
 
-def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario, dificultad):
+def avanzarMapa(salaactual, monstruopasado, dificultad):
     resultadosala = [] #devolveré este array de resultados para saber la siguiente sala, si hubo o no hubo monstruo, etc.
     nuevosObjetos = []
     salidas = []#estas serán las salidas posibles, puede contener N S O E
     
     try:
         salaactual = int(salaactual)
-        #digamos que guardaremos la letra de la salida si en su posición no hay un cero.
-        for puerta in range( len(arraysalas[salaactual]) -1 ):
-            if arraysalas[salaactual][puerta] != "0" and arraysalas[salaactual][puerta] != arraysalas[salaactual][0]:
+        for puerta in range(1, len(arraysalas[salaactual]) ):
+            if arraysalas[salaactual][puerta] != "0":
                 salidas.append(arraysalas[0][puerta])
+                #esta condicion significa que si en la fila de la sala que corresponde a sala actual hay algo que
+                #no sea un 0, guardamos en el array de salidas la letra que corresponde, que se encuentra en
+                #la primera fila de arraysalas
+                
     except ValueError: # si entramos en esta excepción significa que salaactual toma valor que no es entero, cosa que solo
         #debería ocurrir en la sala FIN
         print("")
@@ -37,7 +40,7 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     salirPartida = input("Pulsa intro para entrar en la sala.\nIntroduce G para Guardar y salir o S para Salir sin guardar.").lower()
     
     if salirPartida == "g":
-        gf.guardarPartida(gpj.personaje, gf.opcion, salaactual, monstruopasado, inventario, dificultad)
+        gf.guardarPartida(salaactual, monstruopasado, dificultad)
         print("Saliendo de la partida.")
         resultadosala.append(monstruopasado)
         resultadosala.append('guardar y salir')
@@ -62,7 +65,7 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     
     if monstruopasado == True or nuevosObjetos != None: #si hay un monstruo u objetos en la sala
         #entonces mostramos el menú, si no, pasaremos directamente a elegir la salida
-        menuMapa(inventario, nuevosObjetos, gpj.personaje, monstruoactual, go.arrayobjetos, salaactual, monstruopasado, dificultad)
+        menuMapa(nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad)
     
     
     
@@ -86,7 +89,7 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
         while opcion not in salidas:
             opcion = input("Te chocas con una pared. Elige otra ruta. ").upper()
         
-    print("Has abandonado la sala "+arraysalas[salaactual][0]+" por la puerta "+opcion+"...")
+    print("Has abandonado la sala "+str(salaactual)+" por la puerta "+opcion+"...")
     #esta función debería devolver cual es la siguiente sala, la cual está almacenada en la posicion de 1 al 4
     #dependiendo de la opcion que escogemos, del subarray que estamos tratando (el de salaactual)
     if opcion == "N":
@@ -115,7 +118,7 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     #en resultadosala tenemos: [monstruopasado, salaactual]
 
 
-def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos, salaactual, monstruopasado, dificultad):
+def menuMapa(nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad):
     # si hay monstruo o objeto, damos a elegir las acciones.
     accion = ""
     
@@ -138,16 +141,16 @@ def menuMapa(inventario, nuevosObjetos, personaje, monstruoactual, arrayobjetos,
         if accion == "1":
             gpj.mostrarPersonaje()
         elif accion == "2":
-            go.consultarInventario(inventario)
+            go.consultarInventario()
         elif accion == "3":
             if nuevosObjetos != None:
-                inventario = go.recogerObjeto(nuevosObjetos, inventario)
+                go.recogerObjeto(nuevosObjetos)
                 nuevosObjetos = None
             else:
                 print("No puedes recoger más objetos de esta sala.")
         elif accion == "4": #si decidimos luchar
             if monstruopasado == True:
-                gpj.personaje[1] = gm.lucha(monstruoactual, inventario, go.arrayobjetos, salaactual, dificultad)
+                gpj.personaje[1] = gm.lucha(monstruoactual, salaactual, dificultad)
         elif accion == "5": # si dedicimos escapar
             if monstruopasado == True and salaactual != "FIN":
                 penalizacion = 50 + dificultad * 10

@@ -1,0 +1,12 @@
+arreglar sala final version tkinter
+ver sala caracteres ascii
+editor de mapas y archivos
+propiedades de la habilidad del personaje
+globalizar la variable dificultad
+gestión de inventario¿?
+reajustar código de objetos con índices, sobre todo para tener el combobox más limpio.
+borrar partida guardada
+limpiar parámetros sin utilizar o innecesarios
+eliminar los prints de consola remanentes de la version tkinter, eliminar funciones que no necesito en dicha version
+crear pantalla en tkinter para la carga de partida (y borrar)
+guardar el estado del mapa a la par que se guarda partida.

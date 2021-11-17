@@ -44,7 +44,7 @@ def invocarMonstruo(monstruopasado, salaactual, dificultad):
     return monstruopasado, monstruoactual
 
 
-def lucha(monstruoactual, inventario, arrayobjetos, salaactual, dificultad):
+def lucha(monstruoactual, salaactual, dificultad):
     print("Has decidido enfrentarte al "+monstruoactual[1])
     
     #aquí damos la opción de usar un objeto, si tenemos algo en el inventario
@@ -52,15 +52,15 @@ def lucha(monstruoactual, inventario, arrayobjetos, salaactual, dificultad):
     nombreObjeto = ""
     cualidadObjeto = ""
     puntosObjeto = ""
-    if len(inventario) > 0:
-        objetoUsado = go.usarObjeto(inventario)
+    if len(gpj.inventario) > 0:
+        objetoUsado = go.usarObjeto()
     if objetoUsado != None:#si hemos escogido un objeto, lo eliminamos del inventario y guardamos las variables que nos interesan
-        objeto1 = inventario[objetoUsado]#recordamos que en inventario solo guardamos el "código" del objeto. sus cualidades las
+        objeto1 = gpj.inventario[objetoUsado]#recordamos que en inventario solo guardamos el "código" del objeto. sus cualidades las
         #consultamos en el array de objetos
-        nombreObjeto = arrayobjetos[objeto1][1]
-        cualidadObjeto = arrayobjetos[objeto1][2]
-        puntosObjeto = arrayobjetos[objeto1][3]
-        inventario.pop(objetoUsado)
+        nombreObjeto = go.arrayobjetos[objeto1][1]
+        cualidadObjeto = go.arrayobjetos[objeto1][2]
+        puntosObjeto = go.arrayobjetos[objeto1][3]
+        gpj.inventario.pop(objetoUsado)
     
     #tendremos una variable para saber la vida que le queda al pj despues del encuentro.
     vidaresultado = gpj.personaje[1]

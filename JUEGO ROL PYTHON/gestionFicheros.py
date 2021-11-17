@@ -1,8 +1,9 @@
 import csv
 from prettytable import PrettyTable
+import gestionPersonaje as gpj
 
 opcion = "default" #variable global para saber si la partida que vamos a jugar usa archivos default o custom
-# esta variable se rescribe cada vez que iniciamos partida, a su vez, deben rescribirse todos los arrays (en nueva partida) 
+#esta variable se rescribe cada vez que iniciamos partida, a su vez deben rescribirse todos los arrays(en nuevaPartida) 
 def elegirArchivos():
     opcion = ""
     while opcion != "1" and opcion != "2":
@@ -40,7 +41,7 @@ def generarMonstruos(opcion):
     return arraymonstruos
 
 #me conviene tener esta función aquí
-def guardarPartida(personaje, opcion, salaactual, monstruopasado, inventario, dificultad):
+def guardarPartida(salaactual, monstruopasado, dificultad):
     partidas = open("partidasGuardadas.txt",'a', newline='', encoding='utf-8')
     if dificultad == 0:
         dificultad = "normal"
@@ -49,9 +50,9 @@ def guardarPartida(personaje, opcion, salaactual, monstruopasado, inventario, di
     elif dificultad == -1:
         dificultad = "facil"  
     #en la partida guardaré la cantidad de objetos también, para saber cuántos hay.
-    datosGuardados = [personaje[0], str(personaje[1]), personaje[2], opcion, str(dificultad), str(salaactual),
-                      str(monstruopasado), str(len(inventario))]
-    for objeto in inventario:
+    datosGuardados = [gpj.personaje[0], str(gpj.personaje[1]), gpj.personaje[2], opcion, str(dificultad),
+                      str(salaactual), str(monstruopasado), str(len(gpj.inventario))]
+    for objeto in gpj.inventario:
         datosGuardados.append(str(objeto))
     with partidas:
         csvescrito = csv.writer(partidas,delimiter = ';')
@@ -95,32 +96,3 @@ def elegirPartidaGuardada():#muestra las partidas guardadas en una tabla
     
     return arraypartidas[partidaseleccionada]
     
-"""
-def generarMapa():
-    archivoSalas = open('./default/mapa.txt', "r",encoding="utf-8")
-    salas = archivoSalas.readlines()
-    arraysalas = []
-    for i in salas:
-        arraysalas.append(i.split(";"))
-    #print(arraysalas)
-    return arraysalas
-    #guardamos toda la información de las salas en un array de dos coordenadas
-
-
-def generarAmbientes():
-    archivoAmbiente = open('./default/ambientes.txt', "r",encoding="utf-8")
-    ambientes = archivoAmbiente.readlines()
-    arrayambientes = []
-    for i in ambientes:
-        arrayambientes.append(i.split(";"))
-    return arrayambientes
-
-def generarObjetos():
-    archivoObjeto = open('./default/objetos.txt', "r",encoding="utf-8")
-    objetos = archivoObjeto.readlines()
-    arrayobjetos = []
-    for i in objetos:
-        arrayobjetos.append(i.split(";"))
-    return arrayobjetos
-    
-"""

@@ -1,7 +1,8 @@
 import random
 
 personaje = []
-#el personaje se guardará como una lista global a la que hay que llamar desde este módulo.
+#el personaje e inventario se guardarán como una listas globales a las que hay que llamar desde este módulo.
+inventario = []
 
 def crearPersonaje():
     personaje = []

@@ -40,18 +40,15 @@ def crearPersonaje():
     txtnombre.focus()
     
     def verpersonaje():
-        pj = habilidad.get()
+        pj = habilidad.get()#mostramos la foto del pj seleccionado.
+        canvas.itemconfigure(fotopj1, state='hidden')
+        canvas.itemconfigure(fotopj2, state='hidden')
+        canvas.itemconfigure(fotopj3, state='hidden')
         if pj == 1:
             canvas.itemconfigure(fotopj1, state='normal')
-            canvas.itemconfigure(fotopj2, state='hidden')
-            canvas.itemconfigure(fotopj3, state='hidden')
         elif pj == 2:
-            canvas.itemconfigure(fotopj1, state='hidden')
             canvas.itemconfigure(fotopj2, state='normal')
-            canvas.itemconfigure(fotopj3, state='hidden')
         elif pj == 3:
-            canvas.itemconfigure(fotopj1, state='hidden')
-            canvas.itemconfigure(fotopj2, state='hidden')
             canvas.itemconfigure(fotopj3, state='normal')
     
     habilidad = IntVar()
@@ -74,10 +71,10 @@ def crearPersonaje():
         nombre = txtnombre.get()
         if nombre == "":
             messagebox.showinfo('Error', 'Por favor, escribe un nombre')
-        vida = 100
+
         if nombre != "" and habil != "":
             vidarand = random.randint(0, 100)
-            vida = vida + vidarand
+            vida = 100 + vidarand
             messagebox.showinfo("Atención","Los dioses te han condedido "+str(vida)+" puntos de vida.")
             if len(personaje) > 0:# hay que vaciar el personaje si jugamos varias veces en la misma sesión.
                 for i in range(len(personaje)):
@@ -119,11 +116,8 @@ def mostrarPersonaje():
     lblvida.place(x=240, y=50)
     lblhabilidad = Label(ventanapj, text="Habilidad: " + personaje[2])
     lblhabilidad.place(x=240, y=70)
-    
-    def salir():
-        ventanapj.destroy()
         
-    botonsalir = Button(ventanapj, text="Salir", command=salir)
+    botonsalir = Button(ventanapj, text="Salir", command=ventanapj.destroy)
     botonsalir.place(x=240, y=150)
     
     ventanapj.mainloop()

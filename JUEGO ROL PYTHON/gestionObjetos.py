@@ -1,7 +1,7 @@
 import random
 import gestionFicheros as gf
-import gestionMonstruos as gm #necesitamos usar la funcion de probabilidad
-
+import gestionMonstruos as gm
+import gestionPersonaje as gpj
 
 arrayobjetos = gf.generarObjetos(gf.opcion)
 
@@ -41,47 +41,47 @@ def invocarObjeto(dificultad):# por cada sala, esta función generará 0, 1 o 2 
     else:
         return None
     
-def consultarInventario(inventario):
+def consultarInventario():
     contador = 0
-    if len(inventario) > 0:
+    if len(gpj.inventario) > 0:
         print("Estos son tus objetos disponibles")
-        for objeto in inventario:
+        for objeto in gpj.inventario:
             print(str(contador)+" - "+arrayobjetos[objeto][1])#mostramos un número y el nombre del objeto, el cual consultamos en el array
             contador = contador + 1
     else:
         print("No hay ningún objeto en tu inventario")
         
-def recogerObjeto(nuevosObjetos, inventario):
+def recogerObjeto(nuevosObjetos):
     if nuevosObjetos != None: #si hay objetos en la sala
         if len(nuevosObjetos) == 1:
-            inventario.append(nuevosObjetos[0])
+            gpj.inventario.append(nuevosObjetos[0])
             print("Has recogido "+arrayobjetos[nuevosObjetos[0]][1]+".")
         else:
             opcion = ""
             while opcion != "1" and opcion != "2":
                 opcion = input("Elige, ¿recoger "+arrayobjetos[nuevosObjetos[0]][1]+"(1) o recoger "+arrayobjetos[nuevosObjetos[1]][1]+"(2)?")
             if opcion == 1:
-                inventario.append(nuevosObjetos[0])
+                gpj.inventario.append(nuevosObjetos[0])
                 print("Has recogido "+arrayobjetos[nuevosObjetos[0]][1]+".")
             else:
-                inventario.append(nuevosObjetos[1])
+                gpj.inventario.append(nuevosObjetos[1])
                 print("Has recogido "+arrayobjetos[nuevosObjetos[1]][1]+".")
-    return inventario
+    
 
 
-def usarObjeto(inventario): #en la funcion de lucha, llamamos a esta función para dar la opción de escoger un objeto.
+def usarObjeto(): #en la funcion de lucha, llamamos a esta función para dar la opción de escoger un objeto.
     usarObjeto = ""
     while usarObjeto != "si" and usarObjeto != "no":
         usarObjeto = input("¿Quieres utilizar un objeto? (si/no)").lower()
     if usarObjeto == "si":
-        consultarInventario(inventario)
+        consultarInventario()
         objetoUsado = ""
         while esEntero(objetoUsado) == False or objetoUsado == "":
             objetoUsado = input("Introduce el número a la izquierda del objeto que quieres usar")
             try: # queremos que el usuario meta un número desde 0 hasta el contador máximo de objeto
                 # ej: tenemos 4 objetos, el usuario puede elegir del 0 al 3
                 objetoUsado = int(objetoUsado)
-                if objetoUsado >= 0 and objetoUsado < len(inventario):
+                if objetoUsado >= 0 and objetoUsado < len(gpj.inventario):
                     return objetoUsado #lo que estamos devolviendo es el INDICE del inventario que tenemos que usar y quitar
                 else:
                     objetoUsado = ""

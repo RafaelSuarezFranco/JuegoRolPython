@@ -6,16 +6,17 @@ import gestionSalas as gs
 import gestionPersonaje as gpj
 import csv
 
-#personaje = []
-inventario = []
-
 def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, le pasamos None)
+    
+    if len(gpj.inventario) > 0:#vaciamos el inventario, si jugamos varias partidas en al misma sesión, es necesario.
+        for item in gpj.inventario:
+            gpj.inventario.remove(item)
+            
     if partida == None:# SI LA PARTIDA ES COMPLETAMENTE NUEVA
         gf.opcion = gf.elegirArchivos() #controla si usamos archivos default o custom
         #inicializamos variables que controlarán el estado actual del juego
         gpj.personaje = gpj.crearPersonaje()
         dificultad = elegirDificultad()
-        inventario = []
         salaactual = "1"
         resultadosala = []
         monstruopasado = False #guardamos si hubo un monstruo en la sala anterior
@@ -34,10 +35,10 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         elif partida[4] == "dificil":
             dificultad = 1
             
-        inventario = []
+        
         for i in range(1, int(partida[7])+1):
-            inventario.append(int(partida[7+i]))#añadiendo los objetos guardados al inventario
-
+            #añadiendo los objetos guardados al inventario
+            gpj.inventario.append(int(partida[7+i]))
         salaactual = partida[5]
         resultadosala = []
         monstruopasado = True
@@ -45,9 +46,9 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
             monstruopasado = False
         input("Partida cargada con éxito. Pulsa intro para continuar...")
     
-    #cargamos en memoria los elementos del juego.
-    arraysalas = gf.generarMapa(gf.opcion)
-    arrayambientes = gf.generarAmbientes(gf.opcion)
+    #cargamos en memoria los elementos del juego. cada array se guarda en una variable global del modulo correspondiente.
+    gs.arraysalas = gf.generarMapa(gf.opcion)
+    gs.arrayambientes = gf.generarAmbientes(gf.opcion)
     go.arrayobjetos = gf.generarObjetos(gf.opcion)
     gm.arraymonstruos = gf.generarMonstruos(gf.opcion)
 
@@ -61,7 +62,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
     #avanzamos por las salas mientras que no llegemos a la sala FIN o la sala actual valga -1, que significa que estamos
     #en un callejón sin salida.
     while salaactual != "FIN" and salaactual != "-1" and salaactual !="guardar y salir" and gpj.personaje[1] > 0:
-        resultadosala = gs.avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario, dificultad)
+        resultadosala = gs.avanzarMapa(salaactual, monstruopasado, dificultad)
         salaactual = resultadosala[1]
         monstruopasado = resultadosala[0]
         if salaactual != "-1" and salaactual != "guardar y salir":
@@ -71,7 +72,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
            
     if salaactual == "FIN":
         print("Has llegado a la sala final")
-        resultadosala = gs.avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario, dificultad)
+        resultadosala = gs.avanzarMapa(salaactual, monstruopasado, dificultad)
 
 #nuevaPartida()
         

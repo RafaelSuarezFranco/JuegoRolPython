@@ -3,7 +3,7 @@ import gestionFicheros as gf
 
 def menuPrincipal():
     menuopcion = ""
-
+    print("BIENVENIDO AL JUEGO ROL EN PYTHON, por Rafael Suárez Franco.")
     while menuopcion != "6":
         print("MENÚ PRINCIPAL")
         print("1 - Nueva Partida")
@@ -11,8 +11,8 @@ def menuPrincipal():
         print("6 - Salir del juego")
         menuopcion = input("Introduce una opción")
         if menuopcion == "1":
-            gp.nuevaPartida(None)
+            gp.nuevaPartida( None )
         elif menuopcion == "2":
-            gp.nuevaPartida( gf.elegirPartidaGuardada())
+            gp.nuevaPartida( gf.elegirPartidaGuardada() )
             
 menuPrincipal()

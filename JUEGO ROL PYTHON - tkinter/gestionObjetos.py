@@ -1,11 +1,12 @@
 import random
 import gestionFicheros as gf
-import gestionMonstruos as gm #necesitamos usar la funcion de probabilidad
+import gestionMonstruos as gm
 from tkinter.ttk import *
 from tkinter import *
 import gestionPantalla as cp
+import gestionPersonaje as gpj
 
-arrayobjetos = gf.generarObjetos(gf.opcion)
+arrayobjetos = []
 
 def esEntero(num):
     try:
@@ -15,7 +16,7 @@ def esEntero(num):
     except ValueError:
         return False
     
-def randomizarObjeto(arrayobjetos): #Devuelve un objeto (solo su número, si queremos checkear su info, la buscamos en el arrayobjetos)
+def randomizarObjeto(): #Devuelve un objeto (solo su número, si queremos checkear su info, la buscamos en el arrayobjetos)
     numAleatorio = random.randint(1, len(arrayobjetos))
     for indice in range( len(arrayobjetos) ):
         if arrayobjetos[indice][0] == str(numAleatorio):
@@ -27,7 +28,7 @@ def invocarObjeto(dificultad):# por cada sala, esta función generará 0, 1 o 2 
     objetosNuevos = []
     hayObjeto = gm.probalilidad(75 - (dificultad * 10))
     if hayObjeto == True:
-        objeto1 = int(randomizarObjeto(arrayobjetos))-1
+        objeto1 = int(randomizarObjeto())-1
         objetosNuevos.append(objeto1)
         print("En la sala hay " + arrayobjetos[objeto1][1]+".")
         hayOtroObjeto = gm.probalilidad(30 - (dificultad * 10))
@@ -43,17 +44,19 @@ def invocarObjeto(dificultad):# por cada sala, esta función generará 0, 1 o 2 
     else:
         return None
     
-def consultarInventario(inventario):
+def consultarInventario():
     contador = 0
-    if len(inventario) > 0:
+    if len(gpj.inventario) > 0:
         print("Estos son tus objetos disponibles")
-        for objeto in inventario:
+        for objeto in gpj.inventario:
             print(str(contador)+" - "+arrayobjetos[objeto][1])#mostramos un número y el nombre del objeto, el cual consultamos en el array
             contador = contador + 1
     else:
         print("No hay ningún objeto en tu inventario")
-        
-def recogerObjeto(nuevosObjetos, inventario):
+
+
+"""        
+def recogerObjeto(nuevosObjetos):
     recogido = False
     ventanaobjeto = Tk()
     ventanaobjeto.title('Recoger Objeto')
@@ -64,7 +67,7 @@ def recogerObjeto(nuevosObjetos, inventario):
     lbl.place(x=70,y=150)
     
     def recoger1():
-        inventario.append(o1)
+        gpj.inventario.append(o1)
         objeto1.place_forget()
         if len(nuevosObjetos) > 1: 
             objeto2.place_forget()
@@ -77,7 +80,7 @@ def recogerObjeto(nuevosObjetos, inventario):
     
     o2 = ""
     def recoger2():
-        inventario.append(o2)
+        gpj.inventario.append(o2)
         objeto1.place_forget()
         objeto2.place_forget()
         lbl.configure(text="Has recogido "+arrayobjetos[o2][1])
@@ -96,22 +99,23 @@ def recogerObjeto(nuevosObjetos, inventario):
     salir.place(x=70,y=100)
     
     ventanaobjeto.mainloop()   
-    return inventario, recogido
+    return recogido
 
-
-def usarObjeto(inventario): #en la funcion de lucha, llamamos a esta función para dar la opción de escoger un objeto.
+"""
+"""
+def usarObjeto(): #en la funcion de lucha, llamamos a esta función para dar la opción de escoger un objeto.
     usarObjeto = ""
     while usarObjeto != "si" and usarObjeto != "no":
         usarObjeto = input("¿Quieres utilizar un objeto? (si/no)").lower()
     if usarObjeto == "si":
-        consultarInventario(inventario)
+        consultarInventario()
         objetoUsado = ""
         while esEntero(objetoUsado) == False or objetoUsado == "":
             objetoUsado = input("Introduce el número a la izquierda del objeto que quieres usar")
             try: # queremos que el usuario meta un número desde 0 hasta el contador máximo de objeto
                 # ej: tenemos 4 objetos, el usuario puede elegir del 0 al 3
                 objetoUsado = int(objetoUsado)
-                if objetoUsado >= 0 and objetoUsado < len(inventario):
+                if objetoUsado >= 0 and objetoUsado < len(gpj.inventario):
                     return objetoUsado #lo que estamos devolviendo es el INDICE del inventario que tenemos que usar y quitar
                 else:
                     objetoUsado = ""
@@ -119,24 +123,25 @@ def usarObjeto(inventario): #en la funcion de lucha, llamamos a esta función pa
                 objetoUsado = "" # iterar el bucle
     else:#si elige no usar objeto
         return None
-    
-def crearInventario(panelinferior, inventario):
+"""
+#esta función podría pertenecer a gestionPersonaje, ya que el inventario se almacena allí.
+def crearInventario(panelinferior):
     combo = Combobox(panelinferior, state="readonly") # crear combobox no editable, al que se añaden los objetos.
     nombres = ['Ninguno']
-    for objeto in inventario:
+    for objeto in gpj.inventario:
         nombres.append(arrayobjetos[int(objeto)-1][1])
     combo['values']= nombres
     combo.current(0)
     return combo
 
-def recogerObjeto(objeto, comboobjeto, inventario, nuevosObjetos, btnobjeto1, btnobjeto2):
+def recogerObjeto(objeto, comboobjeto, nuevosObjetos, btnobjeto1, btnobjeto2):
     #le pasamos el objeto recogido y el combobox para añadirlo
-    inventario.append(objeto+1)
+    gpj.inventario.append(objeto+1)
     if len(nuevosObjetos) >1:
         btnobjeto2.place_forget() 
     btnobjeto1.place_forget()
     nombres = ['Ninguno']
-    for obj in inventario:
+    for obj in gpj.inventario:
         nombres.append(arrayobjetos[int(obj)-1][1])
     comboobjeto['values'] = nombres
     comboobjeto.update()

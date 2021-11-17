@@ -12,39 +12,39 @@ import gestionPartidas as gp
 
 arraysalas = []
 arrayambientes = []
-luchar = False
 
-def randomizarAmbiente(arrayambientes): #Devuelve una cadena de ambiente aleatoria.
+def randomizarAmbiente(): #Devuelve una cadena de ambiente aleatoria.
     numAleatorio = random.randint(1, len(arrayambientes))
     for indice in range( len(arrayambientes) ):
         if arrayambientes[indice][0] == str(numAleatorio):
             return arrayambientes[indice]#devolvemos la cadena y el código de ambiente también para saber qué imagen mostrar
 
-def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventario, dificultad):
-    resultadosala = [] #devolveré este array de resultados para saber la siguiente sala, si hubo o no hubo monstruo, etc.
+def avanzarMapa(salaactual, monstruopasado, dificultad):
+    resultadosala = [] #devolveré este array de resultados para saber la siguiente sala y si hubo o no hubo monstruo
     nuevosObjetos = []
     salidas = []#estas serán las salidas posibles, puede contener N S O E
     
-    puertaSala(salaactual, monstruopasado, inventario, dificultad)
-    #en este caso todo el tema de guardar y/o salir al menu se maneja desde la ventana.
+    puertaSala(salaactual, monstruopasado, dificultad)
+    #en este caso todo el tema de guardar y/o salir al menu se maneja desde esta ventana.
     
     try:
         salaactual = int(salaactual)
-        #digamos que guardaremos la letra de la salida si en su posición no hay un cero.
-        for puerta in range( len(arraysalas[salaactual]) -1 ):
-            if arraysalas[salaactual][puerta] != "0" and arraysalas[salaactual][puerta] != arraysalas[salaactual][0]:
+        for puerta in range(1, len(arraysalas[salaactual]) ):
+            if arraysalas[salaactual][puerta] != "0":
                 salidas.append(arraysalas[0][puerta])
+                #esta condicion significa que si en la fila de la sala que corresponde a sala actual hay algo que
+                #no sea un 0, guardamos en el array de salidas la letra que corresponde, que se encuentra en
+                #la primera fila de arraysalas
+                
     except ValueError: # si entramos en esta excepción significa que salaactual toma valor que no es entero, cosa que solo
         #debería ocurrir en la sala FIN
         print("")
     
-    #mostrar mensaje de ambiente
-    ambiente = randomizarAmbiente(arrayambientes)
-    #print(ambiente)
+    #cogemos un ambiente aleatorio. en esta versión guardamos su código también para asociarlo a una imagen.
+    ambiente = randomizarAmbiente()
     
     ventanasala = Tk()
     ventanasala.title('SALA '+str(salaactual))
-    #alto, ancho
     cp.centrarPantalla(500, 500, ventanasala)
     ventanasala.resizable(False, False)
     cp.deshabilitarX(ventanasala)
@@ -52,7 +52,7 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     frame.pack()
     canvas = Canvas(frame, bg="black", width=700, height=400)
     canvas.pack()
-    imgambiente = PhotoImage(file="./pictures/"+ambiente[0]+".png")
+    imgambiente = PhotoImage(file="./pictures/ambiente"+ambiente[0]+".png")
     fotoambiente = canvas.create_image(240,200,image=imgambiente)
     imgpj = PhotoImage(file="./pictures/"+gpj.personaje[2]+".png")
     fotopj = canvas.create_image(80,300,image=imgpj)
@@ -92,22 +92,22 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     
     def siguentemonstruo(): #al pulsar el boton btnsiguiente, se enseña el monstruo y el mensaje
         btnsiguiente.place_forget()
-        btnsiguiente2.place(x=425, y=420)
+        btnsiguiente2.place(x=415, y=420)
         if monstruopasado == True:
             canvas.itemconfigure(fotomonstruo, state='normal')
             textosala.configure(text="Un "+monstruoactual[1]+" salvaje apareció!"+
-                                "¡Ten cuidado! "+monstruoactual[4]+".")
+                                " ¡Ten cuidado! "+monstruoactual[4]+".")
             animacionmonstruo()
         else:
             textosala.configure(text="No parece haber ninguna amenaza en la sala. Suspiras de alivio.")
     
     btnsiguiente = Button(ventanasala, text="Siguiente", command=siguentemonstruo)#boton introduce al monstruo, si lo hay
-    btnsiguiente.place(x=425, y=420)
+    btnsiguiente.place(x=415, y=420)
     
     
     def siguienteobjetos(): #lógica similar, si hay objetos, los monstramos en mensajes.
         btnsiguiente2.place_forget()
-        btnsiguiente3.place(x=425, y=420)
+        btnsiguiente3.place(x=415, y=420)
         if nuevosObjetos != None:#si hay 1 objeto
             cadenaobjeto = "En la sala hay " + go.arrayobjetos[nuevosObjetos[0]][1]+"."
             textosala.configure(text=cadenaobjeto)
@@ -125,16 +125,18 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     panel. de nuevo solo saldremos de ese panel de controles una vez elijamos luchar o huir (o salir si no hay monstruo)
     por lo que el resultado de la sala se determinará en la función del panel inferior, la cual se llama 'crearMenu'.
     """
-    indiceinventario = ""
-    resultadolucha = "empate"
+    indiceinventario = ""#controla el indice del inventario segun el objeto que hemos seleccionado en el menu.
+    resultadolucha = "empate"#controla el resultado de la pelea, que se ejecuta desde el menú.
     def mostrarmenu(indiceinventario, resultadolucha):
         btnsiguiente3.place_forget()
-        panelinferior, indiceinventario, resultadolucha = crearMenu(ventanasala,canvas, textosala,fotopj, fotomonstruo, inventario, nuevosObjetos,
-                                                       monstruoactual, salaactual, monstruopasado, dificultad)
+        panelinferior, indiceinventario, resultadolucha = crearMenu(ventanasala,canvas, textosala,fotopj, fotomonstruo,
+                                                                    nuevosObjetos, monstruoactual, salaactual,
+                                                                    monstruopasado, dificultad)
         panelinferior.place(x=5, y= 420)
-        btnsiguiente4.place(x=425, y=420)#nuevo botón, será visible cuando quitemos el panel de controles.
+        btnsiguiente4.place(x=415, y=420)#nuevo botón, será visible cuando quitemos el panel de controles.
         
-    btnsiguiente3 = Button(ventanasala, text="Ver Menú", command=lambda: mostrarmenu(indiceinventario, resultadolucha))#al pulsar este boton sale el menú.
+    btnsiguiente3 = Button(ventanasala, text="Ver Menú", command=lambda: mostrarmenu(indiceinventario, resultadolucha))
+    #al pulsar este boton sale el menú con los controles..
     
     """
     la siguiente función controla lo que pasa una vez hemos luchado, huido o salido. analiza si nos queda vida para continuar
@@ -143,22 +145,22 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     """
     objetobueno = False #si el objeto ha sido eficaz o no
     def lucharhuirsalir():
-        if monstruopasado == True and resultadolucha != "empate":
+        if monstruopasado == True and resultadolucha == "ganar":
             canvas.itemconfigure(fotomonstruo, state='hidden')
         if gpj.personaje[1] < 1: #bajar a 0 o menos de vida es condición de derrota.
             textosala.configure(text="Tus heridas tras el último encuentro son letales, tu cuerpo no puede aguantar más. Has perdido la partida.")
-            btnsiguiente5.place(x=425, y=420)
+            btnsiguiente5.place(x=415, y=420)
             resultadosala.append("-1")
-        else:
+        else: #si no hemos muerto, mostramos los botones con salidas
             textosala.configure(text="Procede a elegir una salida.")
             encontrarSalida(salidas, norte, sur, este, oeste)
-            if len(salidas) == 0 and salaactual != "FIN":
+            if len(salidas) == 0 and salaactual != "FIN":#si no hay salida posible
                 textosala.configure(text="""Parece ser que estás en un callejón sin salida. Esperas cruzado de brazos hasta que la sala se derrumba sobre tu cabeza. Fin del juego.""")
-                btnsiguiente5.place(x=425, y=420)
+                btnsiguiente5.place(x=415, y=420)
                 resultadosala.append("-1")
             elif len(salidas) == 0 and salaactual == "FIN":
                 #textosala.configure(text="""¡Enhorabuena!¡Has derrotado al jefe final!""")
-                btnsiguiente5.place(x=425, y=420)
+                btnsiguiente5.place(x=415, y=420)
             btnsiguiente4.place_forget()
     
     def saliralmenu():
@@ -172,20 +174,18 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     a continuación tenemos un par de funciones para hacer una animación de salida del personaje, además de controlar
     los botones de salida (N S O E) que mostraremos.
     """
-    def salirsala(puerta):
-        textosala.configure(text="Saliendo de la sala por la puerta "+puerta+"...")
-        canvas.after(200, None)
-        ventanasala.destroy()
-        return resultadosala #retornamos resultado sala para acabar con esta maldita funcion interminable
     
     def pjsaliranimacion(salida, s):
         norte.place_forget()
         sur.place_forget()
         este.place_forget()
         oeste.place_forget()
-        resultadosala.append(arraysalas[salaactual][s])
+        resultadosala.append(arraysalas[salaactual][s])#guardamos en el resultado la salaactual nueva.
+        textosala.configure(text="Saliendo de la sala por la puerta "+salida+"...")
         animacionSalir(ventanasala, canvas, fotopj, salida)
-        salirsala(salida)
+        canvas.after(200, None)
+        ventanasala.destroy()
+        return resultadosala #retornamos resultado sala para acabar con esta funcion interminable
     
     def irnorte():
         salida = "norte"
@@ -228,7 +228,7 @@ def avanzarMapa(salaactual, arraysalas, arrayambientes, monstruopasado, inventar
     #en resultadosala tenemos: [monstruopasado, salaactual]
 
 def encontrarSalida(salidas, norte, sur, este, oeste):
-    if 'N' in salidas:
+    if 'N' in salidas: #muestra los botones de las salidas disponibles.
         norte.place(x=200, y= 20)
     if 'S' in salidas:
         sur.place(x=200, y= 380)
@@ -239,21 +239,22 @@ def encontrarSalida(salidas, norte, sur, este, oeste):
     
     
 
-
-#se crea un panel con unos botones, sustituye al menu de la otra version. Por tanto debemos pasarle casi los mismos parámetros.
-def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, inventario, nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad):
+"""
+Se crea un panel con unos botones, sustituye al menu de la otra versión. Por tanto debemos pasarle casi los mismos
+parámetros. Además hay que pasarle la ventana, el canvas, las fotos, etc. porque queremos manipular todo eso
+desde este menú.
+"""
+def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad):
     panelinferior = Frame(window, height=100, width=500)
     resultadolucha = "empate"
-    def mostrarpj():
-        gpj.mostrarPersonaje()
-    
-    btnpj = Button(panelinferior, text="Mostrar Personaje", command=mostrarpj)
+
+    btnpj = Button(panelinferior, text="Mostrar Personaje", command=gpj.mostrarPersonaje)
     btnpj.place(x=10,y=0)
     
     lblinventario = Label(panelinferior, text="Tu inventario:")
     lblinventario.place(x=30,y=50)
         
-    comboobjeto = go.crearInventario(panelinferior, inventario)
+    comboobjeto = go.crearInventario(panelinferior)
     comboobjeto.place(x=150,y=50)
     
     # para recoger objetos, monstrare tantos botones como objetos hayan en la sala, al pulsar uno, se recoge
@@ -264,20 +265,23 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, inventario, nuevos
     o2 = ""
    
     def recoger1():
-        go.recogerObjeto(o1,comboobjeto, inventario, nuevosObjetos, btnobjeto1, btnobjeto2)
+        go.recogerObjeto(o1,comboobjeto, nuevosObjetos, btnobjeto1, btnobjeto2)
         
     def recoger2():
-        go.recogerObjeto(o2,comboobjeto, inventario, nuevosObjetos, btnobjeto1, btnobjeto2)
+        go.recogerObjeto(o2,comboobjeto, nuevosObjetos, btnobjeto1, btnobjeto2)
         
-    if nuevosObjetos != None:
+    if nuevosObjetos != None:#si hay objetos, mostraremos botones para elegir uno de ellos.
         o1 = int(nuevosObjetos[0])
-        btnobjeto1 = Button(panelinferior, text="Recoger "+go.arrayobjetos[o1][1], command=recoger1)
+        btnobjeto1 = Button(panelinferior, text="Recoger "+go.arrayobjetos[o1][1],
+                            command=lambda: go.recogerObjeto(o1,comboobjeto, nuevosObjetos, btnobjeto1, btnobjeto2))
         btnobjeto1.place(x=150,y=0)
         if len(nuevosObjetos) > 1:
             o2 = int(nuevosObjetos[1])
-            btnobjeto2 = Button(panelinferior, text="Recoger "+go.arrayobjetos[o2][1], command=recoger2)
+            btnobjeto2 = Button(panelinferior, text="Recoger "+go.arrayobjetos[o2][1],
+                                command=lambda: go.recogerObjeto(o2,comboobjeto, nuevosObjetos, btnobjeto1, btnobjeto2))
             btnobjeto2.place(x=150,y=25)
-    ################ FIN BOTONES RECOGER OBJETO.
+    ################
+            
     btnluchar = ""
     btnhuir = ""
     btnsalir = ""
@@ -289,14 +293,14 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, inventario, nuevos
         panelinferior.place_forget()
         return panelinferior, indiceinventario, resultadolucha
     
-    #la función de luchar (o que llama a la función lucha de gestionMonstruos) es un poco más extensa
+    #la función de luchar2 (o que llama a la función lucha de gestionMonstruos) es un poco más extensa
     #dado que hay que recoger si hay un objeto seleccionado y pasarselo a lucha(). esta lucha se repetirá
     #si hay empate o no hemos ganado en la sala FIN, lo cual se verá reflejado en las animaciones.
     objetousado = "" #el objeto que se utilizará en la lucha
     indiceinventario = ""
     objetobueno = False
     def luchar2(objetousado,indiceinventario, objetobueno):
-        luchar = True
+        
         if comboobjeto.get() != "Ninguno":
             objetousado = " utilizando "+comboobjeto.get()
             indiceinventario = comboobjeto.current()
@@ -304,12 +308,13 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, inventario, nuevos
         resultadolucha = "empate"
         while resultadolucha == "empate" or (salaactual == "FIN" and resultadolucha != "ganar"):
             #repetimos la lucha y la animación hasta que no sea empate
-            gpj.personaje[1], resultadolucha, objetobueno = gm.lucha(monstruoactual, inventario,indiceinventario, salaactual, dificultad)
-            gm.animacionLucha(window, canvas, resultadolucha, fotopj, fotomonstruo, textosala, monstruoactual, objetobueno, indiceinventario)
+            resultadolucha, objetobueno = gm.lucha(monstruoactual,indiceinventario, salaactual, dificultad)
+            gm.animacionLucha(window, canvas, resultadolucha, fotopj, fotomonstruo, textosala,
+                                              monstruoactual, objetobueno, indiceinventario)
 
         if resultadolucha != "empate" or (salaactual == "FIN" and resultadolucha != "ganar"):
             panelinferior.place_forget()
-        return panelinferior,  indiceinventario,resultadolucha
+        return panelinferior, indiceinventario,resultadolucha
     
     def salir(): #simplemente quitamos el panel y procedemos a elegir la salida
         panelinferior.place_forget()
@@ -331,7 +336,7 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, inventario, nuevos
  
 # es la introducción de la sala, equivalente a la pequeña etapa de la version de texto donde damos la opcion de guardar
 # y salir.
-def puertaSala(salaactual, monstruopasado, inventario, dificultad):
+def puertaSala(salaactual, monstruopasado, dificultad):
     ventanasala = Tk()
     ventanasala.title('PUERTA DE LA SALA '+salaactual)
     cp.centrarPantalla(400, 480, ventanasala)
@@ -374,14 +379,15 @@ def puertaSala(salaactual, monstruopasado, inventario, dificultad):
         for i in range(1, 75):
             canvas.after(10, None)
             moverpj()
-    def guardar():
-        gf.guardarPartida(gpj.personaje, gf.opcion, salaactual, monstruopasado, inventario, dificultad)
-        ventanasala.destroy()
-        mp.menuPrincipal()
+
         
     def salir():
         ventanasala.destroy()
         mp.menuPrincipal()
+        
+    def guardar():
+        gf.guardarPartida(salaactual, monstruopasado, dificultad)
+        salir()
         
     btnentrar = Button(ventanasala, text="Entrar", command=entrar)
     btnentrar.place(x=70,y=360)

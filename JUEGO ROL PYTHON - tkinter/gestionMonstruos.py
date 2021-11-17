@@ -3,8 +3,7 @@ import gestionFicheros as gf
 import gestionObjetos as go
 import gestionPersonaje as gpj
 
-#hay que definir este array aqui, si no, las funciones no pueden encontrarlo.
-arraymonstruos = gf.generarMonstruos(gf.opcion)
+arraymonstruos = []
 
 def probalilidad(porcentaje):
     #le pasaremos un porcentaje entero entre 0 y 100, devolverá true o false si el resultado cae dentro de esa probabilidad
@@ -14,7 +13,7 @@ def probalilidad(porcentaje):
     else:
         return False
 
-def randomizarMonstruo(arraymonstruos): #Devuelve un monstruo aleatorio con sus características.
+def randomizarMonstruo(): #Devuelve un monstruo aleatorio con sus características.
     numAleatorio = random.randint(1, len(arraymonstruos))
     for indice in range( len(arraymonstruos) ):
         if arraymonstruos[indice][0] == str(numAleatorio):
@@ -35,7 +34,7 @@ def invocarMonstruo(monstruopasado, salaactual, dificultad):
     monstruoactual = ""
     if hayMonstruo == True:
         monstruopasado = True
-        monstruoactual = randomizarMonstruo(arraymonstruos) #en monstruo actual se almacena una línea del fichero de monstruos
+        monstruoactual = randomizarMonstruo() #en monstruo actual se almacena una línea del fichero de monstruos
         print("¡Un "+monstruoactual[1]+" salvaje apareció!\n")
         print("¡Ten cuidado! "+monstruoactual[4]+".")# monstramos el nombre del monstruo y una descripción.
     else:
@@ -44,21 +43,17 @@ def invocarMonstruo(monstruopasado, salaactual, dificultad):
     return monstruopasado, monstruoactual
 
 
-def lucha(monstruoactual, inventario, indiceinventario, salaactual, dificultad):
+def lucha(monstruoactual, indiceinventario, salaactual, dificultad):
     print("Has decidido enfrentarte al "+monstruoactual[1])
     
-    #aquí damos la opción de usar un objeto, si tenemos algo en el inventario
-    objetoUsado = None
-    nombreObjeto = ""
-    cualidadObjeto = ""
-    puntosObjeto = ""
+    objetoUsado = None #controla si se usa o no se usa objeto
+    objetoLucha = [] #guarda el objeto que se usa para luchar.
     if indiceinventario != "":
         index = int(indiceinventario)-1 # estos unos son para reajustar el índice y objeto escogido, dado que en el combobox se usa fórmula distinta
-        objetoUsado = inventario[index]-1
-        nombreObjeto = go.arrayobjetos[objetoUsado][1]
-        cualidadObjeto = go.arrayobjetos[objetoUsado][2]
-        puntosObjeto = go.arrayobjetos[objetoUsado][3]
-        inventario.pop(index)
+        objetoUsado = gpj.inventario[index]-1
+        objetoLucha = [go.arrayobjetos[objetoUsado][1], go.arrayobjetos[objetoUsado][2], go.arrayobjetos[objetoUsado][3]]
+        #contiene nombre, cualidad y puntos del objeto.
+        gpj.inventario.pop(index)
     
     #tendremos una variable para saber la vida que le queda al pj despues del encuentro.
     vidaresultado = gpj.personaje[1]
@@ -92,13 +87,19 @@ def lucha(monstruoactual, inventario, indiceinventario, salaactual, dificultad):
             resultado = "perder"
             
         objetobueno = False
-        vidaresultado, objetobueno = resultadoLucha(resultado, vidaresultado, monstruoactual, objetoUsado, cualidadObjeto, puntosObjeto, nombreObjeto, salaactual)
-    
-    return vidaresultado, resultado, objetobueno
+        gpj.personaje[1], objetobueno = resultadoLucha(resultado, vidaresultado, monstruoactual, objetoUsado, objetoLucha, salaactual)
+    return resultado, objetobueno
 
 
 
-def resultadoLucha(resultado, vidaresultado, monstruoactual, objetoUsado, cualidadObjeto, puntosObjeto, nombreObjeto, salaactual):
+def resultadoLucha(resultado, vidaresultado, monstruoactual, objetoUsado, objetoLucha, salaactual):
+    nombreObjeto = ""
+    cualidadObjeto = ""
+    puntosObjeto = ""
+    if objetoUsado != None:
+        nombreObjeto = objetoLucha[0]
+        cualidadObjeto = objetoLucha[1]
+        puntosObjeto = objetoLucha[2]
     #recalculamos la vida del pj dependiendo del resultado y del objeto
     ########################################################################################## SI GANAMOS
     objetobueno = False
@@ -133,7 +134,7 @@ def resultadoLucha(resultado, vidaresultado, monstruoactual, objetoUsado, cualid
         if salaactual == "FIN":
             resultado = "empate"
             if vidaresultado > 0: #mientras tengamos vida, seguimos luchando.
-                input("Aún te quedan fuerzas para luchar. Pulsa intro para intentarlo de nuevo.")
+                #input("Aún te quedan fuerzas para luchar. Pulsa intro para intentarlo de nuevo.")
                 return vidaresultado, objetobueno
             else:
                 return vidaresultado, objetobueno#si nos quedamos sin vida, salimos de la función.

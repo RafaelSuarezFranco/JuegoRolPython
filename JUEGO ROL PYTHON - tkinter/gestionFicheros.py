@@ -1,5 +1,6 @@
 import csv
 from prettytable import PrettyTable
+import gestionPersonaje as gpj
 
 opcion = "default" #variable global para saber si la partida que vamos a jugar usa archivos default o custom
 # esta variable se rescribe cada vez que iniciamos partida, a su vez, deben rescribirse todos los arrays (en nueva partida) 
@@ -40,7 +41,7 @@ def generarMonstruos(opcion):
     return arraymonstruos
 
 #me conviene tener esta función aquí
-def guardarPartida(personaje, opcion, salaactual, monstruopasado, inventario, dificultad):
+def guardarPartida(salaactual, monstruopasado, dificultad):
     partidas = open("partidasGuardadas.txt",'a', newline='', encoding='utf-8')
     if dificultad == 0:
         dificultad = "normal"
@@ -49,9 +50,9 @@ def guardarPartida(personaje, opcion, salaactual, monstruopasado, inventario, di
     elif dificultad == -1:
         dificultad = "facil"  
     #en la partida guardaré la cantidad de objetos también, para saber cuántos hay.
-    datosGuardados = [personaje[0], str(personaje[1]), personaje[2], opcion, str(dificultad), str(salaactual),
-                      str(monstruopasado), str(len(inventario))]
-    for objeto in inventario:
+    datosGuardados = [gpj.personaje[0], str(gpj.personaje[1]), gpj.personaje[2], opcion, str(dificultad), str(salaactual),
+                      str(monstruopasado), str(len(gpj.inventario))]
+    for objeto in gpj.inventario:
         datosGuardados.append(str(objeto))
     with partidas:
         csvescrito = csv.writer(partidas,delimiter = ';')
