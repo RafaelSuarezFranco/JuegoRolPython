@@ -20,6 +20,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         salaactual = "1"
         resultadosala = []
         monstruopasado = False #guardamos si hubo un monstruo en la sala anterior
+        gs.arraysalas = gf.generarMapa()
         print("Da comienzo la aventura, te encuentras en la sala 1.")
         print("La mazmorra en la que te encuentras es inestable y colapsa a medida que la recorres.")
         print("Cada sala por la que pases se derrumbará y no podrás volver sobre tus pasos. Elige bien a dónde vas.")
@@ -47,11 +48,13 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         input("Partida cargada con éxito. Pulsa intro para continuar...")
     
     #cargamos en memoria los elementos del juego. cada array se guarda en una variable global del modulo correspondiente.
-    gs.arraysalas = gf.generarMapa(gf.opcion)
-    gs.arrayambientes = gf.generarAmbientes(gf.opcion)
-    go.arrayobjetos = gf.generarObjetos(gf.opcion)
-    gm.arraymonstruos = gf.generarMonstruos(gf.opcion)
-
+    #gs.arraysalas = gf.generarMapa()
+    #el array de salas se carga de esta manera si la partida es nueva, pero si no,
+    #se carga desde mapasGuardados.txt a la vez que se cargan otros datos guardados.
+    gs.arrayambientes = gf.generarAmbientes()
+    go.arrayobjetos = gf.generarObjetos()
+    gm.arraymonstruos = gf.generarMonstruos()
+    print(gs.arraysalas)
     """
     Acerca del array de salas: como el tema sobre no volver a una sala anterior queda un poco a criterio del diseñador, lo
     que he dedidido es que cada sala por la que pasemos se vaya borrando de dicho array, como si el mapa se fuera destruyendo

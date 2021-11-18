@@ -3,7 +3,6 @@ import gestionFicheros as gf
 import gestionMonstruos as gm
 import gestionObjetos as go
 import gestionPersonaje as gpj
-import csv
 from tkinter import *
 import gestionPantalla as cp
 import menuPrincipal as mp
@@ -24,8 +23,7 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     nuevosObjetos = []
     salidas = []#estas serán las salidas posibles, puede contener N S O E
     
-    puertaSala(salaactual, monstruopasado, dificultad)
-    #en este caso todo el tema de guardar y/o salir al menu se maneja desde esta ventana.
+    
     
     try:
         salaactual = int(salaactual)
@@ -39,6 +37,18 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     except ValueError: # si entramos en esta excepción significa que salaactual toma valor que no es entero, cosa que solo
         #debería ocurrir en la sala FIN
         print("")
+        
+    #borramos la sala actual de array de salas para que no se pueda volver
+    #básicamente si por ejemplo estamos en la sala 1, borramos todos los 1 y los cambiamos por 0.
+    for i in range(len(arraysalas)-1):
+        for j in range(len(arraysalas[i])):
+            if arraysalas[i][j] == str(salaactual):
+                arraysalas[i][j] = '0'
+    #de esta forma, en la siguiente sala no se reconocerá como salida la sala anterior ni ninguna en la que hayamos
+    # estado, dado que habrá un 0 en su lugar
+    
+    puertaSala(salaactual, monstruopasado, dificultad)
+    #en este caso todo el tema de guardar y/o salir al menu se maneja desde esta ventana.
     
     #cogemos un ambiente aleatorio. en esta versión guardamos su código también para asociarlo a una imagen.
     ambiente = randomizarAmbiente()
@@ -54,7 +64,7 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     canvas.pack()
     imgambiente = PhotoImage(file="./pictures/ambiente"+ambiente[0]+".png")
     fotoambiente = canvas.create_image(240,200,image=imgambiente)
-    imgpj = PhotoImage(file="./pictures/"+gpj.personaje[2]+".png")
+    imgpj = PhotoImage(file="./pictures/"+str(gpj.personaje[2])+".png")
     fotopj = canvas.create_image(80,300,image=imgpj)
     
     panelinferior = Frame(ventanasala, height=100, width=450)
@@ -183,40 +193,13 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
         canvas.after(200, None)
         ventanasala.destroy()
         return resultadosala #retornamos resultado sala para acabar con esta funcion interminable
+
+
     
-    def irnorte():
-        salida = "norte"
-        s = 1
-        pjsaliranimacion(salida, s)
-        
-    def irsur():
-        salida = "sur"
-        s = 2
-        pjsaliranimacion(salida, s)
-        
-    def iroeste():
-        salida = "oeste"
-        s = 3
-        pjsaliranimacion(salida, s)
-        
-    def ireste():
-        salida = "este"
-        s = 4
-        pjsaliranimacion(salida, s)
-    
-    #borramos la sala actual de array de salas para que no se pueda volver
-    #básicamente si por ejemplo estamos en la sala 1, borramos todos los 1 y los cambiamos por 0.
-    for i in range(len(arraysalas)-1):
-        for j in range(len(arraysalas[i])-1):
-            if arraysalas[i][j] == str(salaactual):
-                arraysalas[i][j] = '0'
-    #de esta forma, en la siguiente sala no se reconocerá como salida la sala anterior ni ninguna en la que hayamos
-    # estado, dado que habrá un 0 en su lugar
-    
-    norte = Button(ventanasala, text="Norte", command=irnorte)
-    sur = Button(ventanasala, text="Sur", command=irsur)
-    este = Button(ventanasala, text="Este", command=ireste)
-    oeste = Button(ventanasala, text="Oeste", command=iroeste)
+    norte = Button(ventanasala, text="Norte", command=lambda: pjsaliranimacion("norte", 1))
+    sur = Button(ventanasala, text="Sur", command=lambda: pjsaliranimacion("sur", 2))
+    oeste = Button(ventanasala, text="Oeste", command=lambda: pjsaliranimacion("oeste", 3))
+    este = Button(ventanasala, text="Este", command=lambda: pjsaliranimacion("este", 4))
     ventanasala.mainloop()
     
  
@@ -305,6 +288,7 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, nuevosObjetos, mon
         resultadolucha = "empate"
         while resultadolucha == "empate" or (salaactual == "FIN" and resultadolucha != "ganar"):
             #repetimos la lucha y la animación hasta que no sea empate
+            print(resultadolucha)
             resultadolucha, objetobueno = gm.lucha(monstruoactual,indiceinventario, salaactual, dificultad)
             gm.animacionLucha(window, canvas, resultadolucha, fotopj, fotomonstruo, textosala,
                                               monstruoactual, objetobueno, indiceinventario)
@@ -335,6 +319,7 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, nuevosObjetos, mon
 # es la introducción de la sala, equivalente a la pequeña etapa de la version de texto donde damos la opcion de guardar
 # y salir.
 def puertaSala(salaactual, monstruopasado, dificultad):
+    salaactual = str(salaactual)
     ventanasala = Tk()
     ventanasala.title('PUERTA DE LA SALA '+salaactual)
     cp.centrarPantalla(400, 480, ventanasala)
@@ -380,6 +365,7 @@ def puertaSala(salaactual, monstruopasado, dificultad):
         
     def guardar():
         gf.guardarPartida(salaactual, monstruopasado, dificultad)
+        gf.guardarMapa()
         salir()
         
     btnentrar = Button(ventanasala, text="Entrar", command=entrar)

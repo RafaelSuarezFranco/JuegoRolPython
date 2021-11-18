@@ -3,7 +3,7 @@ import gestionFicheros as gf
 import gestionMonstruos as gm
 import gestionPersonaje as gpj
 
-arrayobjetos = gf.generarObjetos(gf.opcion)
+arrayobjetos = []
 
 def esEntero(num):
     try:

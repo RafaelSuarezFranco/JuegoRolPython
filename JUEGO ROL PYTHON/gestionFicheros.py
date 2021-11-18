@@ -1,6 +1,7 @@
 import csv
 from prettytable import PrettyTable
 import gestionPersonaje as gpj
+import gestionSalas as gs
 
 opcion = "default" #variable global para saber si la partida que vamos a jugar usa archivos default o custom
 #esta variable se rescribe cada vez que iniciamos partida, a su vez deben rescribirse todos los arrays(en nuevaPartida) 
@@ -16,25 +17,25 @@ def elegirArchivos():
 
 
 #funciones de carga de partida
-def generarMapa(opcion): #con csv es más conciso, por lo que importaré los archivos de esta manera.
+def generarMapa(): #con csv es más conciso, por lo que importaré los archivos de esta manera.
     archivoSalas = open('./'+opcion+'/mapa.txt', "r",encoding="utf-8")
     salas = csv.reader(archivoSalas, delimiter = ';')
     arraysalas = list(salas)
     return arraysalas
 
-def generarAmbientes(opcion):
+def generarAmbientes():
     archivoAmbiente = open('./'+opcion+'/ambientes.txt', "r",encoding="utf-8")
     ambientes = csv.reader(archivoAmbiente, delimiter = ';')
     arrayambientes = list(ambientes)
     return arrayambientes
 
-def generarObjetos(opcion):
+def generarObjetos():
     archivoObjeto = open('./'+opcion+'/objetos.txt', "r",encoding="utf-8")
     objetos = csv.reader(archivoObjeto, delimiter = ';')
     arrayobjetos = list(objetos)
     return arrayobjetos
 
-def generarMonstruos(opcion):
+def generarMonstruos():
     archivoMonstruo = open('./'+opcion+'/monstruos.txt', "r",encoding="utf-8")
     monstruos = csv.reader(archivoMonstruo, delimiter = ';')
     arraymonstruos = list(monstruos)
@@ -60,12 +61,14 @@ def guardarPartida(salaactual, monstruopasado, dificultad):
     partidas.close()
     print("Partida guardada con éxito.")
     
-"""
-Nota: soy consciente de que en guardarpartida no hemos guardado el array del mapa, lo que significa que aunque
-carguemos partida, se generará el mapa (default o custom) renovado, por lo que se podría utilizar esto para volver a
-salas anteriores, lo cual no está permitido normalmente, pero para no complicar mucho el tema de guardado, no voy a
-guardar todo el mapa solo para asegurarme de que se cumple esa regla.
-"""
+def guardarMapa():
+    mapas = open("mapasGuardados.txt",'a', newline='', encoding='utf-8')
+    with mapas:
+        csvescrito = csv.writer(mapas,delimiter = ',')
+        csvescrito.writerow(gs.arraysalas)
+    mapas.close()
+    print("Estado del mapa guardado con éxito.")
+    
 
 def elegirPartidaGuardada():#muestra las partidas guardadas en una tabla
     #permite seleccionar una que se le pasará como parámetro a nuevaPartida.
@@ -93,6 +96,20 @@ def elegirPartidaGuardada():#muestra las partidas guardadas en una tabla
             partidaseleccionada = int(input("Introduce el nº de partida a cargar"))
         except ValueError:
             partidaseleccionada = 0
-    
+    gs.arraysalas = cargarMapa(partidaseleccionada) #carga el estado guardado del mapa
     return arraypartidas[partidaseleccionada]
     
+def cargarMapa(indice):#carga el mapa guardado en la misma posicion de la partida.
+    ficheromapas = open("mapasGuardados.txt",'r', encoding='utf-8')   
+    mapasguardados = csv.reader(ficheromapas, delimiter = ',')
+    arraymapas = list(mapasguardados)
+    arrayfinal = []
+    #tal como guardo los mapas (el mapa entero en una linea) cada subarray se guarda como cadena, por lo tanto
+    #al recuperarlo aqui, tengo que hacerle un eval a cada string para convertirlo en array.
+    for i in range(0, len(arraymapas[indice])):
+        array = eval(arraymapas[indice][i])
+        arrayfinal.append(array)
+    #print(arrayfinal)
+    return arrayfinal
+
+

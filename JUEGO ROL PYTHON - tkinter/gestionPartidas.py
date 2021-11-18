@@ -7,16 +7,19 @@ from tkinter import *
 import gestionPantalla as cp
 
 def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, le pasamos None)
-    
+    """
     if len(gpj.inventario) > 0:#vaciamos el inventario, si jugamos varias partidas en al misma sesión, es necesario.
         for item in gpj.inventario:
             gpj.inventario.remove(item)
-            
+    """
+    gpj.inventario = []
+    
     if partida == None:# SI LA PARTIDA ES COMPLETAMENTE NUEVA
         gf.opcion = "default"
         #gf.opcion = gf.elegirArchivos() #controla si usamos archivos default o custom
         #inicializamos variables que controlarán el estado actual del juego
-        gpj.personaje = gpj.crearPersonaje()#En este caso, se crean ventanas para crear el pj y elegir la dificultad.
+        gs.arraysalas = gf.generarMapa()
+        gpj.crearPersonaje()#En este caso, se crean ventanas para crear el pj y elegir la dificultad.
         dificultad = elegirDificultad()
         salaactual = "1"
         resultadosala = []
@@ -88,10 +91,10 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         input("Partida cargada con éxito. Pulsa intro para continuar...")
     
     #cargamos en memoria los elementos del juego.
-    gs.arraysalas = gf.generarMapa(gf.opcion)
-    gs.arrayambientes = gf.generarAmbientes(gf.opcion)
-    go.arrayobjetos = gf.generarObjetos(gf.opcion)
-    gm.arraymonstruos = gf.generarMonstruos(gf.opcion)
+    #gs.arraysalas = gf.generarMapa()
+    gs.arrayambientes = gf.generarAmbientes()
+    go.arrayobjetos = gf.generarObjetos()
+    gm.arraymonstruos = gf.generarMonstruos()
 
     #avanzamos por las salas mientras que no llegemos a la sala FIN o la sala actual valga -1, que significa que estamos
     #en un callejón sin salida. guardar y/o salir o morir tambien son condiciones para salir del bucle.

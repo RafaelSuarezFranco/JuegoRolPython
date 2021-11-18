@@ -76,10 +76,9 @@ def crearPersonaje():
             vidarand = random.randint(0, 100)
             vida = 100 + vidarand
             messagebox.showinfo("Atención","Los dioses te han condedido "+str(vida)+" puntos de vida.")
-            if len(personaje) > 0:# hay que vaciar el personaje si jugamos varias veces en la misma sesión.
-                for i in range(len(personaje)):
-                    personaje.pop(i)
-            personaje.extend((nombre, vida, habil))
+            #para hacer referencia a una global dentro del mismo archivo:
+            global personaje
+            personaje = [nombre, vida, habil]
             ventanapj.destroy()
             
 
@@ -90,7 +89,7 @@ def crearPersonaje():
     btncrear.place(x=400, y=300)
     
     ventanapj.mainloop()
-    return personaje
+    #return personaje
     
 
 def mostrarPersonaje():

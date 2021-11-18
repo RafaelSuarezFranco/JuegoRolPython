@@ -3,6 +3,7 @@ import gestionFicheros as gf
 import gestionMonstruos as gm
 import gestionObjetos as go
 import gestionPersonaje as gpj
+import gestionGraficos as gg
 import csv
 
 arraysalas = []
@@ -32,6 +33,15 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     except ValueError: # si entramos en esta excepción significa que salaactual toma valor que no es entero, cosa que solo
         #debería ocurrir en la sala FIN
         print("")
+        
+    #borramos la sala actual de array de salas para que no se pueda volver
+    #básicamente si por ejemplo estamos en la sala 1, borramos todos los 1 y los cambiamos por 0.
+    for i in range(len(arraysalas)-1):
+        for j in range(len(arraysalas[i])):
+            if arraysalas[i][j] == str(salaactual):
+                arraysalas[i][j] = '0'
+    #de esta forma, en la siguiente sala no se reconocerá como salida la sala anterior ni ninguna en la que hayamos
+    # estado, dado que habrá un 0 en su lugar
     
     #aquí damos la opción de salir (guardando o sin guardar).Si elegimos una de esas opciones, hacemos un return de
     #resultado sala para salir de la función, pero debemos introducir algo en ese return para que no se vuelva a iterar esta
@@ -41,6 +51,7 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     
     if salirPartida == "g":
         gf.guardarPartida(salaactual, monstruopasado, dificultad)
+        gf.guardarMapa()
         print("Saliendo de la partida.")
         resultadosala.append(monstruopasado)
         resultadosala.append('guardar y salir')
@@ -65,7 +76,7 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     
     if monstruopasado == True or nuevosObjetos != None: #si hay un monstruo u objetos en la sala
         #entonces mostramos el menú, si no, pasaremos directamente a elegir la salida
-        menuMapa(nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad)
+        menuMapa(nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad, salidas)
     
     
     
@@ -105,20 +116,12 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
 
     print("La sala "+arraysalas[salaactual][0]+" se derrumba tras cerrar la puerta.")
     print("")
-    #borramos la sala actual de array de salas para que no se pueda volver
-    #básicamente si por ejemplo estamos en la sala 1, borramos todos los 1 y los cambiamos por 0.
-    for i in range(len(arraysalas)-1):
-        for j in range(len(arraysalas[i])-1):
-            if arraysalas[i][j] == str(salaactual):
-                arraysalas[i][j] = '0'
-    #de esta forma, en la siguiente sala no se reconocerá como salida la sala anterior ni ninguna en la que hayamos
-    # estado, dado que habrá un 0 en su lugar
  
     return resultadosala
     #en resultadosala tenemos: [monstruopasado, salaactual]
 
 
-def menuMapa(nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad):
+def menuMapa(nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificultad, salidas):
     # si hay monstruo o objeto, damos a elegir las acciones.
     accion = ""
     
@@ -135,6 +138,7 @@ def menuMapa(nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificult
             print("5 - Huir del monstruo")
         else:
             print("4, 5 - Salir de la sala")
+        print("6 - Ver la sala")
                 
         accion = input("")
 
@@ -160,6 +164,7 @@ def menuMapa(nuevosObjetos, monstruoactual, salaactual, monstruopasado, dificult
             elif salaactual == "FIN": #si estamos en la sala FIN, no podemos huir del monstruo
                 print("Es el monstruo final, no puedes huir de él.")
                 accion = ""
- 
+        elif accion == "6":
+             gg.dibujarSala(salidas, nuevosObjetos, monstruopasado, salaactual)
 
 

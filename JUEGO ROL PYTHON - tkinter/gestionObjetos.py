@@ -1,5 +1,4 @@
 import random
-import gestionFicheros as gf
 import gestionMonstruos as gm
 from tkinter.ttk import *
 from tkinter import *

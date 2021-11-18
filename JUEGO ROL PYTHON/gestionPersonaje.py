@@ -5,7 +5,7 @@ personaje = []
 inventario = []
 
 def crearPersonaje():
-    personaje = []
+    personaje = []#personaje local, se asigna luego al global
     print("Vamos a crear tu personaje")
     nombre = input("Nombre de tu personaje: ")
     while nombre == "":

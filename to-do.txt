@@ -1,7 +1,5 @@
 arreglar sala final version tkinter
-ver sala caracteres ascii
 editor de mapas y archivos
-propiedades de la habilidad del personaje
 globalizar la variable dificultad
 gestión de inventario¿?
 reajustar código de objetos con índices, sobre todo para tener el combobox más limpio.
@@ -9,5 +7,20 @@ borrar partida guardada
 limpiar parámetros sin utilizar o innecesarios
 eliminar los prints de consola remanentes de la version tkinter, eliminar funciones que no necesito en dicha version
 crear pantalla en tkinter para la carga de partida (y borrar)
-guardar el estado del mapa a la par que se guarda partida.
 se produce un doble manejo de los empates, en lucha y desde el boton que llama a la lucha. hay que desenmarañar eso como sea
+	Es mejor que eso se gestione dentro de gestionMonstruos, y que la animación se llame desde allí.
+
+propiedades de las habilidades del personaje (y monstruos/objetos)
+	personaje:
+		LUCHA: dados del pj van de 1 a 25
+		MAGIA: empieza con 100 de vida adicional (entre 200 y 300)
+		ASTUCIA: reduce probabilidad de monstruo
+			 Libro de astucia: Crea un botón adicional que muestra la info de los objetos y monstruos.
+	monstruo:
+		LUCHA: monstruo cuenta con un dado adicional
+		MAGIA: monstruo inflige un % de vida adicional si gana.
+		ASTUCIA: si el monstruo gana, nos quita objetos.
+	objeto: cualidades de la habilidad de objeto, se aplica independientemente de si el objeto coincide o no con el monstruo
+		LUCHA: nuestros dados van de 5 a 20 (o a 25)
+		MAGIA: reduce un 50% el daño recibido si perdemos.
+		ASTUCIA: si se produce un empate, ganamos automáticamente.

@@ -1,5 +1,4 @@
 import random
-import gestionFicheros as gf
 import gestionObjetos as go
 import gestionPersonaje as gpj
 
@@ -46,7 +45,7 @@ def invocarMonstruo(monstruopasado, salaactual, dificultad):
 def lucha(monstruoactual, indiceinventario, salaactual, dificultad):
     print("Has decidido enfrentarte al "+monstruoactual[1])
     
-    objetoUsado = None #controla si se usa o no se usa objeto
+    objetoUsado = None #controla si se usa o no se usa objeto. en este caso el indice de objeto viene dado de fuera.
     objetoLucha = [] #guarda el objeto que se usa para luchar.
     if indiceinventario != "":
         index = int(indiceinventario)-1 # estos unos son para reajustar el índice y objeto escogido, dado que en el combobox se usa fórmula distinta
@@ -60,7 +59,7 @@ def lucha(monstruoactual, indiceinventario, salaactual, dificultad):
     resultado = "empate"
     objetobueno = False
     
-    while resultado == "" or (resultado == "perder" and salaactual == "FIN" and vidaresultado > 0):
+    while resultado == "empate" or (resultado == "perder" and salaactual == "FIN" and vidaresultado > 0):
         # repetimos hasta que una de las partes gane (si no es la sala final)
     
         #hacemos 3 tiradas y las guardamos ordenadas
@@ -87,7 +86,7 @@ def lucha(monstruoactual, indiceinventario, salaactual, dificultad):
             resultado = "ganar"
         else:
             resultado = "perder"
-            
+        
         gpj.personaje[1], objetobueno = resultadoLucha(resultado, vidaresultado, monstruoactual, objetoUsado, objetoLucha, salaactual)
     return resultado, objetobueno
 
