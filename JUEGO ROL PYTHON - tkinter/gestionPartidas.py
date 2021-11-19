@@ -7,14 +7,11 @@ from tkinter import *
 import gestionPantalla as cp
 
 def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, le pasamos None)
-    """
-    if len(gpj.inventario) > 0:#vaciamos el inventario, si jugamos varias partidas en al misma sesión, es necesario.
-        for item in gpj.inventario:
-            gpj.inventario.remove(item)
-    """
+    
+    #vaciamos el inventario, si jugamos varias partidas en al misma sesión, es necesario.
     gpj.inventario = []
     
-    if partida == None:# SI LA PARTIDA ES COMPLETAMENTE NUEVA
+    if partida == None:################################################# SI LA PARTIDA ES COMPLETAMENTE NUEVA
         gf.opcion = "default"
         #gf.opcion = gf.elegirArchivos() #controla si usamos archivos default o custom
         #inicializamos variables que controlarán el estado actual del juego
@@ -68,7 +65,8 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         
         sala1.mainloop()
 
-    else: #SI LA PARTIDA ES CARGADA, INICILIZAMOS LAS VARIABLES CON LA PARTIDA QUE HEMOS PASADO
+    else: ####################SI LA PARTIDA ES CARGADA, INICILIZAMOS LAS VARIABLES CON LA PARTIDA QUE HEMOS PASADO
+        
         gf.opcion = partida[3] # default o custom guardado en partida[3]
         gpj.personaje = [partida[0], int(partida[1]), partida[2]]
         
@@ -78,18 +76,17 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         elif partida[4] == "dificil":
             dificultad = 1
             
-
         for i in range(1, int(partida[7])+1):
             #añadiendo los objetos guardados al inventario
             gpj.inventario.append(int(partida[7+i]))
-            
+          
         salaactual = partida[5]
         resultadosala = []
         monstruopasado = True
         if partida[6] == "False":#el monstruo pasado está guardado como string.
             monstruopasado = False
-        input("Partida cargada con éxito. Pulsa intro para continuar...")
-    
+            
+    ######################################################################### UNA VEZ SE HA CREADO O CARGADO PARTIDA
     #cargamos en memoria los elementos del juego.
     #gs.arraysalas = gf.generarMapa()
     gs.arrayambientes = gf.generarAmbientes()

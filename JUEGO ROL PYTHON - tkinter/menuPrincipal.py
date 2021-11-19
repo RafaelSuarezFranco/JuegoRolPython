@@ -20,26 +20,19 @@ def menuPrincipal():
     canvas.create_text(238,18,text='MENÚ PRINCIPAL', fill='black', font=('freemono', 20, 'bold'))
     canvas.create_text(240,20,text='MENÚ PRINCIPAL', fill='white', font=('freemono', 20, 'bold'))
 
-    def botonnuevaClick():
+    def botonnueva():
         ventana.destroy()
         gp.nuevaPartida(None)
     
-    def botoncargarClick():
-        ventana.destroy()
-        gp.nuevaPartida(gf.elegirPartidaGuardada())
-        
-    def botoncargar2():
+    def botoncargar():
         ventana.destroy()
         gf.pantallaCargarPartida()
 
-    botonnueva = Button(ventana, text="Nueva Partida", command=botonnuevaClick)
+    botonnueva = Button(ventana, text="Nueva Partida", command=botonnueva)
     botonnueva.place(x=150, y=300)
 
-    botoncargar = Button(ventana, text="Cargar Partida", command=botoncargarClick)
+    botoncargar = Button(ventana, text="Cargar Partida", command=botoncargar)
     botoncargar.place(x=250, y=300)
-    
-    botoncargar2 = Button(ventana, text="Cargar Partida 2", command=botoncargar2)
-    botoncargar2.place(x=250, y=200)
 
     botonsalir = Button(ventana, text="Salir", command=sys.exit)
     botonsalir.place(x=350, y=300)

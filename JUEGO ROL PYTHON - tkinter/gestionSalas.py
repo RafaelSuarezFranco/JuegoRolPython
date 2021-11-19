@@ -18,13 +18,15 @@ def randomizarAmbiente(): #Devuelve una cadena de ambiente aleatoria.
         if arrayambientes[indice][0] == str(numAleatorio):
             return arrayambientes[indice]#devolvemos la cadena y el código de ambiente también para saber qué imagen mostrar
 
-def avanzarMapa(salaactual, monstruopasado, dificultad):
-    resultadosala = [] #devolveré este array de resultados para saber la siguiente sala y si hubo o no hubo monstruo
-    nuevosObjetos = []
-    salidas = []#estas serán las salidas posibles, puede contener N S O E
-    
-    
-    
+
+
+"""
+el codigo de esta función es extraído de la siguiente, la cual es bastante larga.
+lo que hacemos aquí es convertir salaactual en entero para poder usarlo como índice y buscar dicha sala en el array
+de salas, y así guardar las salidas en el array 'salidas'. Ya de paso, actualizamos el arraysalas y eliminamos las
+salas y salidas a las que no tendremos acceso conforme avancemos en el juego.
+"""
+def actualizarMapa(salaactual, salidas):
     try:
         salaactual = int(salaactual)
         for puerta in range(1, len(arraysalas[salaactual]) ):
@@ -35,8 +37,8 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
                 #la primera fila de arraysalas
                 
     except ValueError: # si entramos en esta excepción significa que salaactual toma valor que no es entero, cosa que solo
-        #debería ocurrir en la sala FIN
-        print("")
+        #debería ocurrir en la sala FIN. En cualquier caso significa que no debemos preocuparnos de las salidas.
+        pass
         
     #borramos la sala actual de array de salas para que no se pueda volver
     #básicamente si por ejemplo estamos en la sala 1, borramos todos los 1 y los cambiamos por 0.
@@ -46,9 +48,17 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
                 arraysalas[i][j] = '0'
     #de esta forma, en la siguiente sala no se reconocerá como salida la sala anterior ni ninguna en la que hayamos
     # estado, dado que habrá un 0 en su lugar
+    return salaactual, salidas
+
+def avanzarMapa(salaactual, monstruopasado, dificultad):
+    resultadosala = [] #devolveré este array de resultados para saber la siguiente sala y si hubo o no hubo monstruo
+    nuevosObjetos = []
+    salidas = []#estas serán las salidas posibles, puede contener N S O E
     
-    puertaSala(salaactual, monstruopasado, dificultad)
+    salaactual, salidas = actualizarMapa(salaactual, salidas)
+    
     #en este caso todo el tema de guardar y/o salir al menu se maneja desde esta ventana.
+    puertaSala(salaactual, monstruopasado, dificultad)
     
     #cogemos un ambiente aleatorio. en esta versión guardamos su código también para asociarlo a una imagen.
     ambiente = randomizarAmbiente()
@@ -288,8 +298,8 @@ def crearMenu(window, canvas, textosala,fotopj, fotomonstruo, nuevosObjetos, mon
         resultadolucha = "empate"
         while resultadolucha == "empate" or (salaactual == "FIN" and resultadolucha != "ganar"):
             #repetimos la lucha y la animación hasta que no sea empate
-            print(resultadolucha)
             resultadolucha, objetobueno = gm.lucha(monstruoactual,indiceinventario, salaactual, dificultad)
+            print(resultadolucha)
             gm.animacionLucha(window, canvas, resultadolucha, fotopj, fotomonstruo, textosala,
                                               monstruoactual, objetobueno, indiceinventario)
 

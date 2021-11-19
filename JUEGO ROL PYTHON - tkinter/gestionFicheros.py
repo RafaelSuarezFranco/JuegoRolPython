@@ -4,6 +4,8 @@ import gestionPersonaje as gpj
 import gestionSalas as gs
 from tkinter import *
 import gestionPantalla as cp
+import menuPrincipal as mp
+import gestionPartidas as gp
 
 opcion = "default" #variable global para saber si la partida que vamos a jugar usa archivos default o custom
 # esta variable se rescribe cada vez que iniciamos partida, a su vez, deben rescribirse todos los arrays (en nueva partida) 
@@ -18,7 +20,7 @@ def elegirArchivos():
     return opcion
 
 
-#funciones de carga de partida
+#FUNCIONES DE CARGAR DATOS, PARA NUEVA PARTIDA.
 def generarMapa(): #con csv es más conciso, por lo que importaré los archivos de esta manera.
     archivoSalas = open('./'+opcion+'/mapa.txt', "r",encoding="utf-8")
     salas = csv.reader(archivoSalas, delimiter = ';')
@@ -43,7 +45,7 @@ def generarMonstruos():
     arraymonstruos = list(monstruos)
     return arraymonstruos
 
-#me conviene tener esta función aquí
+#FUNCIONES DE GUARDAR
 def guardarPartida(salaactual, monstruopasado, dificultad):
     partidas = open("partidasGuardadas.txt",'a', newline='', encoding='utf-8')
     if dificultad == 0:
@@ -72,30 +74,7 @@ def guardarMapa():
     print("Estado del mapa guardado con éxito.")
         
 
-def elegirPartidaGuardada():#muestra las partidas guardadas en una tabla
-    #permite seleccionar una que se le pasará como parámetro a nuevaPartida.
-    ficheropartidas = open("partidasGuardadas.txt",'r', encoding='utf-8')   
-    partidasguardadas = csv.reader(ficheropartidas, delimiter = ';')
-    arraypartidas = list(partidasguardadas)
-    tablaPartidas=PrettyTable(["Nº PARTIDA","NOMBRE","VIDA","HABILIDAD","TIPO PARTIDA","DIFICULTAD","SALA ACTUAL"])
-    contador = 0
-
-        
-    for partida in arraypartidas:
-        if contador != 0:
-            tablaPartidas.add_row([contador, partida[0], partida[1], partida[2], partida[3], partida[4], partida[5]])
-        contador = contador + 1
-    print(tablaPartidas)
-    
-    partidaseleccionada = 0
-    while partidaseleccionada < 1 or partidaseleccionada > contador-1:
-        try:
-            partidaseleccionada = int(input("Introduce el nº de partida a cargar"))
-        except ValueError:
-            partidaseleccionada = 0
-    gs.arraysalas = cargarMapa(partidaseleccionada) #carga el estado guardado del mapa
-    return arraypartidas[partidaseleccionada]
-
+#FUNCIONES DE CARGAR PARTIDA GUARDADA
 def pantallaCargarPartida():
     ficheropartidas = open("partidasGuardadas.txt",'r', encoding='utf-8')   
     partidasguardadas = csv.reader(ficheropartidas, delimiter = ';')
@@ -122,8 +101,31 @@ def pantallaCargarPartida():
         textopartida = "Partida: {} | Nombre: {} - Vida: {} - Habilidad: {} - Dificultad: {} - Sala actual: {} ".format(
             i, p[0],p[1],p[2],p[4],p[5])#formateamos un poco para que quede bien.
         partidas.insert(i, textopartida)
-    
+
     partidas.place(x=20, y=60)
+    
+    def cargarseleccion():
+        try:
+            indicepartida =  int(partidas.curselection()[0]) + 1
+            #guardamos el indice de partida para saber que línea de los archivos coger.
+            messagebox.showinfo(message="Partida cargada con éxito.", title="Atención")
+            ventana.destroy()
+            
+            gs.arraysalas = cargarMapa(indicepartida)
+            gp.nuevaPartida(arraypartidas[indicepartida])
+            #a la funcion nuevaPartida le pasamos la partida correspondiente guardada en ese array
+            
+        except Exception:
+            messagebox.showerror(message="Escoge una partida para cargarla.", title="Error")
+        
+    btnsiguiente = Button(ventana, text="Cargar", command=cargarseleccion)
+    btnsiguiente.place(x=60, y=320)
+    
+    def atras():
+        ventana.destroy()
+        mp.menuPrincipal()
+    btnsiguiente = Button(ventana, text="Atrás", command=atras)
+    btnsiguiente.place(x=260, y=320)
     
     ventana.mainloop()
 
@@ -139,5 +141,5 @@ def cargarMapa(indice):#carga el mapa guardado en la misma posicion de la partid
     for i in range(0, len(arraymapas[indice])):
         array = eval(arraymapas[indice][i])
         arrayfinal.append(array)
-    #print(arrayfinal)
+    
     return arrayfinal

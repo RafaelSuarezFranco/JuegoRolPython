@@ -8,11 +8,10 @@ import csv
 
 def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, le pasamos None)
     
-    if len(gpj.inventario) > 0:#vaciamos el inventario, si jugamos varias partidas en al misma sesión, es necesario.
-        for item in gpj.inventario:
-            gpj.inventario.remove(item)
+    #vaciamos el inventario, si jugamos varias partidas en al misma sesión, es necesario.
+    gpj.inventario = []
             
-    if partida == None:# SI LA PARTIDA ES COMPLETAMENTE NUEVA
+    if partida == None:###################################################### SI LA PARTIDA ES COMPLETAMENTE NUEVA
         gf.opcion = gf.elegirArchivos() #controla si usamos archivos default o custom
         #inicializamos variables que controlarán el estado actual del juego
         gpj.personaje = gpj.crearPersonaje()
@@ -26,7 +25,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         print("Cada sala por la que pases se derrumbará y no podrás volver sobre tus pasos. Elige bien a dónde vas.")
         input("Pulsa intro para empezar...")
         
-    else: #SI LA PARTIDA ES CARGADA, INICILIZAMOS LAS VARIABLES CON LA PARTIDA QUE HEMOS PASADO
+    else: ################# SI LA PARTIDA ES CARGADA, INICILIZAMOS LAS VARIABLES CON LA PARTIDA QUE HEMOS PASADO
         gf.opcion = partida[3] # default o custom guardado en partida[3]
         gpj.personaje = [partida[0], int(partida[1]), partida[2]]
         
@@ -46,15 +45,14 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         if partida[6] == "False":#el monstruo pasado está guardado como string.
             monstruopasado = False
         input("Partida cargada con éxito. Pulsa intro para continuar...")
-    
+    ######################################################################### UNA VEZ SE HA CREADO O CARGADO PARTIDA
+        
     #cargamos en memoria los elementos del juego. cada array se guarda en una variable global del modulo correspondiente.
     #gs.arraysalas = gf.generarMapa()
-    #el array de salas se carga de esta manera si la partida es nueva, pero si no,
-    #se carga desde mapasGuardados.txt a la vez que se cargan otros datos guardados.
     gs.arrayambientes = gf.generarAmbientes()
     go.arrayobjetos = gf.generarObjetos()
     gm.arraymonstruos = gf.generarMonstruos()
-    print(gs.arraysalas)
+
     """
     Acerca del array de salas: como el tema sobre no volver a una sala anterior queda un poco a criterio del diseñador, lo
     que he dedidido es que cada sala por la que pasemos se vaya borrando de dicho array, como si el mapa se fuera destruyendo

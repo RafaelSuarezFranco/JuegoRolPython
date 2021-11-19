@@ -6,7 +6,6 @@ reajustar código de objetos con índices, sobre todo para tener el combobox má
 borrar partida guardada
 limpiar parámetros sin utilizar o innecesarios
 eliminar los prints de consola remanentes de la version tkinter, eliminar funciones que no necesito en dicha version
-crear pantalla en tkinter para la carga de partida (y borrar)
 se produce un doble manejo de los empates, en lucha y desde el boton que llama a la lucha. hay que desenmarañar eso como sea
 	Es mejor que eso se gestione dentro de gestionMonstruos, y que la animación se llame desde allí.
 

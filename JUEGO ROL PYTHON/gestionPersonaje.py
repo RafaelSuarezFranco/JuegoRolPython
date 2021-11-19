@@ -9,7 +9,7 @@ def crearPersonaje():
     print("Vamos a crear tu personaje")
     nombre = input("Nombre de tu personaje: ")
     while nombre == "":
-        nombre = input("¿Crees que te voy a dejar avanzar sin que escribas un nombre?")
+        nombre = input("Escribe un nombre, por favor.")
 
     vidarand = random.randint(0, 100)
     vida = 100 + vidarand
