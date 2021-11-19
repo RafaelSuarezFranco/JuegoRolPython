@@ -1,4 +1,3 @@
-arreglar sala final version tkinter
 editor de mapas y archivos
 globalizar la variable dificultad
 gestión de inventario¿?
@@ -6,8 +5,6 @@ reajustar código de objetos con índices, sobre todo para tener el combobox má
 borrar partida guardada
 limpiar parámetros sin utilizar o innecesarios
 eliminar los prints de consola remanentes de la version tkinter, eliminar funciones que no necesito en dicha version
-se produce un doble manejo de los empates, en lucha y desde el boton que llama a la lucha. hay que desenmarañar eso como sea
-	Es mejor que eso se gestione dentro de gestionMonstruos, y que la animación se llame desde allí.
 
 propiedades de las habilidades del personaje (y monstruos/objetos)
 	personaje:
