@@ -27,18 +27,21 @@ def menuPrincipal():
     def botoncargarClick():
         ventana.destroy()
         gp.nuevaPartida(gf.elegirPartidaGuardada())
-
-    def salirClick():
+        
+    def botoncargar2():
         ventana.destroy()
-        sys.exit()
+        gf.pantallaCargarPartida()
 
     botonnueva = Button(ventana, text="Nueva Partida", command=botonnuevaClick)
     botonnueva.place(x=150, y=300)
 
     botoncargar = Button(ventana, text="Cargar Partida", command=botoncargarClick)
     botoncargar.place(x=250, y=300)
+    
+    botoncargar2 = Button(ventana, text="Cargar Partida 2", command=botoncargar2)
+    botoncargar2.place(x=250, y=200)
 
-    botonsalir = Button(ventana, text="Salir", command=salirClick)
+    botonsalir = Button(ventana, text="Salir", command=sys.exit)
     botonsalir.place(x=350, y=300)
 
     ventana.mainloop()

@@ -2,6 +2,8 @@ import csv
 from prettytable import PrettyTable
 import gestionPersonaje as gpj
 import gestionSalas as gs
+from tkinter import *
+import gestionPantalla as cp
 
 opcion = "default" #variable global para saber si la partida que vamos a jugar usa archivos default o custom
 # esta variable se rescribe cada vez que iniciamos partida, a su vez, deben rescribirse todos los arrays (en nueva partida) 
@@ -93,6 +95,37 @@ def elegirPartidaGuardada():#muestra las partidas guardadas en una tabla
             partidaseleccionada = 0
     gs.arraysalas = cargarMapa(partidaseleccionada) #carga el estado guardado del mapa
     return arraypartidas[partidaseleccionada]
+
+def pantallaCargarPartida():
+    ficheropartidas = open("partidasGuardadas.txt",'r', encoding='utf-8')   
+    partidasguardadas = csv.reader(ficheropartidas, delimiter = ';')
+    arraypartidas = list(partidasguardadas)
+    
+    ventana = Tk()
+    ventana.title('Cargar Partida')
+    cp.centrarPantalla(350, 550, ventana)
+    cp.deshabilitarX(ventana)
+    ventana.resizable(False, False)
+    imagenfondo = PhotoImage(file="./pictures/menuppal.png")    
+    frame = Frame(ventana)
+    frame.pack()
+    canvas = Canvas(frame, bg="black", width=700, height=400)
+    canvas.create_image(200,180,image=imagenfondo)
+    canvas.pack()
+    canvas.create_text(268,18,text='Cargar Partida', fill='black', font=('freemono', 20, 'bold'))
+    canvas.create_text(270,20,text='Cargar Partida', fill='white', font=('freemono', 20, 'bold'))
+    # listbox de partidas guardadas. muestra 15 a la vez, es scrollable.
+
+    partidas = Listbox ( ventana, width=85, height=15)
+    for i in range(1, len(arraypartidas)):
+        p = arraypartidas[i] #guardamos cada partida para mostrar algo de info de cada una de ellas en la lista.
+        textopartida = "Partida: {} | Nombre: {} - Vida: {} - Habilidad: {} - Dificultad: {} - Sala actual: {} ".format(
+            i, p[0],p[1],p[2],p[4],p[5])#formateamos un poco para que quede bien.
+        partidas.insert(i, textopartida)
+    
+    partidas.place(x=20, y=60)
+    
+    ventana.mainloop()
 
 
     
