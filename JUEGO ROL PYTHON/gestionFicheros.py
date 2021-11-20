@@ -17,7 +17,7 @@ def elegirArchivos():
 
 
 #funciones de carga de partida
-def generarMapa(): #con csv es más conciso, por lo que importaré los archivos de esta manera.
+def generarMapa(): 
     archivoSalas = open('./'+opcion+'/mapa.txt', "r",encoding="utf-8")
     salas = csv.reader(archivoSalas, delimiter = ';')
     arraysalas = list(salas)

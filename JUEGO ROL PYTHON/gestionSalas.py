@@ -53,9 +53,7 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     nuevosObjetos = []
     salidas = []#estas serán las salidas posibles, puede contener N S O E
     
-    
     salaactual, salidas = actualizarMapa(salaactual, salidas)
-    
     
     #aquí damos la opción de salir (guardando o sin guardar).Si elegimos una de esas opciones, hacemos un return de
     #resultado sala para salir de la función, pero debemos introducir algo en ese return para que no se vuelva a iterar esta
@@ -117,17 +115,16 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     print("Has abandonado la sala "+str(salaactual)+" por la puerta "+opcion+"...")
     #esta función debería devolver cual es la siguiente sala, la cual está almacenada en la posicion de 1 al 4
     #dependiendo de la opcion que escogemos, del subarray que estamos tratando (el de salaactual)
+
     if opcion == "N":
         resultadosala.append(arraysalas[salaactual][1])
     elif opcion == "S":
         resultadosala.append(arraysalas[salaactual][2])
     elif opcion == "O":
         resultadosala.append(arraysalas[salaactual][3])
-    elif opcion == "E":
+    else:#elif opcion == "E":
         resultadosala.append(arraysalas[salaactual][4])
-    else:
-        print("Este mensaje no debe aparecer nunca.")
-
+    
     print("La sala "+str(salaactual)+" se derrumba tras cerrar la puerta.")
     print("")
  
