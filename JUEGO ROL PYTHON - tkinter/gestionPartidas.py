@@ -41,19 +41,19 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         
         def avanzarnarracion():
             if btnsiguiente.counter == 0:
-                btnsiguiente.counter = btnsiguiente.counter + 1
+                btnsiguiente.counter = 1
                 canvas.itemconfigure(narracion, text="La mazmorra a la que vas a entrar es inestable \ny colapsa a medida que la recorres.")
             elif btnsiguiente.counter == 1:
-                btnsiguiente.counter = btnsiguiente.counter + 1
+                btnsiguiente.counter = 2
                 canvas.itemconfigure(narracion, text="Cada sala por la que pases se derrumbará y no \npodrás volver sobre tus pasos. Elige bien a dónde vas.")
             elif btnsiguiente.counter == 2:
-                btnsiguiente.counter = btnsiguiente.counter + 1
+                btnsiguiente.counter = 3
                 canvas.itemconfigure(narracion, text="En cada sala puede haber un monstruo aleatorio\nDebes elegir luchar o huir antes de poder avanzar.")
             elif btnsiguiente.counter == 3:
-                btnsiguiente.counter = btnsiguiente.counter + 1
+                btnsiguiente.counter = 4
                 canvas.itemconfigure(narracion, text="También puede haber hasta 2 objetos en cada sala.\nPuedes optar por recoger uno de ellos.")
             elif btnsiguiente.counter == 4:
-                btnsiguiente.counter = btnsiguiente.counter + 1
+                btnsiguiente.counter = 5
                 canvas.itemconfigure(narracion, text="Puedes usar un objeto en cada lucha, si ganas,\nte recompensará o perjudicará. Si pierdes, nada.")
                 btnsiguiente.configure(text="Empezar")
             else: 

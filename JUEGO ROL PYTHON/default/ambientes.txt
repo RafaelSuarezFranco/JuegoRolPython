@@ -1,6 +1,6 @@
-1;La sala está expuesta a los elementos, sufres un escalofrío cuando la brisa nocturna acaricia tu espalda.;
-2;El suelo de esta sala tiembla y se resquebraja, de las grietas comienzan a surgir un río de lava. El calor es sofocante.;
-3;Una densa niebla inunda toda la estancia, la visibilidad es casi nula. Ten cuidado, ni siquiera puedes ver donde estás pisando.;
-4;La flora se ha apoderado de esta sala, todo está lleno de vegetación. Es difícil moverse sin tropezar o enredarse.;
-5;La sala está aparentemente vacía. Hay tanta calma que puedes oír el sonido de tu respiración y de tus pasos.;
-6;Un hedor putrefacto reina en esta sala. Te preguntas de dónde viene esa insoportable peste.;
+1;La sala está expuesta a los elementos, sufres un escalofrío cuando la brisa nocturna acaricia tu espalda.
+2;El suelo de esta sala tiembla y se resquebraja, de las grietas comienzan a surgir un río de lava. El calor es sofocante.
+3;Una densa niebla inunda toda la estancia, la visibilidad es casi nula. Ten cuidado, ni siquiera puedes ver donde estás pisando.
+4;La flora se ha apoderado de esta sala, todo está lleno de vegetación. Es difícil moverse sin tropezar o enredarse.
+5;La sala está aparentemente vacía. Hay tanta calma que puedes oír el sonido de tu respiración y de tus pasos.
+6;Un hedor putrefacto reina en esta sala. Te preguntas de dónde viene esa insoportable peste.

@@ -23,13 +23,14 @@ def randomizarObjeto(): #Devuelve un objeto (solo su número, si queremos checke
 def invocarObjeto(dificultad):# por cada sala, esta función generará 0, 1 o 2 objetos aleatorios.
     #la dificultad hace más o menos probable que hayan objetos. si es fácil, será 85 y 40, si es difícil, será 65 y 20.
     objetosNuevos = []
-    hayObjeto = gm.probalilidad(75 - (dificultad * 10))
+    
+    hayObjeto = gm.probalilidad(75 - (dificultad * 10))#generamos 1er objeto
     if hayObjeto == True:
         objeto1 = int(randomizarObjeto())-1
         objetosNuevos.append(objeto1)
         print("En la sala hay " + arrayobjetos[objeto1][1]+".")
         
-        hayOtroObjeto = gm.probalilidad(30 - (dificultad * 10))
+        hayOtroObjeto = gm.probalilidad(30 - (dificultad * 10))#generamos 2do objeto
         if hayOtroObjeto == True:
             objeto2 = objeto1
             while objeto2 == objeto1: #no permitimos que un segundo objeto sea igual al primero
@@ -53,20 +54,21 @@ def consultarInventario():
         print("No hay ningún objeto en tu inventario")
         
 def recogerObjeto(nuevosObjetos):
-    if nuevosObjetos != None: #si hay objetos en la sala
-        if len(nuevosObjetos) == 1:
+    if nuevosObjetos != None: 
+        if len(nuevosObjetos) == 1:#si hay un objeto en la sala
             gpj.inventario.append(nuevosObjetos[0])
             print("Has recogido "+arrayobjetos[nuevosObjetos[0]][1]+".")
-        else:
+        else:#si hay dos objetos en la sala
             opcion = ""
+            o1, o2 = arrayobjetos[nuevosObjetos[0]][1], arrayobjetos[nuevosObjetos[1]][1]
             while opcion != "1" and opcion != "2":
-                opcion = input("Elige, ¿recoger "+arrayobjetos[nuevosObjetos[0]][1]+"(1) o recoger "+arrayobjetos[nuevosObjetos[1]][1]+"(2)?")
-            if opcion == 1:
+                opcion = input("Elige, ¿recoger "+o1+"(1) o recoger "+o2+"(2)?")
+            if opcion == "1":
                 gpj.inventario.append(nuevosObjetos[0])
-                print("Has recogido "+arrayobjetos[nuevosObjetos[0]][1]+".")
+                print("Has recogido "+o1+".")
             else:
                 gpj.inventario.append(nuevosObjetos[1])
-                print("Has recogido "+arrayobjetos[nuevosObjetos[1]][1]+".")
+                print("Has recogido "+o2+".")
     
 
 
@@ -74,6 +76,7 @@ def usarObjeto(): #en la funcion de lucha, llamamos a esta función para dar la 
     usarObjeto = ""
     while usarObjeto != "si" and usarObjeto != "no":
         usarObjeto = input("¿Quieres utilizar un objeto? (si/no)").lower()
+        
     if usarObjeto == "si":
         consultarInventario()
         objetoUsado = ""

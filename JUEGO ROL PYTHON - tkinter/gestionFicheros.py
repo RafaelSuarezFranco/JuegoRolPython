@@ -6,6 +6,9 @@ from tkinter import *
 import gestionPantalla as cp
 import menuPrincipal as mp
 import gestionPartidas as gp
+from distutils.dir_util import copy_tree
+import os
+
 
 opcion = "default" #variable global para saber si la partida que vamos a jugar usa archivos default o custom
 # esta variable se rescribe cada vez que iniciamos partida, a su vez, deben rescribirse todos los arrays (en nueva partida) 
@@ -85,11 +88,11 @@ def pantallaCargarPartida():
     cp.centrarPantalla(350, 550, ventana)
     cp.deshabilitarX(ventana)
     ventana.resizable(False, False)
-    imagenfondo = PhotoImage(file="./pictures/menuppal.png")    
+    imagenfondo = PhotoImage(file="./pictures/cargapartida.png")    
     frame = Frame(ventana)
     frame.pack()
     canvas = Canvas(frame, bg="black", width=700, height=400)
-    canvas.create_image(200,180,image=imagenfondo)
+    canvas.create_image(300,180,image=imagenfondo)
     canvas.pack()
     canvas.create_text(268,18,text='Cargar Partida', fill='black', font=('freemono', 20, 'bold'))
     canvas.create_text(270,20,text='Cargar Partida', fill='white', font=('freemono', 20, 'bold'))
@@ -143,3 +146,23 @@ def cargarMapa(indice):#carga el mapa guardado en la misma posicion de la partid
         arrayfinal.append(array)
     
     return arrayfinal
+
+def importarCustom():
+    #permite importar los archivos custom de la versón de texto.
+    
+    respuesta=messagebox.askyesno('Importar archivos',"""¿Quieres importar los archivos personalizados de la versión
+de texto? Hacer esto sobrescribirá los archivos actuales.""")
+    if respuesta == True:
+
+        directorioactual = os.getcwd()  
+        directoriopadre = os.path.abspath(os.path.join(directorioactual, os.pardir))
+
+        fromDirectory = directoriopadre+"/JUEGO ROL PYTHON/custom"
+        toDirectory = directoriopadre+"/JUEGO ROL PYTHON - tkinter/custom"
+        try:
+            copy_tree(fromDirectory, toDirectory)
+            messagebox.showinfo(message="Archivos importados con éxito.", title="Atención")
+        except Exception:
+            messagebox.showinfo(message="Error al importar archivos.", title="Atención")
+        
+

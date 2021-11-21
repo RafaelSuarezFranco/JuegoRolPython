@@ -1,3 +1,4 @@
+importar custom a version tkinter no debería importar ambientes.
 de las funciones de generarmapa, etc se puede quitar los return y que asignen directamente a los arrays globales
 editor de mapas y archivos
 globalizar la variable dificultad
@@ -9,7 +10,7 @@ eliminar los prints de consola remanentes de la version tkinter, eliminar funcio
 
 propiedades de las habilidades del personaje (y monstruos/objetos)
 	personaje:
-		LUCHA: dados del pj van de 1 a 25
+		LUCHA: dados del pj van de hasta 23
 		MAGIA: empieza con 100 de vida adicional (entre 200 y 300)
 		ASTUCIA: reduce probabilidad de monstruo
 			 Libro de astucia: Crea un botón adicional que muestra la info de los objetos y monstruos.
@@ -18,6 +19,6 @@ propiedades de las habilidades del personaje (y monstruos/objetos)
 		MAGIA: monstruo inflige un % de vida adicional si gana.
 		ASTUCIA: si el monstruo gana, nos quita objetos.
 	objeto: cualidades de la habilidad de objeto, se aplica independientemente de si el objeto coincide o no con el monstruo
-		LUCHA: nuestros dados van de 5 a 20 (o a 25)
+		LUCHA: nuestros dados van de 5 a 20 
 		MAGIA: reduce un 50% el daño recibido si perdemos.
 		ASTUCIA: si se produce un empate, ganamos automáticamente.

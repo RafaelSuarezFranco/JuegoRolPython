@@ -1,6 +1,6 @@
-1;Calamar Terrestre;40;MAGIA;No es tan ágil fuera del agua, pero no te confíes;
-2;Gólem de Piedra;60;LUCHA;Puede que sea lento, pero su resistencia es inigualable;
-3;Dragón anciano;80;MAGIA;Prepárate para esquivar su aliento de fuego, o saldrás muy mal parado;
-4;Cocodrilo Desdentado;30;LUCHA;No es una gran amenaza dado que carece de dientes, pero aún puede arrear coletazos;
-5;Voluntario de Greenpeace;10;ASTUCIA;No es muy violento, pero desde luego muy molesto;
-6;Brujo Oscuro;25;ASTUCIA;Sus maldiciones son perjudiciales, aunque rara vez letales;
+1;Calamar Terrestre;40;MAGIA;No es tan ágil fuera del agua, pero no te confíes
+2;Gólem de Piedra;60;LUCHA;Puede que sea lento, pero su resistencia es inigualable
+3;Dragón anciano;80;MAGIA;Prepárate para esquivar su aliento de fuego, o saldrás muy mal parado
+4;Cocodrilo Desdentado;30;LUCHA;No es una gran amenaza dado que carece de dientes, pero aún puede arrear coletazos
+5;Voluntario de Greenpeace;10;ASTUCIA;No es muy violento, pero desde luego muy molesto
+6;Brujo Oscuro;25;ASTUCIA;Sus maldiciones son perjudiciales, aunque rara vez letales
