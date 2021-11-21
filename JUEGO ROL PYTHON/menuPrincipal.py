@@ -18,4 +18,3 @@ def menuPrincipal():
             gp.nuevaPartida( gf.elegirPartidaGuardada() )
         elif menuopcion == "3":
             em.crearNuevoMapa()
-menuPrincipal()

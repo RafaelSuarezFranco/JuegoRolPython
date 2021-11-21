@@ -13,7 +13,7 @@ def esEntero(num):
     except ValueError:
         return False
     
-def randomizarObjeto(arrayobjetos): #Devuelve un objeto (solo su número, si queremos checkear su info, la buscamos en el arrayobjetos)
+def randomizarObjeto(): #Devuelve un objeto (solo su número, si queremos checkear su info, la buscamos en el arrayobjetos)
     numAleatorio = random.randint(1, len(arrayobjetos))
     for indice in range( len(arrayobjetos) ):
         if arrayobjetos[indice][0] == str(numAleatorio):
@@ -25,14 +25,15 @@ def invocarObjeto(dificultad):# por cada sala, esta función generará 0, 1 o 2 
     objetosNuevos = []
     hayObjeto = gm.probalilidad(75 - (dificultad * 10))
     if hayObjeto == True:
-        objeto1 = int(randomizarObjeto(arrayobjetos))-1
+        objeto1 = int(randomizarObjeto())-1
         objetosNuevos.append(objeto1)
         print("En la sala hay " + arrayobjetos[objeto1][1]+".")
+        
         hayOtroObjeto = gm.probalilidad(30 - (dificultad * 10))
         if hayOtroObjeto == True:
             objeto2 = objeto1
             while objeto2 == objeto1: #no permitimos que un segundo objeto sea igual al primero
-                objeto2 = int(randomizarObjeto(arrayobjetos))-1
+                objeto2 = int(randomizarObjeto())-1
             objetosNuevos.append(objeto2)
             print("Además, hay " + arrayobjetos[objeto2][1]+".")
     

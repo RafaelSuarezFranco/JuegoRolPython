@@ -75,7 +75,6 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         print("Has llegado a la sala final")
         resultadosala = gs.avanzarMapa(salaactual, monstruopasado, dificultad)
 
-#nuevaPartida()
         
 
 #dificultad afecta a la probabilidad de encontrar objetos, de generar un monstruo, a los dados del monstruo y a la

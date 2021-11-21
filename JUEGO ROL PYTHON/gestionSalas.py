@@ -10,7 +10,7 @@ arraysalas = []
 arrayambientes = []
 
 
-def randomizarAmbiente(arrayambientes): #Devuelve una cadena de ambiente aleatoria.
+def randomizarAmbiente(): #Devuelve una cadena de ambiente aleatoria.
     numAleatorio = random.randint(1, len(arrayambientes))
     for indice in range( len(arrayambientes) ):
         if arrayambientes[indice][0] == str(numAleatorio):
@@ -76,7 +76,7 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     
     print("")
     #mostrar mensaje de ambiente
-    ambiente = randomizarAmbiente(arrayambientes)
+    ambiente = randomizarAmbiente()
     print(ambiente)
     
     #calculo de objetos
