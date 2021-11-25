@@ -255,12 +255,6 @@ def crearMenu(elementosVentana, nuevosObjetos, monstruoactual, salaactual, monst
     o1 = ""
     o2 = ""
    
-    def recoger1():
-        go.recogerObjeto(o1,comboobjeto, nuevosObjetos, btnobjeto1, btnobjeto2)
-        
-    def recoger2():
-        go.recogerObjeto(o2,comboobjeto, nuevosObjetos, btnobjeto1, btnobjeto2)
-        
     if nuevosObjetos != None:#si hay objetos, mostraremos botones para elegir uno de ellos.
         o1 = int(nuevosObjetos[0])
         btnobjeto1 = Button(panelinferior, text="Recoger "+go.arrayobjetos[o1][1],

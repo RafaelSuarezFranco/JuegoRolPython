@@ -30,7 +30,6 @@ def invocarObjeto(dificultad):# por cada sala, esta función generará 0, 1 o 2 
     if hayObjeto == True:
         objeto1 = int(randomizarObjeto())-1
         objetosNuevos.append(objeto1)
-        print("En la sala hay " + arrayobjetos[objeto1][1]+".")
         
         hayOtroObjeto = gm.probalilidad(30 - (dificultad * 10))#generamos 2do objeto
         if hayOtroObjeto == True:
@@ -38,23 +37,12 @@ def invocarObjeto(dificultad):# por cada sala, esta función generará 0, 1 o 2 
             while objeto2 == objeto1: #no permitimos que un segundo objeto sea igual al primero
                 objeto2 = int(randomizarObjeto())-1
             objetosNuevos.append(objeto2)
-            print("Además, hay " + arrayobjetos[objeto2][1]+".")
     
     if len(objetosNuevos) > 0:
         return objetosNuevos
     else:
         return None
     
-def consultarInventario():
-    contador = 0
-    if len(gpj.inventario) > 0:
-        print("Estos son tus objetos disponibles")
-        for objeto in gpj.inventario:
-            print(str(contador)+" - "+arrayobjetos[objeto][1])#mostramos un número y el nombre del objeto, el cual consultamos en el array
-            contador = contador + 1
-    else:
-        print("No hay ningún objeto en tu inventario")
-
 
 #esta función podría pertenecer a gestionPersonaje, ya que el inventario se almacena allí.
 def crearInventario(panelinferior):

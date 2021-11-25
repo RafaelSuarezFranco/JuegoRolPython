@@ -99,14 +99,8 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         resultadosala = gs.avanzarMapa(salaactual, monstruopasado, dificultad)
         salaactual = resultadosala[1]
         monstruopasado = resultadosala[0]
-        if salaactual != "-1" and salaactual != "guardar y salir":
-            print("Te encuentras en la sala "+salaactual)
-            print(gpj.inventario)
-        #si hemos seleccionado guardar partida y salir, salaactual recoge el valor 'guardar y salir'
-        #nos indica que debemos salir del juego (romper este bucle)
            
     if salaactual == "FIN":
-        print("Has llegado a la sala final")
         resultadosala = gs.avanzarMapa(salaactual, monstruopasado, dificultad)
 
 
@@ -164,20 +158,16 @@ def elegirDificultad():
 
     
     dificultad = IntVar()
-    rad1 = Radiobutton(ventanadif,text='Fácil', value=-1, variable=dificultad, command=describirdif)
-    rad2 = Radiobutton(ventanadif,text='Normal', value=0, variable=dificultad, command=describirdif)
-    rad3 = Radiobutton(ventanadif,text='Difícil', value=1, variable=dificultad, command=describirdif)
+    Radiobutton(ventanadif,text='Fácil', value=-1, variable=dificultad, command=describirdif).place(x=10, y=50)
+    Radiobutton(ventanadif,text='Normal', value=0, variable=dificultad, command=describirdif).place(x=120, y=50)
+    Radiobutton(ventanadif,text='Difícil', value=1, variable=dificultad, command=describirdif).place(x=240, y=50)
 
     def elegirdif():
         dif = dificultad.get()
         if dif == 1 or dif == 0 or dif == -1:
             ventanadif.destroy()
             
-    btnelegir = Button(ventanadif, text="Aceptar", command=elegirdif)
-    rad1.place(x=10, y=50)
-    rad2.place(x=120, y=50)
-    rad3.place(x=240, y=50)
-    btnelegir.place(x=120, y=160)
+    Button(ventanadif, text="Aceptar", command=elegirdif).place(x=120, y=160)
     
     ventanadif.mainloop()
     return dificultad.get()

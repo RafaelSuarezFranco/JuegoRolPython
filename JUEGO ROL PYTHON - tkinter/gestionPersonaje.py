@@ -35,11 +35,11 @@ def crearPersonaje():
     #las fotos de pj están escondidas, se enseña la que se seleccione.
 
     #título, introducción de nombre
-    canvas.create_text(240,20,text='CREACIÓN DE PERSONAJE', fill='white', font=('freemono', 16, 'bold'))
-    canvas.create_text(140,68,text='Nombre', fill='black', font=('freemono', 11, 'bold'))
-    canvas.create_text(140,70,text='Nombre', fill='white', font=('freemono', 11, 'bold'))
+    canvas.create_text(265,20,text='CREACIÓN DE PERSONAJE', fill='white', font=('freemono', 16, 'bold'))
+    canvas.create_text(160,68,text='Nombre', fill='black', font=('freemono', 11, 'bold'))
+    canvas.create_text(162,70,text='Nombre', fill='white', font=('freemono', 11, 'bold'))
     txtnombre = Entry(ventanapj,width=20)
-    txtnombre.place(x=200, y=60)
+    txtnombre.place(x=220, y=60)
     txtnombre.focus()
     
     descripcion2 = canvas.create_text(447,172,text=descripcionl, fill='black', font=('freemono', 10, 'bold'), state='hidden')
@@ -66,11 +66,10 @@ def crearPersonaje():
             canvas.itemconfigure(descripcion2, text=descripciona)
     
     habilidad = IntVar()
-    rad1 = Radiobutton(ventanapj,text='LUCHA', value=1, variable=habilidad, command=verpersonaje)
-    rad2 = Radiobutton(ventanapj,text='MAGIA', value=2, variable=habilidad, command=verpersonaje)
-    rad3 = Radiobutton(ventanapj,text='ASTUCIA', value=3, variable=habilidad, command=verpersonaje)
+    Radiobutton(ventanapj,text='LUCHA', value=1, variable=habilidad, command=verpersonaje).place(x=50, y=300)
+    Radiobutton(ventanapj,text='MAGIA', value=2, variable=habilidad, command=verpersonaje).place(x=170, y=300)
+    Radiobutton(ventanapj,text='ASTUCIA', value=3, variable=habilidad, command=verpersonaje).place(x=290, y=300)
 
-    
     def crearpjfinal():
         habil = ""
         if habilidad.get() == 1:
@@ -101,14 +100,9 @@ def crearPersonaje():
             ventanapj.destroy()
             
 
-    btncrear = Button(ventanapj, text="Crear personaje", command=crearpjfinal)
-    rad1.place(x=50, y=300)
-    rad2.place(x=170, y=300)
-    rad3.place(x=290, y=300)
-    btncrear.place(x=400, y=300)
+    Button(ventanapj, text="Crear personaje", command=crearpjfinal).place(x=400, y=300)
     
     ventanapj.mainloop()
-    #return personaje
     
 
 def mostrarPersonaje():
@@ -123,20 +117,13 @@ def mostrarPersonaje():
     canvas.pack()
     imgpj = PhotoImage(master = canvas, file="./pictures/"+personaje[2]+".png")
     fotopj1 = canvas.create_image(120,100,image=imgpj)
-    #PARA PODER ABRIR UNA NUEVA VENTANA CON IMAGEN SIN DESTRUIR LA ANTERIOR
-    #DEBE UTILIZARSE UNA LINEA COMO LA SIGUIENTE PARA GUARDAR UNA REFERENCIA. SI NO, NO FUNCIONA
     canvas.theimage = imgpj
     
-    
-    lblnombre = Label(ventanapj, text="Nombre: "+personaje[0])
-    lblnombre.place(x=240, y=30)
-    lblvida = Label(ventanapj, text="Vida: " + str(personaje[1]))
-    lblvida.place(x=240, y=50)
-    lblhabilidad = Label(ventanapj, text="Habilidad: " + personaje[2])
-    lblhabilidad.place(x=240, y=70)
+    Label(ventanapj, text="Nombre: "+personaje[0]).place(x=240, y=30)
+    Label(ventanapj, text="Vida: " + str(personaje[1])).place(x=240, y=50)
+    Label(ventanapj, text="Habilidad: " + personaje[2]).place(x=240, y=70)
         
-    botonsalir = Button(ventanapj, text="Salir", command=ventanapj.destroy)
-    botonsalir.place(x=240, y=150)
+    Button(ventanapj, text="Salir", command=ventanapj.destroy).place(x=240, y=150)
     
     ventanapj.mainloop()
     

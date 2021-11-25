@@ -1,5 +1,4 @@
 import csv
-from prettytable import PrettyTable
 import gestionPersonaje as gpj
 import gestionSalas as gs
 from tkinter import *
@@ -66,7 +65,6 @@ def guardarPartida(salaactual, monstruopasado, dificultad):
         csvescrito = csv.writer(partidas,delimiter = ';')
         csvescrito.writerow(datosGuardados)
     partidas.close()
-    print("Partida guardada con éxito.")
     
 def guardarMapa():
     mapas = open("mapasGuardados.txt",'a', newline='', encoding='utf-8')
@@ -74,7 +72,6 @@ def guardarMapa():
         csvescrito = csv.writer(mapas,delimiter = ',')
         csvescrito.writerow(gs.arraysalas)
     mapas.close()
-    print("Estado del mapa guardado con éxito.")
         
 
 #FUNCIONES DE CARGAR PARTIDA GUARDADA
@@ -121,14 +118,12 @@ def pantallaCargarPartida():
         except Exception:
             messagebox.showerror(message="Escoge una partida para cargarla.", title="Error")
         
-    btnsiguiente = Button(ventana, text="Cargar", command=cargarseleccion)
-    btnsiguiente.place(x=60, y=320)
+    btncargar = Button(ventana, text="Cargar", command=cargarseleccion).place(x=60, y=320)
     
     def atras():
         ventana.destroy()
         mp.menuPrincipal()
-    btnsiguiente = Button(ventana, text="Atrás", command=atras)
-    btnsiguiente.place(x=260, y=320)
+    btnatras = Button(ventana, text="Atrás", command=atras).place(x=260, y=320)
     
     ventana.mainloop()
 

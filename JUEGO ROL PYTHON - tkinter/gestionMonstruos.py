@@ -35,10 +35,7 @@ def invocarMonstruo(monstruopasado, salaactual, dificultad):
     if hayMonstruo == True:
         monstruopasado = True
         monstruoactual = randomizarMonstruo() #en monstruo actual se almacena una línea del fichero de monstruos
-        print("¡Un "+monstruoactual[1]+" salvaje apareció!\n")
-        print("¡Ten cuidado! "+monstruoactual[4]+".")# monstramos el nombre del monstruo y una descripción.
     else:
-        print("No parece haber ninguna amenaza en la sala. Suspiras de alivio.")
         monstruopasado = False
     return monstruopasado, monstruoactual
 
@@ -124,22 +121,18 @@ def resultadoDeLuchar(resultado, vidaresultado, monstruoactual, objetoUsado, obj
     ########################################################################################## SI GANAMOS
     if resultado == "ganar" and objetoUsado == None:#######si hemos ganado sin objeto
         vidaresultado = vidaresultado + int(monstruoactual[2])
-        print("Has derrotado al " + monstruoactual[1] + ", tu vida se ha incrementado a "+ str(vidaresultado))
         return vidaresultado, objetobueno
     
     elif resultado == "ganar" and objetoUsado != None: #######si hemos ganado con objeto
         vidaresultado = vidaresultado + int(monstruoactual[2])
         if objetobueno == True:#si las cualidades coindicieron
-            print("Has usado un "+nombreObjeto+". Ha sido efectivo, ganas "+puntosObjeto+" puntos de vida.")
             vidaresultado = vidaresultado + int(puntosObjeto)
             
             if gpj.personaje[2] == monstruoactual[3]: #si nuestra cualidad también coincide, sumamos 20%
                 bonus = 0.2*(int(puntosObjeto)+int(monstruoactual[2]))
-                print("Tu cualidad de "+gpj.personaje[2]+" ha sido efectiva, recibes un bonus de "+str(bonus)+" de vida.")
                 vidaresultado = vidaresultado + int(bonus)
                 
         else:#si las cualidades no coindicieron
-            print("Has usado un "+nombreObjeto+". Ha sido contraproducente, pierdes "+puntosObjeto+" puntos de vida.")
             vidaresultado = vidaresultado - int(puntosObjeto)
         return vidaresultado, objetobueno
     ################################################################################### SI PERDEMOS
@@ -151,14 +144,13 @@ def resultadoDeLuchar(resultado, vidaresultado, monstruoactual, objetoUsado, obj
         #si usamos un objeto de MAGIA, reduce un 50% el daño si perdemos.
         
         vidaresultado = int(vidaresultado - int(monstruoactual[2]) * bonusenemigomagia * bonusobjetomagia)
-        print("Has perdido contra el " + monstruoactual[1] + ", tu vida se ha reducido a "+ str(vidaresultado))
         
         if monstruoactual[3] == "ASTUCIA": #si el monstruo es de ASTUCIA, nos roba un objeto.
             if len(gpj.inventario) > 0: #si tenemos alguno, obviamente.
                 gpj.inventario.pop(0)
         
-        if objetoUsado != None: #si hemos usado objeto, considero que no ha sido beneficioso en ningún caso.
-            print("Has usado un "+nombreObjeto+". No ha tenido efecto.")
+        #if objetoUsado != None: #si hemos usado objeto, considero que no ha sido beneficioso en ningún caso.
+        #    print("Has usado un "+nombreObjeto+". No ha tenido efecto.")
         return vidaresultado, objetobueno
 
     else: ##################################################################################SI EMPATAMOS
@@ -208,7 +200,7 @@ def animacionLucha(elementosVentana, vidaresultado, resultadolucha, monstruoactu
     elif resultadolucha == "ganar":
         animacionganar()
         
-        textofinal = "Has vencido al "+nombremonstruo
+        textofinal = "Has vencido al "+nombremonstruo+"."
         if objetousado == True:#si hemos usado objeto
             if objetobueno == True:#si el objeto ha sido eficaz
                 textofinal = textofinal +". El objeto usado ha sido eficaz."
@@ -217,7 +209,7 @@ def animacionLucha(elementosVentana, vidaresultado, resultadolucha, monstruoactu
             else:#si no ha sido bueno
                 textofinal = textofinal +". El objeto usado ha sido contraproducente."
 
-        textosala.configure(text=textofinal+". Tu vida se ha incrementado a "+str(vidaresultado)+".")
+        textosala.configure(text=textofinal+" Tu vida se ha incrementado a "+str(vidaresultado)+".")
     else:#si empatamos
         textosala.configure(text="La pelea contra el "+nombremonstruo+" está igualada...")
         animacionempate()
