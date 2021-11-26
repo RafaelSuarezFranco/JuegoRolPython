@@ -2,6 +2,5 @@ NOMBRE;VIDA;HABILIDAD;TIPO PARTIDA;DIFICULTAD; SALA ACTUAL;MONSTRUO PASADO;CANTI
 aaaa;130;MAGIA;custom;normal;1;True;0
 Vidín;921;LUCHA;default;dificil;3;True;3;1;2;5
 asdf;105;LUCHA;default;facil;1;False;0
-111111111;184;MAGIA;default;dificil;1;False;0
-tal;82;LUCHA;default;dificil;4;True;3;1;3;8
-tal;92;LUCHA;default;dificil;FIN;True;3;1;2;5
+aaaa;130;MAGIA;custom;normal;1;True;0
+pepe;183;ASTUCIA;default;facil;3;False;1;2

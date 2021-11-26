@@ -16,7 +16,7 @@ def elegirArchivos():
     return opcion
 
 
-#funciones de carga de partida
+#FUNCIONES DE CARGAR DATOS, PARA NUEVA PARTIDA.
 def generarMapa(): 
     archivoSalas = open('./'+opcion+'/mapa.txt', "r",encoding="utf-8")
     salas = csv.reader(archivoSalas, delimiter = ';')
@@ -41,7 +41,7 @@ def generarMonstruos():
     arraymonstruos = list(monstruos)
     return arraymonstruos
 
-#me conviene tener esta función aquí
+#FUNCIONES DE GUARDAR
 def guardarPartida(salaactual, monstruopasado, dificultad):
     partidas = open("partidasGuardadas.txt",'a', newline='', encoding='utf-8')
     if dificultad == 0:
@@ -69,7 +69,7 @@ def guardarMapa():
     mapas.close()
     print("Estado del mapa guardado con éxito.")
     
-
+#FUNCIONES DE CARGAR PARTIDA GUARDADA
 def elegirPartidaGuardada():#muestra las partidas guardadas en una tabla
     #permite seleccionar una que se le pasará como parámetro a nuevaPartida.
     ficheropartidas = open("partidasGuardadas.txt",'r', encoding='utf-8')   
@@ -98,7 +98,8 @@ def elegirPartidaGuardada():#muestra las partidas guardadas en una tabla
             partidaseleccionada = 0
     gs.arraysalas = cargarMapa(partidaseleccionada) #carga el estado guardado del mapa
     return arraypartidas[partidaseleccionada]
-    
+
+
 def cargarMapa(indice):#carga el mapa guardado en la misma posicion de la partida.
     ficheromapas = open("mapasGuardados.txt",'r', encoding='utf-8')   
     mapasguardados = csv.reader(ficheromapas, delimiter = ',')
@@ -112,4 +113,54 @@ def cargarMapa(indice):#carga el mapa guardado en la misma posicion de la partid
     #print(arrayfinal)
     return arrayfinal
 
+#FUNCIÓN DE BORRAR PARTIDA
+def borrarPartida():
+    #basicamente es una copia de cargar partida + guardar partida, recuperarmos las partidas y mapas en unos arrays,
+    #borramos una partida y su mapa de los arrays y los reescribimos en los ficheros
+    ficheropartidas = open("partidasGuardadas.txt",'r', encoding='utf-8')   
+    partidasguardadas = csv.reader(ficheropartidas, delimiter = ';')
+    arraypartidas = list(partidasguardadas)
+    
+    ficheromapas = open("mapasGuardados.txt",'r', encoding='utf-8')   
+    mapasguardados = csv.reader(ficheromapas, delimiter = ',')
+    arraymapas = list(mapasguardados)
+    
+    if len(arraypartidas) == 1:#si no hay partidas guardadas
+        print("No tienes partidas guardadas.")
+    
+    tablaPartidas=PrettyTable(["Nº PARTIDA","NOMBRE","VIDA","HABILIDAD","TIPO PARTIDA","DIFICULTAD","SALA ACTUAL"])
+    contador = 0
+
+        
+    for partida in arraypartidas:
+        if contador != 0:
+            tablaPartidas.add_row([contador, partida[0], partida[1], partida[2], partida[3], partida[4], partida[5]])
+        contador = contador + 1
+    print(tablaPartidas)
+    
+    partidaseleccionada = -1
+    while (partidaseleccionada < 0 or partidaseleccionada > contador-1):
+        try:
+            partidaseleccionada = int(input("Introduce el nº de partida a borrar (pulsa intro si no quieres borrar nada)"))
+        except ValueError:
+            partidaseleccionada = 0
+
+    if partidaseleccionada != 0:
+        arraypartidas.pop(partidaseleccionada) #borramos la línea en partidas y mapas guardados.
+        arraymapas.pop(partidaseleccionada)
+        print("Partida borrada con éxito")
+        #print(arraypartidas)
+        
+    partidas = open("partidasGuardadas.txt",'w', newline='', encoding='utf-8')#rescribir partidas
+    with partidas:
+        csvescrito = csv.writer(partidas,delimiter = ';')
+        csvescrito.writerows(arraypartidas)
+    partidas.close()
+    
+    mapas = open("mapasGuardados.txt",'w', newline='', encoding='utf-8')
+    with mapas:
+        csvescrito = csv.writer(mapas,delimiter = ',')
+        csvescrito.writerows(arraymapas)
+    mapas.close()
+    
 

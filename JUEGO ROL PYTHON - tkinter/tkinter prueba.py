@@ -1,30 +1,15 @@
-from tkinter import *
+import csv
+def cargarMapa(indice):#carga el mapa guardado en la misma posicion de la partida.
+    ficheromapas = open("mapasGuardados.txt",'r', encoding='utf-8')   
+    mapasguardados = csv.reader(ficheromapas, delimiter = ',')
+    arraymapas = list(mapasguardados)
+    arrayfinal = []
+    #tal como guardo los mapas (el mapa entero en una linea) cada subarray se guarda como cadena, por lo tanto
+    #al recuperarlo aqui, tengo que hacerle un eval a cada string para convertirlo en array.
+    for i in range(0, len(arraymapas[indice])):
+        array = eval(arraymapas[indice][i])
+        arrayfinal.append(array)
+    print(arrayfinal)
+    return arrayfinal
 
-window = Tk()
-
-window.title("Welcome to LikeGeeks app")
-window.geometry('350x200')
-lbl = Label(window, text="Hello")
-lbl.grid(column=0, row=0)
-
-btn2 = Button(window, text="Click Me", bg="orange", fg="red")
-btn2.grid(column=1, row=1)
-
-def clicked():
-    lbl.configure(text="Button was clicked !!")#cambia el texto del label.
-btn3 = Button(window, text="Click Me", command=clicked)
-btn3.grid(column=2, row=1)
-
-txt = Entry(window,width=10)
-#txt = Entry(window,width=10, state='disabled')
-txt.grid(column=5, row=0)
-
-def clicked2():
-    res = "Welcome to " + txt.get()
-    lbl.configure(text= res)
-    
-btn1 = Button(window, text="Click Me", command=clicked2)
-btn1.grid(column=1, row=0)
-
-
-window.mainloop()
+cargarMapa(1)

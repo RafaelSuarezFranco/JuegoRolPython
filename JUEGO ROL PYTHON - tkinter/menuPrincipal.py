@@ -37,7 +37,7 @@ def menuPrincipal():
     botoncargar = Button(ventana, text="Cargar Partida", command=botoncargar)
     botoncargar.place(x=105, y=280)
     
-    botonimportar = Button(ventana, text="Importar partida personalizada", command=gf.importarCustom)
+    botonimportar = Button(ventana, text="Importar mapa personalizado", command=gf.importarCustom)
     botonimportar.place(x=10, y=315)
     
     botondescripcion = Button(ventana, text="Información extra", command=descripcion)

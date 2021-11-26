@@ -1,10 +1,8 @@
 implementar opción de jugar con mapa personalizado en tkinter
-importar custom a version tkinter no debería importar ambientes.
 de las funciones de generarmapa, etc se puede quitar los return y que asignen directamente a los arrays globales
 editor de mapas y archivos (editor de mapas ya hecho)
 globalizar la variable dificultad
 gestión de inventario¿?
 reajustar código de objetos con índices, sobre todo para tener el combobox más limpio.
-borrar partida guardada
 limpiar parámetros sin utilizar o innecesarios
 eliminar los prints de consola remanentes de la version tkinter, eliminar funciones que no necesito en dicha version

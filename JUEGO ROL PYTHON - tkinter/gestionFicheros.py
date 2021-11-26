@@ -7,7 +7,7 @@ import menuPrincipal as mp
 import gestionPartidas as gp
 from distutils.dir_util import copy_tree
 import os
-
+import shutil
 
 opcion = "default" #variable global para saber si la partida que vamos a jugar usa archivos default o custom
 # esta variable se rescribe cada vez que iniciamos partida, a su vez, deben rescribirse todos los arrays (en nueva partida) 
@@ -23,7 +23,7 @@ def elegirArchivos():
 
 
 #FUNCIONES DE CARGAR DATOS, PARA NUEVA PARTIDA.
-def generarMapa(): #con csv es más conciso, por lo que importaré los archivos de esta manera.
+def generarMapa():
     archivoSalas = open('./'+opcion+'/mapa.txt', "r",encoding="utf-8")
     salas = csv.reader(archivoSalas, delimiter = ';')
     arraysalas = list(salas)
@@ -96,11 +96,7 @@ def pantallaCargarPartida():
     # listbox de partidas guardadas. muestra 15 a la vez, es scrollable.
 
     partidas = Listbox ( ventana, width=85, height=15)
-    for i in range(1, len(arraypartidas)):
-        p = arraypartidas[i] #guardamos cada partida para mostrar algo de info de cada una de ellas en la lista.
-        textopartida = "Partida: {} | Nombre: {} - Vida: {} - Habilidad: {} - Dificultad: {} - Sala actual: {} ".format(
-            i, p[0],p[1],p[2],p[4],p[5])#formateamos un poco para que quede bien.
-        partidas.insert(i, textopartida)
+    refrescarLista(partidas, arraypartidas)
 
     partidas.place(x=20, y=60)
     
@@ -110,11 +106,10 @@ def pantallaCargarPartida():
             #guardamos el indice de partida para saber que línea de los archivos coger.
             messagebox.showinfo(message="Partida cargada con éxito.", title="Atención")
             ventana.destroy()
-            
+        
             gs.arraysalas = cargarMapa(indicepartida)
             gp.nuevaPartida(arraypartidas[indicepartida])
             #a la funcion nuevaPartida le pasamos la partida correspondiente guardada en ese array
-            
         except Exception:
             messagebox.showerror(message="Escoge una partida para cargarla.", title="Error")
         
@@ -123,9 +118,34 @@ def pantallaCargarPartida():
     def atras():
         ventana.destroy()
         mp.menuPrincipal()
-    btnatras = Button(ventana, text="Atrás", command=atras).place(x=260, y=320)
+    btnatras = Button(ventana, text="Atrás", command=atras).place(x=460, y=320)
+    
+    def borrar():
+        try:
+            indicepartida =  int(partidas.curselection()[0]) + 1
+            #guardamos el indice de partida para saber que línea de los archivos borrar
+            borrarPartida(indicepartida)
+            #arraypartidas.pop(indicepartida)
+            arraypartidas.pop(indicepartida)
+            messagebox.showinfo(message="Partida borrada con éxito.", title="Atención")
+            #borramos la partida seleccionada y actualizamos la lista
+            refrescarLista(partidas, arraypartidas)
+        except Exception:
+            messagebox.showerror(message="Escoge una partida para borrarla.", title="Error")
+        
+        
+    btnborrar = Button(ventana, text="Borrar", command=borrar).place(x=260, y=320)
     
     ventana.mainloop()
+
+
+def refrescarLista(listbox, arraypartidas):
+    listbox.delete(0, END)
+    for i in range(1, len(arraypartidas)):
+        p = arraypartidas[i] #guardamos cada partida para mostrar algo de info de cada una de ellas en la lista.
+        textopartida = "Partida: {} | Nombre: {} - Vida: {} - Habilidad: {} - Dificultad: {} - Sala actual: {} ".format(
+            i, p[0],p[1],p[2],p[4],p[5])#formateamos un poco para que quede bien.
+        listbox.insert(i, textopartida)
 
 
     
@@ -142,22 +162,51 @@ def cargarMapa(indice):#carga el mapa guardado en la misma posicion de la partid
     
     return arrayfinal
 
-def importarCustom():
-    #permite importar los archivos custom de la versón de texto.
+
+#FUNCIÓN DE BORRAR PARTIDA
+def borrarPartida(indicepartida):
+    #igual que la de la versión texto, pero se le pasa el índice desde fuera, elegido en la lista.
+    ficheropartidas = open("partidasGuardadas.txt",'r', encoding='utf-8')   
+    partidasguardadas = csv.reader(ficheropartidas, delimiter = ';')
+    arraypartidas = list(partidasguardadas)
     
-    respuesta=messagebox.askyesno('Importar archivos',"""¿Quieres importar los archivos personalizados de la versión
-de texto? Hacer esto sobrescribirá los archivos actuales.""")
+    ficheromapas = open("mapasGuardados.txt",'r', encoding='utf-8')   
+    mapasguardados = csv.reader(ficheromapas, delimiter = ',')
+    arraymapas = list(mapasguardados)
+
+    arraypartidas.pop(indicepartida) #borramos la línea en partidas y mapas guardados.
+    arraymapas.pop(indicepartida)
+        
+    partidas = open("partidasGuardadas.txt",'w', newline='', encoding='utf-8')#rescribir partidas
+    with partidas:
+        csvescrito = csv.writer(partidas,delimiter = ';')
+        csvescrito.writerows(arraypartidas)
+    partidas.close()
+    
+    mapas = open("mapasGuardados.txt",'w', newline='', encoding='utf-8')#reescribir mapas.
+    with mapas:
+        csvescrito = csv.writer(mapas,delimiter = ',')
+        csvescrito.writerows(arraymapas)
+    mapas.close()
+
+
+
+def importarCustom():
+    #permite importar el mapa custom de la versión de texto.
+    
+    respuesta=messagebox.askyesno('Importar mapa',"""¿Quieres importar el mapa personalizado de la versión
+de texto? Hacer esto sobrescribirá el mapa personalizado actual.""")
     if respuesta == True:
 
         directorioactual = os.getcwd()  
         directoriopadre = os.path.abspath(os.path.join(directorioactual, os.pardir))
 
-        fromDirectory = directoriopadre+"/JUEGO ROL PYTHON/custom"
-        toDirectory = directoriopadre+"/JUEGO ROL PYTHON - tkinter/custom"
+        fromDirectory = directoriopadre+"/JUEGO ROL PYTHON/custom/mapa.txt"
+        toDirectory = directoriopadre+"/JUEGO ROL PYTHON - tkinter/custom/mapa.txt"
         try:
-            copy_tree(fromDirectory, toDirectory)
-            messagebox.showinfo(message="Archivos importados con éxito.", title="Atención")
+            shutil.copyfile(fromDirectory, toDirectory)
+            messagebox.showinfo(message="Mapa importado con éxito.", title="Atención")
         except Exception:
-            messagebox.showinfo(message="Error al importar archivos.", title="Atención")
+            messagebox.showinfo(message="Error al importar mapa.", title="Atención")
         
 

@@ -7,7 +7,7 @@ from tkinter import *
 import gestionPantalla as cp
 
 def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, le pasamos None)
-    
+
     #vaciamos el inventario, si jugamos varias partidas en al misma sesión, es necesario.
     gpj.inventario = []
     
