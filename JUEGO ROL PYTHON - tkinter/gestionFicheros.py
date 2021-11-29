@@ -5,21 +5,38 @@ from tkinter import *
 import gestionPantalla as cp
 import menuPrincipal as mp
 import gestionPartidas as gp
-from distutils.dir_util import copy_tree
 import os
 import shutil
 
 opcion = "default" #variable global para saber si la partida que vamos a jugar usa archivos default o custom
-# esta variable se rescribe cada vez que iniciamos partida, a su vez, deben rescribirse todos los arrays (en nueva partida) 
+# esta variable se rescribe cada vez que iniciamos partida o cargamos partida,
+#a su vez, deben rescribirse todos los arrays (en nueva partida)
+
 def elegirArchivos():
-    opcion = ""
-    while opcion != "1" and opcion != "2":
-        opcion = input("Introduce 1 para cargar archivos por defecto, Introduce 2 para cargar archivos personalizados.")
-    if opcion == "2":
-        opcion = "custom"
-    else:
-        opcion = "default"
-    return opcion
+    #sirve para elegir la opción a través de una pantalla
+    ventana = Tk()
+    ventana.title('Elegir mapa')
+    cp.centrarPantalla(200, 400, ventana)
+    cp.deshabilitarX(ventana)
+    ventana.resizable(False, False)
+    imagenfondo = PhotoImage(file="./pictures/mapaselect.png")    
+    frame = Frame(ventana)
+    frame.pack()
+    canvas = Canvas(frame, bg="black", width=700, height=400)
+    canvas.create_image(300,180,image=imagenfondo)
+    canvas.pack()
+    canvas.create_text(200,30,text='Elige un mapa para la nueva partida', fill='white', font=('freemono', 15, 'bold'))
+    
+    def seleccionar(op):
+        global opcion
+        opcion = op
+        ventana.destroy()
+
+    Button(ventana, text="Mapa por defecto", command=lambda: seleccionar("default")).place(x=70, y=100)
+    Button(ventana, text="Mapa personalizado", command=lambda: seleccionar("custom")).place(x=230, y=100)
+    
+    ventana.mainloop()
+
 
 
 #FUNCIONES DE CARGAR DATOS, PARA NUEVA PARTIDA.
@@ -125,7 +142,6 @@ def pantallaCargarPartida():
             indicepartida =  int(partidas.curselection()[0]) + 1
             #guardamos el indice de partida para saber que línea de los archivos borrar
             borrarPartida(indicepartida)
-            #arraypartidas.pop(indicepartida)
             arraypartidas.pop(indicepartida)
             messagebox.showinfo(message="Partida borrada con éxito.", title="Atención")
             #borramos la partida seleccionada y actualizamos la lista

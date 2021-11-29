@@ -12,8 +12,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
     gpj.inventario = []
     
     if partida == None:################################################# SI LA PARTIDA ES COMPLETAMENTE NUEVA
-        gf.opcion = "default"
-        #gf.opcion = gf.elegirArchivos() #controla si usamos archivos default o custom
+        gf.elegirArchivos() #controla si usamos archivos default o custom
         #inicializamos variables que controlarán el estado actual del juego
         gs.arraysalas = gf.generarMapa()
         gpj.crearPersonaje()#En este caso, se crean ventanas para crear el pj y elegir la dificultad.
@@ -68,6 +67,8 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
     else: ####################SI LA PARTIDA ES CARGADA, INICILIZAMOS LAS VARIABLES CON LA PARTIDA QUE HEMOS PASADO
         
         gf.opcion = partida[3] # default o custom guardado en partida[3]
+        #realmente nos da igual la opción, dado que el mapa se rescata del fichero de mapas guardados.
+        #si tuvieramos archivos de monstruos, objetos o ambientes distintos, sí servería.
         gpj.personaje = [partida[0], int(partida[1]), partida[2]]
         
         dificultad = 0

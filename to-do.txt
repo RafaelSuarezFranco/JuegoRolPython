@@ -1,4 +1,3 @@
-implementar opción de jugar con mapa personalizado en tkinter
 de las funciones de generarmapa, etc se puede quitar los return y que asignen directamente a los arrays globales
 editor de mapas y archivos (editor de mapas ya hecho)
 globalizar la variable dificultad
