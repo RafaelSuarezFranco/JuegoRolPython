@@ -1,6 +1,3 @@
-1;Calamar AAAAATerrestre;40;MAGIA;No es tan ágil fuera del agua, pero no te confíes
-2;Gólem dAAAAAAe Piedra;60;LUCHA;Puede que sea lento, pero su resistencia es inigualable
-3;Dragón AAAAAAAAAAanciano;80;MAGIA;Prepárate para esquivar su aliento de fuego, o saldrás muy mal parado
-4;CocodriloAAAA Desdentado;30;LUCHA;No es una gran amenaza dado que carece de dientes, pero aún puede arrear coletazos
-5;VoluntarioAAAAA de Greenpeace;10;ASTUCIA;No es muy violento, pero desde luego muy molesto
-6;Brujo OscuAAAAAAro;25;ASTUCIA;Sus maldiciones son perjudiciales, aunque rara vez letales
+1;Monstruo personalizado;20;MAGIA;Es un monstruo creado en el editor de monstruos. Quizás deberías probar el editor.
+2;Monstruo altamente personalizado;200;LUCHA;Este monstruo esta muy personalizado, lo cual no significa nada importante.
+3;Monstruo astuto;50;ASTUCIA;Este monstruo no es de astucia, o al menos te hace creer que no lo es.
