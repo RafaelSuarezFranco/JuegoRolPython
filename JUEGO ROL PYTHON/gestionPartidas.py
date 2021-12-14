@@ -1,10 +1,8 @@
-import random
 import gestionFicheros as gf
 import gestionMonstruos as gm
 import gestionObjetos as go
 import gestionSalas as gs
 import gestionPersonaje as gpj
-import csv
 
 def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, le pasamos None)
     
@@ -13,6 +11,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
             
     if partida == None:###################################################### SI LA PARTIDA ES COMPLETAMENTE NUEVA
         gf.opcion = gf.elegirArchivos() #controla si usamos archivos default o custom
+        
         #inicializamos variables que controlarán el estado actual del juego
         gpj.personaje = gpj.crearPersonaje()
         dificultad = elegirDificultad()

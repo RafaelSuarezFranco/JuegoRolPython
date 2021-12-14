@@ -4,7 +4,6 @@ import gestionMonstruos as gm
 import gestionObjetos as go
 import gestionPersonaje as gpj
 import gestionGraficos as gg
-import csv
 
 arraysalas = []
 arrayambientes = []
@@ -15,6 +14,7 @@ def randomizarAmbiente(): #Devuelve una cadena de ambiente aleatoria.
     for indice in range( len(arrayambientes) ):
         if arrayambientes[indice][0] == str(numAleatorio):
             return arrayambientes[indice][1]
+    
 
 
 """
@@ -23,6 +23,7 @@ lo que hacemos aquí es convertir salaactual en entero para poder usarlo como í
 de salas, y así guardar las salidas en el array 'salidas'. Ya de paso, actualizamos el arraysalas y eliminamos las
 salas y salidas a las que no tendremos acceso conforme avancemos en el juego.
 """
+
 def actualizarMapa(salaactual, salidas):
     try:
         salaactual = int(salaactual)
@@ -31,7 +32,7 @@ def actualizarMapa(salaactual, salidas):
                 salidas.append(arraysalas[0][puerta])
                 #esta condicion significa que si en la fila de la sala que corresponde a sala actual hay algo que
                 #no sea un 0, guardamos en el array de salidas la letra que corresponde, que se encuentra en
-                #la primera fila de arraysalas
+                #la primera fila de arraysalas (guardamos una N, S, O, u E)
                 
     except ValueError: # si entramos en esta excepción significa que salaactual toma valor que no es entero, cosa que solo
         #debería ocurrir en la sala FIN. En cualquier caso significa que no debemos preocuparnos de las salidas.

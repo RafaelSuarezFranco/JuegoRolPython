@@ -5,7 +5,7 @@ import gestionPantalla as cp
 
 def menuPrincipal():
     ventana = Tk()
-    ventana.title('JUEGO ROL PYTHON - VERSIÓN TKINTER')
+    ventana.title('Mazmorra Azarosa - Versión Tkinter')
     cp.centrarPantalla(350, 500, ventana)
     cp.deshabilitarX(ventana)
     ventana.resizable(False, False)

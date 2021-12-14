@@ -5,7 +5,7 @@ import editorArchivos as ea
 
 def menuPrincipal():
     menuopcion = ""
-    print("BIENVENIDO AL JUEGO ROL EN PYTHON, por Rafael Suárez Franco.")
+    print("Bienvenido a la Mazmorra Azarosa, por Rafael Suárez Franco.")
     while menuopcion != "5":
         print("")
         print("MENÚ PRINCIPAL")
