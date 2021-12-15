@@ -50,11 +50,12 @@ def guardarPartida(salaactual, monstruopasado, dificultad):
         dificultad = "dificil"
     elif dificultad == -1:
         dificultad = "facil"  
-    #en la partida guardaré la cantidad de objetos también, para saber cuántos hay.
+    #el inventario lo guardaremos casteando el array a string
+    inventarioguardado = str(gpj.inventario)
+    #el personaje prefiero guardarlo por separado porque quiero visualizarlo a la hora de mostrar partidas guardadas (para cargar una de ellas)
     datosGuardados = [gpj.personaje[0], str(gpj.personaje[1]), gpj.personaje[2], opcion, str(dificultad),
-                      str(salaactual), str(monstruopasado), str(len(gpj.inventario))]
-    for objeto in gpj.inventario:
-        datosGuardados.append(str(objeto))
+                      str(salaactual), str(monstruopasado), inventarioguardado]
+
     with partidas:
         csvescrito = csv.writer(partidas,delimiter = ';')
         csvescrito.writerow(datosGuardados)

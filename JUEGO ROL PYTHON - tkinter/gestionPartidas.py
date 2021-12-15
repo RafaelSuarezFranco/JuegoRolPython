@@ -77,9 +77,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
         elif partida[4] == "dificil":
             dificultad = 1
             
-        for i in range(1, int(partida[7])+1):
-            #añadiendo los objetos guardados al inventario
-            gpj.inventario.append(int(partida[7+i]))
+        gpj.inventario = eval(partida[7])#casteamos el inventario guardado a array
           
         salaactual = partida[5]
         resultadosala = []

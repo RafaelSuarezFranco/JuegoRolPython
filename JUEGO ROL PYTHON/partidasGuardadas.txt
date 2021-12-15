@@ -1,9 +1,11 @@
-NOMBRE;VIDA;HABILIDAD;TIPO PARTIDA;DIFICULTAD; SALA ACTUAL;MONSTRUO PASADO;CANTIDAD OBJETOS;OBJETOS
-aaaa;130;MAGIA;custom;normal;1;True;0
-tal;92;LUCHA;default;dificil;3;True;0
-asdf;105;LUCHA;default;facil;1;False;3;4;5;6
-asdf;65;LUCHA;default;facil;3;True;4;4;5;6;8
-123;156;LUCHA;default;dificil;1;False;0
-1;42;LUCHA;default;facil;2;True;0
-1;111;LUCHA;default;facil;2;False;0
-111;145;LUCHA;default;facil;1;False;0
+NOMBRE;VIDA;HABILIDAD;TIPO PARTIDA;DIFICULTAD; SALA ACTUAL;MONSTRUO PASADO;OBJETOS
+aaaa;130;MAGIA;custom;normal;1;True;[]
+tal;92;LUCHA;default;dificil;3;True;[6, 4,2]
+asdf;105;LUCHA;default;facil;1;False;[]
+asdf;65;LUCHA;default;facil;3;True;[1, 2, 3]
+123;156;LUCHA;default;dificil;1;False;[6, 4, 2]
+1;42;LUCHA;default;facil;2;True;[]
+1;111;LUCHA;default;facil;2;False;[3, 4, 5]
+111;145;LUCHA;default;facil;1;False;[5]
+1;111;LUCHA;default;facil;5;False;[3, 4, 5, 7]
+pepe;162;ASTUCIA;custom;facil;2;True;[3]
