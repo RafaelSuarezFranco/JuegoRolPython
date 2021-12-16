@@ -32,37 +32,25 @@ def elegirArchivos():
         opcion = op
         ventana.destroy()
 
-    Button(ventana, text="Mapa por defecto", command=lambda: seleccionar("default")).place(x=70, y=100)
-    Button(ventana, text="Mapa personalizado", command=lambda: seleccionar("custom")).place(x=230, y=100)
+    Button(ventana, text="Mapa por defecto", command=lambda: seleccionar("default")).place(x=70, y=90)
+    Button(ventana, text="Mapa personalizado", command=lambda: seleccionar("custom")).place(x=230, y=90)
+       
+    def volver():
+        ventanapj.destroy()
+        mp.menuPrincipal()
+    
+    Button(ventana, text="Salir al menú", command=volver).place(x=165, y=160)
     
     ventana.mainloop()
 
 
+# para cargar los elementos del juego en arrays, le pasamos el nombre de los ficheros.
+def generarArray(fichero):
+    archivo = open('./'+opcion+'/'+fichero+'.txt', "r",encoding="utf-8")
+    elementos = csv.reader(archivo, delimiter = ';')
+    array = list(elementos)
+    return array
 
-#FUNCIONES DE CARGAR DATOS, PARA NUEVA PARTIDA.
-def generarMapa():
-    archivoSalas = open('./'+opcion+'/mapa.txt', "r",encoding="utf-8")
-    salas = csv.reader(archivoSalas, delimiter = ';')
-    arraysalas = list(salas)
-    return arraysalas
-
-def generarAmbientes():
-    archivoAmbiente = open('./'+opcion+'/ambientes.txt', "r",encoding="utf-8")
-    ambientes = csv.reader(archivoAmbiente, delimiter = ';')
-    arrayambientes = list(ambientes)
-    return arrayambientes
-
-def generarObjetos():
-    archivoObjeto = open('./'+opcion+'/objetos.txt', "r",encoding="utf-8")
-    objetos = csv.reader(archivoObjeto, delimiter = ';')
-    arrayobjetos = list(objetos)
-    return arrayobjetos
-
-def generarMonstruos():
-    archivoMonstruo = open('./'+opcion+'/monstruos.txt', "r",encoding="utf-8")
-    monstruos = csv.reader(archivoMonstruo, delimiter = ';')
-    arraymonstruos = list(monstruos)
-    return arraymonstruos
 
 #FUNCIONES DE GUARDAR
 def guardarPartida(salaactual, monstruopasado, dificultad):

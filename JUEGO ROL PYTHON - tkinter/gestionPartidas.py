@@ -14,7 +14,7 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
     if partida == None:################################################# SI LA PARTIDA ES COMPLETAMENTE NUEVA
         gf.elegirArchivos() #controla si usamos archivos default o custom
         #inicializamos variables que controlarán el estado actual del juego
-        gs.arraysalas = gf.generarMapa()
+        gs.arraysalas = gf.generarArray("mapa")
         gpj.crearPersonaje()#En este caso, se crean ventanas para crear el pj y elegir la dificultad.
         dificultad = elegirDificultad()
         salaactual = "1"
@@ -88,9 +88,9 @@ def nuevaPartida(partida): #le pasamos la partida cargada (si es nueva partida, 
     ######################################################################### UNA VEZ SE HA CREADO O CARGADO PARTIDA
     #cargamos en memoria los elementos del juego.
     #gs.arraysalas = gf.generarMapa()
-    gs.arrayambientes = gf.generarAmbientes()
-    go.arrayobjetos = gf.generarObjetos()
-    gm.arraymonstruos = gf.generarMonstruos()
+    gs.arrayambientes = gf.generarArray("ambientes")
+    go.arrayobjetos = gf.generarArray("objetos")
+    gm.arraymonstruos = gf.generarArray("monstruos")
 
     #avanzamos por las salas mientras que no llegemos a la sala FIN o la sala actual valga -1, que significa que estamos
     #en un callejón sin salida. guardar y/o salir o morir tambien son condiciones para salir del bucle.

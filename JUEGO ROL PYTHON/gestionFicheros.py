@@ -15,31 +15,12 @@ def elegirArchivos():
         opcion = "default"
     return opcion
 
-
-#FUNCIONES DE CARGAR DATOS, PARA NUEVA PARTIDA.
-def generarMapa(): 
-    archivoSalas = open('./'+opcion+'/mapa.txt', "r",encoding="utf-8")
-    salas = csv.reader(archivoSalas, delimiter = ';')
-    arraysalas = list(salas)
-    return arraysalas
-
-def generarAmbientes():
-    archivoAmbiente = open('./'+opcion+'/ambientes.txt', "r",encoding="utf-8")
-    ambientes = csv.reader(archivoAmbiente, delimiter = ';')
-    arrayambientes = list(ambientes)
-    return arrayambientes
-
-def generarObjetos():
-    archivoObjeto = open('./'+opcion+'/objetos.txt', "r",encoding="utf-8")
-    objetos = csv.reader(archivoObjeto, delimiter = ';')
-    arrayobjetos = list(objetos)
-    return arrayobjetos
-
-def generarMonstruos():
-    archivoMonstruo = open('./'+opcion+'/monstruos.txt', "r",encoding="utf-8")
-    monstruos = csv.reader(archivoMonstruo, delimiter = ';')
-    arraymonstruos = list(monstruos)
-    return arraymonstruos
+# para cargar los elementos del juego en arrays, le pasamos el nombre de los ficheros.
+def generarArray(fichero):
+    archivo = open('./'+opcion+'/'+fichero+'.txt', "r",encoding="utf-8")
+    elementos = csv.reader(archivo, delimiter = ';')
+    array = list(elementos)
+    return array
 
 #FUNCIONES DE GUARDAR
 def guardarPartida(salaactual, monstruopasado, dificultad):

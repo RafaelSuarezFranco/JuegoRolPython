@@ -203,11 +203,11 @@ def animacionLucha(elementosVentana, vidaresultado, resultadolucha, monstruoactu
         textofinal = "Has vencido al "+nombremonstruo+"."
         if objetousado == True:#si hemos usado objeto
             if objetobueno == True:#si el objeto ha sido eficaz
-                textofinal = textofinal +". El objeto usado ha sido eficaz."
+                textofinal = textofinal +" El objeto usado ha sido eficaz."
                 if gpj.personaje[2] ==  cualidadmonstruo:#si además nuestra habilidad coincide
                     textofinal = textofinal + " Tu cualidad "+gpj.personaje[2]+" también ha sido efectiva."
             else:#si no ha sido bueno
-                textofinal = textofinal +". El objeto usado ha sido contraproducente."
+                textofinal = textofinal +" El objeto usado ha sido contraproducente."
 
         textosala.configure(text=textofinal+" Tu vida se ha incrementado a "+str(vidaresultado)+".")
     else:#si empatamos

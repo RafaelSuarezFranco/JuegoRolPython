@@ -1,6 +1,7 @@
 import random
 from tkinter import *
 import gestionPantalla as cp
+import menuPrincipal as mp
 
 personaje = []
 #el personaje e inventario se guardarán como una listas globales a las que hay que llamar desde este módulo.
@@ -101,6 +102,13 @@ def crearPersonaje():
             
 
     Button(ventanapj, text="Crear personaje", command=crearpjfinal).place(x=400, y=300)
+    
+    def volver():
+        ventanapj.destroy()
+        mp.menuPrincipal()
+    
+    Button(ventanapj, text="Salir al menú", command=volver).place(x=420, y=60)
+        
     
     ventanapj.mainloop()
     
