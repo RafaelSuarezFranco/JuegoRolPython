@@ -139,7 +139,7 @@ def resultadoDeLuchar(resultado, vidaresultado, monstruoactual, objetoUsado, obj
     elif resultado == "perder":
         
         bonusenemigomagia = 1.3 if monstruoactual[3] == "MAGIA" else 1
-        #si el monstruo es de MAGIA, inglige % adicional
+        #si el monstruo es de MAGIA, inflige % adicional
         bonusobjetomagia  = 0.5 if cualidadObjeto == "MAGIA" else 1
         #si usamos un objeto de MAGIA, reduce un 50% el daño si perdemos.
         
@@ -149,8 +149,6 @@ def resultadoDeLuchar(resultado, vidaresultado, monstruoactual, objetoUsado, obj
             if len(gpj.inventario) > 0: #si tenemos alguno, obviamente.
                 gpj.inventario.pop(0)
         
-        #if objetoUsado != None: #si hemos usado objeto, considero que no ha sido beneficioso en ningún caso.
-        #    print("Has usado un "+nombreObjeto+". No ha tenido efecto.")
         return vidaresultado, objetobueno
 
     else: ##################################################################################SI EMPATAMOS
@@ -204,8 +202,10 @@ def animacionLucha(elementosVentana, vidaresultado, resultadolucha, monstruoactu
         if objetousado == True:#si hemos usado objeto
             if objetobueno == True:#si el objeto ha sido eficaz
                 textofinal = textofinal +" El objeto usado ha sido eficaz."
+                
                 if gpj.personaje[2] ==  cualidadmonstruo:#si además nuestra habilidad coincide
                     textofinal = textofinal + " Tu cualidad "+gpj.personaje[2]+" también ha sido efectiva."
+                    
             else:#si no ha sido bueno
                 textofinal = textofinal +" El objeto usado ha sido contraproducente."
 

@@ -89,8 +89,7 @@ def avanzarMapa(salaactual, monstruopasado, dificultad):
     fotomonstruo = ""
     if monstruopasado == True:#si hay monstruo, creamos su imagen y la escondemos
         imgmonstruo = PhotoImage(file="./pictures/monstruo"+str(monstruoactual[0])+".png")
-        fotomonstruo = canvas.create_image(550,320,image=imgmonstruo)
-        canvas.itemconfigure(fotomonstruo, state='hidden')
+        fotomonstruo = canvas.create_image(550,320,image=imgmonstruo, state='hidden')
     
     #calculo de objetos
     nuevosObjetos = go.invocarObjeto(dificultad)
