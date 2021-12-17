@@ -103,7 +103,7 @@ def editarMonstruoObjeto(monstruoObjeto):
                 
             guardarFicheroPersonalizado(arrayMonstruoObjeto, monstruoObjeto+"s")
         else:
-            print(monstruoObjeto+" nuevos descartados.")
+            print(monstruoObjeto+"s nuevos descartados.")
     else:
         print("Has salido sin crear ningún "+monstruoObjeto+".")
 

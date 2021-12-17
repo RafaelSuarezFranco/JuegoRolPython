@@ -87,7 +87,7 @@ def crearNuevoMapa():
         actualizarNuevoMapa(o, 4)#en la siguiente sala le ponemos esa salida al sur (indice 2)
         actualizarNuevoMapa(e, 3)
         
-        print(nuevomapa)
+        print("Este es tu mapa de momento: "+str(nuevomapa))
     #una vez hemos terminado el proceso y no quedan salas por crear.
     
     print("Estas son tus salas creadas:")
@@ -120,7 +120,7 @@ def crearNuevoSubarray(nuevomapa, salida):
     creararray = True
     indice = 0
     nuevoarray = None
-    print(nuevomapa)
+    #print(nuevomapa)#descomenta el print para ver como se crean los arrays de las nuevas salas.
     for s in range(len(nuevomapa)):
         if nuevomapa[s][0] == salida:
             #si ya existe un subarray con el nº nuevo
@@ -132,7 +132,7 @@ def crearNuevoSubarray(nuevomapa, salida):
     return nuevoarray, indice
 
 def asignarSalidas(arraysala, salasporcrear, salascreadas, cadinalidad, indice):
-    print(arraysala)
+    #print(arraysala)#descomenta el print para ver como se va modificando el array de la sala
     salida = "-1"
     if arraysala[indice] == "0":
         
